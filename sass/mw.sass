@@ -1,0 +1,48 @@
+#field .card
+  width: 100%
+  display: flex
+  justify-content: center
+
+#board
+  > div
+    display: flex
+    > div
+      height: 40px
+      width: 40px
+      background-color: #ccc
+      border: 4px outset #ddd
+      text-align: center
+      font-size: 24px
+      font-weight: bold
+      &.mine:not(.marked)
+        background-color: #f00
+        border: 1px solid #333
+      &.marked
+        border: 4px solid #f00
+      &.revealed
+        border: 1px solid #999
+      &.value1
+        color: #00f
+      &.value2
+        color: #0a0
+      &.value3
+        color: #f00
+      &.value4
+        color: #00a
+      &.value5
+        color: #a00
+      &.value6
+        color: #0aa
+      &.value7
+        color: #000
+      &.value8
+        color: #aaa
+
+input.input
+  width: 70px
+label.label
+  display: inline-block
+  padding-top: 6px
+  margin: 0 5px
+#time
+  margin-left: 50px

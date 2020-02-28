@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "module": "amd",
+    "target": "es6",
+    "rootDir": "../ts/bs",
+    "outFile": "../public/bs/app.js"
+  },
+  "include": [
+    "../ts/bs",
+    "../ts/core"
+  ]
+}
