@@ -2,6 +2,7 @@ import {Settings} from "./Settings";
 import {FieldImpl} from "./impl/FieldImpl";
 import {Field} from "./interface/Field";
 import {BaseApp} from "../core/BaseApp";
+import {Record} from "./model/Record";
 import ClickEvent = JQuery.ClickEvent;
 import ContextMenuEvent = JQuery.ContextMenuEvent;
 
@@ -9,12 +10,15 @@ export class App extends BaseApp {
 
     private readonly CLASS_MARKED   = 'marked';
     private readonly CLASS_REVEALED = 'revealed';
+    private readonly RECORD_SEPARATOR = ';';
+    private readonly STORAGE_KEY = 'tsgames-mw';
 
     private settings: Settings;
     private field: Field;
     private marked: number[];
     private started: boolean;
     private timer: number;
+    private records: Record[];
 
     private $board =    $('#board');
     private $width =    $('#width');
@@ -23,24 +27,29 @@ export class App extends BaseApp {
     private $time =     $('#time');
     private $minesR     =$('#minesRemaining');
 
+    private width: number;
+    private height: number;
+    private mines: number;
+
     constructor() {
         super();
         this.reset();
         this.$resetButton.on('click', () => this.reset());
         this.runTimer();
+        this.fetchRecords();
     }
 
     reset(): void {
-        let width = parseInt(this.$width.val().toString());
-        let height = parseInt(this.$height.val().toString());
-        let mines = parseInt(this.$mines.val().toString());
+        this.width = this.getWidth();
+        this.height = this.getHeight();
+        this.mines = this.getMines();
 
-        if (width < 1 || height < 1 || mines < 0 || mines > width*height-1 ) {
+        if (this.width < 1 || this.height < 1 || this.mines < 0 || this.mines > this.width*this.height-1 ) {
             this.overlay("ERROR");
             return;
         }
 
-        this.settings = new Settings(width, height, mines);
+        this.settings = new Settings(this.width, this.height, this.mines);
         this.started = false;
         this.timer = null;
         this.marked = [];
@@ -92,11 +101,11 @@ export class App extends BaseApp {
         }
         if (this.field.isDefeated()) {
             this.timer = null;
-            this.overlay('YOU FAILED.');
+            this.end(false);
         }
         if (this.field.isComplete()) {
             this.timer = null;
-            this.overlay('YOU WON!');
+            this.end(true);
         }
         this.buildBoard();
     }
@@ -123,10 +132,66 @@ export class App extends BaseApp {
         return [parseInt(coords[1]), parseInt(coords[0])];
     }
 
-    private runTimer() {
+    private runTimer(): void {
         if (this.timer !== null) {
             this.$time.val(Math.round((performance.now()-this.timer)/100)/10 + ' s');
         }
         setTimeout(() => this.runTimer(), 100);
+    }
+
+    private getWidth(): number {
+        return this.parseInt(this.$width);
+    }
+
+    private getHeight(): number {
+        return this.parseInt(this.$height);
+    }
+
+    private getMines(): number {
+        return this.parseInt(this.$mines);
+    }
+
+    private parseInt(field: JQuery): number {
+        return parseInt(field.val().toString());
+    }
+
+    private end(win: boolean): void {
+        let text = "YOU " + (win ? "WON!" : "FAILED.")+ "<br/><br/>";
+        if (win) {
+            let timeString = this.$time.val().toString();
+            let time = parseFloat(timeString.substr(0, timeString.length-2));
+            this.setRecord(time);
+            text += "Your time: " + time + "<br/>";
+        }
+        let record = this.getRecord();
+        text += "Personal best: " + (record ? record.value : "-");
+        this.overlay(text);
+    }
+
+    private fetchRecords(): void {
+        let string = localStorage.getItem(this.STORAGE_KEY);
+        this.records = string ? string.split(this.RECORD_SEPARATOR).map(s => new Record(s)) : [];
+    }
+
+    private setRecord(time: number): void {
+        let existingRecord = this.getRecord();
+        if (existingRecord && existingRecord.value > time) {
+             existingRecord.value = time;
+             this.storeRecords();
+        } else {
+            this.records.push(new Record(this.getRecordKey()+Record.SEPARATOR+time));
+        }
+    }
+
+    private getRecord(): Record {
+        return this.records.find(r => r.key === this.getRecordKey());
+    }
+
+    private getRecordKey(): string {
+        return "r"+Math.min(this.width, this.height)+"x"+Math.max(this.width, this.height)+"x"+this.mines;
+    }
+
+    private storeRecords(): void {
+        localStorage.setItem(this.STORAGE_KEY, this.records.map(r => r.toString()).join(this.RECORD_SEPARATOR));
     }
 }

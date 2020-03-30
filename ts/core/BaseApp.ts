@@ -14,7 +14,7 @@ export abstract class BaseApp {
     }
 
     protected overlay(text): void {
-        this.$overlay.find('>div').text(text);
+        this.$overlay.find('>div').html(text);
         this.$overlay.show();
     }
 }
