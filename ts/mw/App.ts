@@ -177,10 +177,10 @@ export class App extends BaseApp {
         let existingRecord = this.getRecord();
         if (existingRecord && existingRecord.value > time) {
              existingRecord.value = time;
-             this.storeRecords();
         } else {
             this.records.push(new Record(this.getRecordKey()+Record.SEPARATOR+time));
         }
+        this.storeRecords();
     }
 
     private getRecord(): Record {
