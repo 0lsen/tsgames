@@ -19,8 +19,9 @@
     "ts-node": "^8.5.4"
   },
   "scripts": {
-    "compileTs": "tsc -p tsconfig/bs.json && tsc -p tsconfig/mw.json",
-    "compileSass": "node-sass --output-style compressed sass/index.sass public/style.css && node-sass --output-style compressed sass/bs.sass public/bs/style.css && node-sass --output-style compressed sass/mw.sass public/mw/style.css",
+    "compileBaseSass": "node-sass --output-style compressed sass/index.sass public/style.css",
+    "compileBS": "tsc -p tsconfig/bs.json && node-sass --output-style compressed sass/bs.sass public/bs/style.css",
+    "compileMW": "tsc -p tsconfig/mw.json && node-sass --output-style compressed sass/mw.sass public/mw/style.css",
     "test": "tsc -p tsconfig/test.json && mocha -r ts-node/register $NODE_DEBUG_OPTION test/**/**.test.ts"
   }
 }
