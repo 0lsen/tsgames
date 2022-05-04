@@ -1,3 +1,5 @@
+$cellSize: 40px
+
 #opponentBoard
   cursor: pointer
 
@@ -18,8 +20,8 @@
     font-size: 25px
 
 .board
-  width: 402px
-  height: 402px
+  width: 10*$cellSize + 2px
+  height: 10*$cellSize + 2px
   border: 1px solid #000
   background-color: #efefef
   margin: 25px
@@ -33,112 +35,112 @@
       width: 1px
       height: 100%
       &.g1
-        left: 40px
+        left: $cellSize
       &.g2
-        left: 80px
+        left: 2*$cellSize
       &.g3
-        left: 120px
+        left: 3*$cellSize
       &.g4
-        left: 160px
+        left: 4*$cellSize
       &.g5
-        left: 200px
+        left: 5*$cellSize
       &.g6
-        left: 240px
+        left: 6*$cellSize
       &.g7
-        left: 280px
+        left: 7*$cellSize
       &.g8
-        left: 320px
+        left: 8*$cellSize
       &.g9
-        left: 360px
+        left: 9*$cellSize
 
     &.horizontal
       height: 1px
       width: 100%
       &.g1
-        top: 40px
+        top: $cellSize
       &.g2
-        top: 80px
+        top: 2*$cellSize
       &.g3
-        top: 120px
+        top: 3*$cellSize
       &.g4
-        top: 160px
+        top: 4*$cellSize
       &.g5
-        top: 200px
+        top: 5*$cellSize
       &.g6
-        top: 240px
+        top: 6*$cellSize
       &.g7
-        top: 280px
+        top: 7*$cellSize
       &.g8
-        top: 320px
+        top: 8*$cellSize
       &.g9
-        top: 360px
+        top: 9*$cellSize
 
   .x0
-    left: 0px
+    left: 0
   .x1
-    left: 40px
+    left: $cellSize
   .x2
-    left: 80px
+    left: 2*$cellSize
   .x3
-    left: 120px
+    left: 3*$cellSize
   .x4
-    left: 160px
+    left: 4*$cellSize
   .x5
-    left: 200px
+    left: 5*$cellSize
   .x6
-    left: 240px
+    left: 6*$cellSize
   .x7
-    left: 280px
+    left: 7*$cellSize
   .x8
-    left: 320px
+    left: 8*$cellSize
   .x9
-    left: 360px
+    left: 9*$cellSize
 
   .y0
-    top: 0px
+    top: 0
   .y1
-    top: 40px
+    top: $cellSize
   .y2
-    top: 80px
+    top: 2*$cellSize
   .y3
-    top: 120px
+    top: 3*$cellSize
   .y4
-    top: 160px
+    top: 4*$cellSize
   .y5
-    top: 200px
+    top: 5*$cellSize
   .y6
-    top: 240px
+    top: 6*$cellSize
   .y7
-    top: 280px
+    top: 7*$cellSize
   .y8
-    top: 320px
+    top: 8*$cellSize
   .y9
-    top: 360px
+    top: 9*$cellSize
 
 .ship
   position: absolute
 
   &.horizontal
-    height: 40px
+    height: $cellSize
     &.carrier
-      width: 200px
+      width: 5*$cellSize
     &.battleship
-      width: 160px
+      width: 4*$cellSize
     &.destroyer
-      width: 120px
+      width: 3*$cellSize
     &.patrol
-      width: 80px
+      width: 2*$cellSize
 
   &.vertical
-    width: 40px
+    width: $cellSize
     &.carrier
-      height: 200px
+      height: 5*$cellSize
     &.battleship
-      height: 160px
+      height: 4*$cellSize
     &.destroyer
-      height: 120px
+      height: 3*$cellSize
     &.patrol
-      height: 80px
+      height: 2*$cellSize
 
   > div
     background: #aaa
@@ -151,43 +153,43 @@
 
   &.horizontal
     > div
-      height: 33px
+      height: $cellSize - 7px
     &.carrier > div
-      width: 191px
+      width: 5*$cellSize - 9px
     &.battleship > div
-      width: 152px
+      width: 4*$cellSize - 8px
     &.destroyer > div
-      width: 113px
+      width: 3*$cellSize - 7px
     &.patrol > div
-      width: 72px
+      width: 2*$cellSize - 8px
 
   &.vertical
     > div
-      width: 33px
+      width: $cellSize - 7px
     &.carrier > div
-      height: 191px
+      height: 5*$cellSize - 9px
     &.battleship > div
-      height: 152px
+      height: 4*$cellSize - 8px
     &.destroyer > div
-      height: 113px
+      height: 3*$cellSize - 7px
     &.patrol > div
-      height: 72px
+      height: 2*$cellSize - 8px
 
   > div > i
     cursor: pointer
     color: #fff
 
 .hit
-  width: 36px
-  height: 36px
+  width: $cellSize - 4px
+  height: $cellSize - 4px
   position: absolute
   border-radius: 50%
   margin: 2px
   &.success
     background: #f00
     margin: 5px
-    width: 31px
-    height: 31px
+    width: $cellSize - 9px
+    height: $cellSize - 9px
   &.fail
     border: 3px solid #000
 
