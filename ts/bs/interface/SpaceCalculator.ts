@@ -1,5 +1,5 @@
 import {HitMap} from "../model/HitMap";
-import {Orientation} from "../enum/Orientation";
+import {Orientation} from "../../core/enum/Orientation";
 
 export interface SpaceCalculator {
     buildFreeMap(hitmap: HitMap): boolean[][]

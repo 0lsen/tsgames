@@ -1,5 +1,5 @@
 import {Coord} from "./model/Coord";
-import {Orientation} from "./enum/Orientation";
+import {Orientation} from "../core/enum/Orientation";
 import {Carrier} from "./model/ship/Carrier";
 import {Battleship} from "./model/ship/Battleship";
 import {Destroyer} from "./model/ship/Destroyer";

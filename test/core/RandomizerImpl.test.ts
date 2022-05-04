@@ -1,5 +1,5 @@
 import {RandomizerImpl} from "../../ts/core/impl/RandomizerImpl";
-import {Orientation} from "../../ts/bs/enum/Orientation";
+import {Orientation} from "../../ts/core/enum/Orientation";
 
 const chai = require('chai');
 const mocha = require('mocha');

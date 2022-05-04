@@ -6,7 +6,7 @@ import {IShip} from "../../interface/IShip";
 import {Coord} from "../../model/Coord";
 import {Randomizer} from "../../../core/interface/Randomizer";
 import {Settings} from "../../Settings";
-import {Orientation} from "../../enum/Orientation";
+import {Orientation} from "../../../core/enum/Orientation";
 import {ShipArrangement} from "../../model/ShipArrangement";
 
 export class RandomOpponent implements Opponent {

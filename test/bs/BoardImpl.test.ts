@@ -2,7 +2,7 @@ import {BoardImpl} from "../../ts/bs/impl/BoardImpl";
 import {ShipArrangement} from "../../ts/bs/model/ShipArrangement";
 import {Carrier} from "../../ts/bs/model/ship/Carrier";
 import {Coord} from "../../ts/bs/model/Coord";
-import {Orientation} from "../../ts/bs/enum/Orientation";
+import {Orientation} from "../../ts/core/enum/Orientation";
 import {OutOfBoundsException} from "../../ts/core/exception/OutOfBoundsException";
 import {Destroyer} from "../../ts/bs/model/ship/Destroyer";
 import {CollisionException} from "../../ts/bs/exception/CollisionException";

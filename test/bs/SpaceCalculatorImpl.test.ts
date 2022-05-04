@@ -1,5 +1,5 @@
 import {SpaceCalculatorImpl} from "../../ts/bs/impl/SpaceCalculatorImpl";
-import {Orientation} from "../../ts/bs/enum/Orientation";
+import {Orientation} from "../../ts/core/enum/Orientation";
 import {HitMapBuilder} from "./HitMapBuilder";
 
 const chai = require('chai');

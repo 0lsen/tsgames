@@ -10,7 +10,7 @@ import {BoardImpl} from "../BoardImpl";
 import {IShip} from "../../interface/IShip";
 import {ThisShouldNeverHappenException} from "../../../core/exception/ThisShouldNeverHappenException";
 import {Helper} from "../../Helper";
-import {Orientation} from "../../enum/Orientation";
+import {Orientation} from "../../../core/enum/Orientation";
 import {Settings} from "../../Settings";
 
 export class ProbabilityBasedOpponent implements Opponent {

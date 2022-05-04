@@ -2,7 +2,7 @@ import {Board} from "../interface/Board";
 import {HitMap} from "../model/HitMap";
 import {ShipArrangement} from "../model/ShipArrangement";
 import {Coord} from "../model/Coord";
-import {Orientation} from "../enum/Orientation";
+import {Orientation} from "../../core/enum/Orientation";
 import {OutOfBoundsException} from "../../core/exception/OutOfBoundsException";
 import {Helper} from "../Helper";
 import {CollisionException} from "../exception/CollisionException";

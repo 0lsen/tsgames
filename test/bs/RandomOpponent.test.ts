@@ -6,7 +6,7 @@ import {BoardImpl} from "../../ts/bs/impl/BoardImpl";
 import {Destroyer} from "../../ts/bs/model/ship/Destroyer";
 import {RandomizerMock} from "../core/RandomizerMock";
 import {ShipArrangement} from "../../ts/bs/model/ShipArrangement";
-import {Orientation} from "../../ts/bs/enum/Orientation";
+import {Orientation} from "../../ts/core/enum/Orientation";
 import {Coord} from "../../ts/bs/model/Coord";
 import {Shot} from "../../ts/bs/model/Shot";
 

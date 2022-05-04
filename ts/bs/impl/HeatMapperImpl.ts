@@ -3,7 +3,7 @@ import {HitMap} from "../model/HitMap";
 import {HeatMap} from "../model/HeatMap";
 import {SpaceCalculator} from "../interface/SpaceCalculator";
 import {Settings} from "../Settings";
-import {Orientation} from "../enum/Orientation";
+import {Orientation} from "../../core/enum/Orientation";
 
 export class HeatMapperImpl implements HeatMapper {
 

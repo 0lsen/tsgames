@@ -8,7 +8,7 @@ import {Carrier} from "./model/ship/Carrier";
 import {Battleship} from "./model/ship/Battleship";
 import {Destroyer} from "./model/ship/Destroyer";
 import {Patrol} from "./model/ship/Patrol";
-import {Orientation} from "./enum/Orientation";
+import {Orientation} from "../core/enum/Orientation";
 import {Helper} from "./Helper";
 import {Coord} from "./model/Coord";
 import {SpaceCalculatorImpl} from "./impl/SpaceCalculatorImpl";

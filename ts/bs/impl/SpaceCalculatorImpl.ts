@@ -1,6 +1,6 @@
 import {SpaceCalculator} from "../interface/SpaceCalculator";
 import {HitMap} from "../model/HitMap";
-import {Orientation} from "../enum/Orientation";
+import {Orientation} from "../../core/enum/Orientation";
 import {Settings} from "../Settings";
 
 export class SpaceCalculatorImpl implements SpaceCalculator {
