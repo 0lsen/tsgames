@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "module": "amd",
+    "target": "es6",
+    "rootDir": "../ts/gol",
+    "outFile": "../public/gol/app.js"
+  },
+  "include": [
+    "../ts/gol",
+    "../ts/core"
+  ]
+}

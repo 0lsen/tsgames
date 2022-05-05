@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        Conway's Game of Life
+    </title>
+    <meta name="viewport" content="initial-scale=1, width=device-width"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.js" integrity="sha384-WKPjHIEhBzyEuCp8//j0gXBM/TP1OwKdWMPBRFZ6q8g66Pce1n6o0M/q4duEXrmA" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="../index.html" class="fas fa-chevron-left"></a> CONWAY'S GAME OF LIFE
+        </div>
+    </div>
+</header>
+<div class="container" id="field">
+    <div class="card">
+        <div id="board">
+            <table></table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <button type="button" class="button fas fa-backward" id="reset"></button>
+    <button type="button" class="button fas fa-play" id="go"></button>
+    <button type="button" class="button fas fa-stop" id="stop"></button>
+    <span id="status"></span>
+    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
+    <a class="button" href="https://en.wikipedia.org/wiki/Conway's Game of Life" target="_blank" id="wikipedia"></a>
+</div>
+<div class="container mt-4">
+    <label class="label" for="width">WIDTH:</label><input type="number" id="width" value="40" class="input">
+    <label class="label" for="height">HEIGHT:</label><input type="number" id="height" value="30" class="input">
+    <button type="button" class="button" id="setSize">Set size</button>
+</div>
+<div class="container mt-4">
+    <label class="label" for="tick">TICK:</label><input type="number" id="tick" value="500" class="input">
+    <button type="button" class="button" id="setTick">Set tick</button>
+</div>
+
+<div id="overlay">
+    <div class="card"></div>
+</div>
+
+<script>
+    let app;
+    $(function () {
+        require(
+            ['gol/App'],
+            (main) => {
+                app = new main.App();
+            }
+        );
+    })
+</script>
+</body>
+</html>
