@@ -21,6 +21,7 @@
   "scripts": {
     "compileBaseSass": "node-sass --output-style compressed sass/index.sass public/style.css",
     "compileBS": "tsc -p tsconfig/bs.json && node-sass --output-style compressed sass/bs.sass public/bs/style.css",
+    "compileCanvas": "tsc -p tsconfig/canvas.json && node-sass --output-style compressed sass/canvas.sass public/canvas/style.css",
     "compileGoL": "tsc -p tsconfig/gol.json && node-sass --output-style compressed sass/gol.sass public/gol/style.css",
     "compileMW": "tsc -p tsconfig/mw.json && node-sass --output-style compressed sass/mw.sass public/mw/style.css",
     "compileSnake": "tsc -p tsconfig/snake.json && node-sass --output-style compressed sass/snake.sass public/snake/style.css",

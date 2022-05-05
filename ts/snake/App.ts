@@ -1,7 +1,7 @@
 import {BaseApp} from "../core/BaseApp";
 import {Settings} from "./Settings";
-import {Position} from "./model/Position";
 import {Direction} from "../core/enum/Direction";
+import {Coord} from "../core/model/Coord";
 
 export class App extends BaseApp {
 
@@ -17,9 +17,9 @@ export class App extends BaseApp {
 
     private settings : Settings = new Settings();
 
-    private foodPosition : Position;
-    private headPosition : Position;
-    private bodyPositions : Position[];
+    private foodPosition : Coord;
+    private headPosition : Coord;
+    private bodyPositions : Coord[];
     private direction : Direction;
     private directionChange : boolean = false;
     private isRunning : boolean = false;
@@ -61,7 +61,7 @@ export class App extends BaseApp {
         if (this.isRunning) return;
 
         this.bodyPositions = [];
-        this.headPosition = new Position(this.settings.startX, this.settings.startY);
+        this.headPosition = new Coord(this.settings.startX, this.settings.startY);
         this.direction = Direction.UP;
         this.$board.removeClass(this.CLASS_LOST);
         this.$board.find('div').removeClass(this.CLASS_HEAD);
@@ -74,7 +74,7 @@ export class App extends BaseApp {
     }
 
     private slither() : void {
-        this.bodyPositions.push(new Position(this.headPosition.x, this.headPosition.y));
+        this.bodyPositions.push(new Coord(this.headPosition.x, this.headPosition.y));
         let newY = this.headPosition.y;
         if (this.direction == Direction.UP) newY--;
         if (this.direction == Direction.DOWN) newY++;
@@ -82,7 +82,7 @@ export class App extends BaseApp {
         if (this.direction == Direction.RIGHT) newX++;
         if (this.direction == Direction.LEFT) newX--;
         this.directionChange = false;
-        let newHeadPosition = new Position(newX, newY);
+        let newHeadPosition = new Coord(newX, newY);
 
         let foodConsumed = newHeadPosition.equals(this.foodPosition);
         if (foodConsumed) {
@@ -108,7 +108,7 @@ export class App extends BaseApp {
         this.$board.find('div').removeClass(this.CLASS_FOOD);
         if (this.bodyPositions.length <= this.settings.width * this.settings.height - 2) {
             do {
-                this.foodPosition = new Position(
+                this.foodPosition = new Coord(
                     this.randomizer.randomInt(this.settings.width),
                     this.randomizer.randomInt(this.settings.height)
                 );
@@ -121,11 +121,11 @@ export class App extends BaseApp {
         this.addClass(this.headPosition, this.CLASS_HEAD);
     }
 
-    private addClass(position : Position, clazz : string) : void {
+    private addClass(position : Coord, clazz : string) : void {
         this.$board.find(' > div:nth-child('+(position.y+1)+') > div:nth-child('+(position.x+1)+')').addClass(clazz);
     }
 
-    private removeClass(position : Position, clazz : string) : void {
+    private removeClass(position : Coord, clazz : string) : void {
         this.$board.find(' > div:nth-child('+(position.y+1)+') > div:nth-child('+(position.x+1)+')').removeClass(clazz);
     }
 
@@ -133,7 +133,7 @@ export class App extends BaseApp {
         return !this.headPosition.equals(this.foodPosition) && this.bodyPositions.find(p => p.equals(this.foodPosition)) === undefined;
     }
     
-    private collision(newHeadPosition : Position) : boolean {
+    private collision(newHeadPosition : Coord) : boolean {
         if (newHeadPosition.x < 0 || newHeadPosition.y < 0 || newHeadPosition.x >= this.settings.width || newHeadPosition.y >= this.settings.height) {
             return true;
         }
