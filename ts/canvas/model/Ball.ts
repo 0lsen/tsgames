@@ -1,12 +1,14 @@
-import {Coord} from "../../core/model/Coord";
+import {Coord as BaseCoord} from "../../core/model/Coord";
+import {Coord} from "./Coord";
 
 export class Ball {
     private readonly _radius : number;
-    private _coord : Coord;
-    private _velocity : Coord = new Coord(0, 0);
+    private _coord : BaseCoord;
+    private _velocity : BaseCoord = new BaseCoord(0, 0);
     private _color : number;
+    private _trail : Coord[] = [];
 
-    constructor(radius: number, coord: Coord, color: number) {
+    constructor(radius: number, coord: BaseCoord, color: number) {
         this._radius = radius;
         this._coord = coord;
         this._color = color;
@@ -20,15 +22,23 @@ export class Ball {
         return this._radius;
     }
 
-    get coord(): Coord {
+    get coord(): BaseCoord {
         return this._coord;
     }
 
-    get velocity(): Coord {
+    get velocity(): BaseCoord {
         return this._velocity;
     }
 
     get color(): number {
         return this._color;
+    }
+
+    get trail(): Coord[] {
+        return this._trail;
+    }
+
+    set trail(value: Coord[]) {
+        this._trail = value;
     }
 }
