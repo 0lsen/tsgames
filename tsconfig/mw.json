@@ -3,7 +3,6 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "rootDir": "../ts/mw",
     "outFile": "../public/mw/app.js"
   },
   "include": [

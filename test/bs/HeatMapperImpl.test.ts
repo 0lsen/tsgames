@@ -2,6 +2,7 @@ import {HeatMapperImpl} from "../../ts/bs/impl/HeatMapperImpl";
 import {SpaceCalculatorImpl} from "../../ts/bs/impl/SpaceCalculatorImpl";
 import {HitMapBuilder} from "./HitMapBuilder";
 import {ThisShouldNeverHappenException} from "../../ts/core/exception/ThisShouldNeverHappenException";
+import {HeatMap} from "../../ts/bs/model/HeatMap";
 
 const chai = require('chai');
 const mocha = require('mocha');
@@ -14,7 +15,7 @@ const mapper = new HeatMapperImpl(new SpaceCalculatorImpl());
 let hitmap = HitMapBuilder.build();
 
 mocha.describe('BS HeatMapper', () => {
-    let heatMap;
+    let heatMap : HeatMap;
 
     mocha.it('builds without failure', () => {
         chai.expect(() => heatMap = mapper.build(hitmap, minLength, maxLength)).to.not.throw();
@@ -29,6 +30,6 @@ mocha.describe('BS HeatMapper', () => {
         chai.expect(heatMap.getHeat()[heatMap.findIndex(8,9)]).to.equal(25);
         chai.expect(heatMap.getHeat()[heatMap.findIndex(6,8)]).to.equal(34);
 
-        chai.expect(() => heatMap.getHeat().get(heatMap.findIndex(2,6))).to.throw(ThisShouldNeverHappenException);
+        chai.expect(() => heatMap.getHeat().at(heatMap.findIndex(2,6))).to.throw(ThisShouldNeverHappenException);
     });
 });

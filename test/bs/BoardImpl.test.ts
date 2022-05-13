@@ -59,7 +59,7 @@ mocha.describe('BS Board', () => {
         chai.expect(() => board.addShip(new ShipArrangement(new Destroyer(), new Coord(1, 3, Orientation.HORIZONTAL)))).to.not.throw();
     });
 
-    let assertShot = function(x: number, y: number, hit: boolean, expectedException) {
+    let assertShot = function(x: number, y: number, hit: boolean, expectedException : (new () => Error) | null) {
         if (expectedException != null) {
             chai.expect(() => board.shoot(x, y)).to.throw(expectedException);
         } else {

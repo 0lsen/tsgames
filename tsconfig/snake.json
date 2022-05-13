@@ -3,7 +3,6 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "rootDir": "../ts/snake",
     "outFile": "../public/snake/app.js"
   },
   "include": [
