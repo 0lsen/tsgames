@@ -1,3 +1,13 @@
+$headColor: #666
+$bodyColor: #333
+$tailColor: #333
+$headRadius: 30%
+$bodyRadius: 30%
+$tailRadius: 50%
+
+$compassPoints: "&.north > div:nth-child(2), &.northeast > div:nth-child(3), &.east > div:nth-child(6), &.southeast > div:nth-child(9), &.south > div:nth-child(8), &.southwest > div:nth-child(7), &.west > div:nth-child(4), &.northwest > div:nth-child(1)"
+$center: "> div:nth-child(5)"
+
 #field .card
   width: 100%
   display: flex
@@ -12,7 +22,6 @@ input.input
 #board
   background: #33cc33
   border: 5px solid #000
-  padding: 5px
   height: 80vh
   aspect-ratio: 3 / 2
   &.lost
@@ -23,9 +32,96 @@ input.input
     > div
       width: calc((100% - 10px)/21)
       aspect-ratio: 1 / 1
+      position: relative
+      > div
+        position: absolute
+        &:nth-child(1)
+          width: 10%
+          height: 10%
+          top: 0
+          left: 0
+        &:nth-child(2)
+          width: 80%
+          height: 10%
+          top: 0
+          left: 10%
+        &:nth-child(3)
+          width: 10%
+          height: 10%
+          top: 0
+          right: 0
+        &:nth-child(4)
+          width: 10%
+          height: 80%
+          top: 10%
+          left: 0
+        &:nth-child(5)
+          width: 80%
+          height: 80%
+          top: 10%
+          left: 10%
+        &:nth-child(6)
+          width: 10%
+          height: 80%
+          top: 10%
+          right: 0
+        &:nth-child(7)
+          width: 10%
+          height: 10%
+          bottom: 0
+          left: 0
+        &:nth-child(8)
+          width: 80%
+          height: 10%
+          bottom: 0
+          left: 10%
+        &:nth-child(9)
+          width: 10%
+          height: 10%
+          bottom: 0
+          right: 0
       &.head
-        background: #666
+        #{$center}, #{$compassPoints}
+          background: $headColor
+        &.north #{$center}
+          border-bottom-right-radius: $headRadius
+          border-bottom-left-radius: $headRadius
+        &.east #{$center}
+          border-top-left-radius: $headRadius
+          border-bottom-left-radius: $headRadius
+        &.south #{$center}
+          border-top-right-radius: $headRadius
+          border-top-left-radius: $headRadius
+        &.west #{$center}
+          border-bottom-right-radius: $headRadius
+          border-top-right-radius: $headRadius
       &.body
-        background: #333
+        #{$center}, #{$compassPoints}
+          background: $bodyColor
+        &.north.west #{$center}
+          border-bottom-right-radius: $bodyRadius
+        &.south.west #{$center}
+          border-top-right-radius: $bodyRadius
+        &.south.east #{$center}
+          border-top-left-radius: $bodyRadius
+        &.north.east #{$center}
+          border-bottom-left-radius: $bodyRadius
+      &.tail
+        #{$center}, #{$compassPoints}
+          background: $tailColor
+        &.north #{$center}
+          border-bottom-right-radius: $tailRadius
+          border-bottom-left-radius: $tailRadius
+        &.east #{$center}
+          border-top-left-radius: $tailRadius
+          border-bottom-left-radius: $tailRadius
+        &.south #{$center}
+          border-top-right-radius: $tailRadius
+          border-top-left-radius: $tailRadius
+        &.west #{$center}
+          border-bottom-right-radius: $tailRadius
+          border-top-right-radius: $tailRadius
       &.food
-        background: #fff
+        #{$center}
+          background: #fff
+          border-radius: 50%
