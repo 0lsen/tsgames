@@ -10,7 +10,7 @@ export class VelocityCalculatorImpl implements VelocityCalculator {
     private readonly maxVelocity = 100;
 
     calc(coords: Coord[]): CoreCoord {
-        let newestTime = coords[coords.length-1].time;
+        let newestTime = coords.at(-1).time;
         let recentCoords = coords.filter(c => (newestTime-c.time)/1000 < this.timeThreshold);
         if (recentCoords.length < this.dataThreshold+1) return null;
         let xs = recentCoords.map(c => c.x);
