@@ -45,8 +45,37 @@
     </div>
 </div>
 <div class="container mt-4">
-    <label class="label" for="gravity">TRAIL LENGTH:</label><input type="range" id="trail" value="100" min="0" max="200" step="1" class="input" style="width: 20rem;">
-    <input id="showTrail" type="number" value="100" class="input" disabled>
+    <div class="columns">
+        <div class="column is-6">
+            <label class="label" for="trail">TRAIL LENGTH:</label><input type="range" id="trail" value="100" min="0" max="200" step="1" class="input" style="width: 20rem;">
+            <input id="showTrail" type="number" value="100" class="input" disabled>
+        </div>
+        <div class="column is-6">
+            <label class="label" for="showVelocity">SHOW VELOCITY</label><input type="checkbox" id="showVelocity">
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="columns">
+        <div class="column is-6">
+            <label class="label" for="radius1">RADIUS 1:</label><input type="range" id="radius1" value="50" min="0.01" max="100" step="0.01" class="input" style="width: 20rem;">
+            <input id="showRadius1" type="number" value="50" class="input" disabled>
+        </div>
+        <div class="column is-6">
+            <label class="label" for="radius2">RADIUS 2:</label><input type="range" id="radius2" value="30" min="0.01" max="100" step="0.01" class="input" style="width: 20rem;">
+            <input id="showRadius2" type="number" value="30" class="input" disabled>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column is-6">
+            <label class="label" for="mass1">MASS 1:</label><input type="range" id="mass1" value="100" min="0.01" max="200" step="0.01" class="input" style="width: 20rem;">
+            <input id="showMass1" type="number" value="100" class="input" disabled>
+        </div>
+        <div class="column is-6">
+            <label class="label" for="mass2">MASS 2:</label><input type="range" id="mass2" value="40" min="0.01" max="200" step="0.01" class="input" style="width: 20rem;">
+            <input id="showMass2" type="number" value="40" class="input" disabled>
+        </div>
+    </div>
 </div>
 <div id="overlay">
     <div class="card"></div>

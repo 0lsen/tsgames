@@ -7,14 +7,24 @@ import {VelocityCalculatorImpl} from "./impl/VelocityCalculatorImpl";
 import {Coord} from "./model/Coord";
 import {Coord as BaseCoord} from "../core/model/Coord";
 import {Ball} from "./model/Ball";
+import {CollisionFreeMovementCalculatorImpl} from "./impl/CollisionFreeMovementCalculatorImpl";
+import {CollisionCalculator} from "./interface/CollisionCalculator";
+import {CollisionCalculatorImpl} from "./impl/CollisionCalculatorImpl";
+import {QuadraticFormulaSolverImpl} from "./impl/QuadraticFormulaSolverImpl";
+import {CoordDimensionChooserImpl} from "./impl/CoordDimensionChooserImpl";
+import {CollisionFreeMovementCalculator} from "./interface/CollisionFreeMovementCalculator";
 
 export class App extends BaseApp {
+
+    public static readonly TIMESTEP = 0.1;
 
     private readonly CLASS_PAUSE = 'fa-pause';
     private readonly CLASS_PLAY = 'fa-play';
 
     private movementCalculator : MovementCalculator;
     private velocityCalculator : VelocityCalculator;
+    private collisionFreeCalculator : CollisionFreeMovementCalculator;
+    private collisionCalculator : CollisionCalculator;
 
     private readonly canvas = $('#canvas')[0] as HTMLCanvasElement;
     private readonly context = this.canvas.getContext("2d");
@@ -22,20 +32,30 @@ export class App extends BaseApp {
     private readonly $showGravity = $('#showGravity');
     private readonly $trail = $('#trail');
     private readonly $showTrail = $('#showTrail');
+    private readonly $radius1 = $('#radius1');
+    private readonly $showRadius1 = $('#showRadius1');
+    private readonly $radius2 = $('#radius2');
+    private readonly $showRadius2 = $('#showRadius2');
+    private readonly $mass1 = $('#mass1');
+    private readonly $showMass1 = $('#showMass1');
+    private readonly $mass2 = $('#mass2');
+    private readonly $showMass2 = $('#showMass2');
+    private readonly $showVelocity = $('#showVelocity');
     private readonly $direction = $('#direction');
     private readonly $pause = $('#pause');
 
-    private readonly width: number = 800;
-    private readonly height: number = 600;
+    private readonly dimensions = new BaseCoord(800, 600);
     private readonly trailMaxLength = 200;
     private readonly trailMaxRadiusPercentage = 0.1;
 
     private readonly balls : Ball[] = [];
+    private collidingBalls : Ball[] = [];
 
     private gravityDirection : Direction = Direction.DOWN;
     private changesMade : boolean = false;
     private trailLength : number = 100;
     private isPaused : boolean = false;
+    private showVelocity : boolean = false;
 
     private dragging : number = null;
     private dragTracking : Coord[];
@@ -44,23 +64,23 @@ export class App extends BaseApp {
 
     constructor() {
         super();
-        this.balls.push(new Ball(50, new BaseCoord(this.width/3, this.height/3), 0));
-        this.balls.push(new Ball(30, new BaseCoord(2*this.width/3, 2*this.height/3), 180));
-        this.movementCalculator = new MovementCalculatorImpl();
+        this.balls.push(new Ball(parseFloat(this.$radius1.val().toString()), parseFloat(this.$mass1.val().toString()), new BaseCoord(this.dimensions.x/3, this.dimensions.y/2), 0));
+        this.balls.push(new Ball(parseFloat(this.$radius2.val().toString()), parseFloat(this.$mass2.val().toString()), new BaseCoord(2*this.dimensions.x/3, this.dimensions.y/2), 180));
+        let quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
+        this.movementCalculator = new MovementCalculatorImpl(quadraticFormulaSolver);
         this.velocityCalculator = new VelocityCalculatorImpl();
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-        this.$gravity.on('change input', () => {
-            this.$showGravity.val(this.$gravity.val());
-            this.changesMade = true;
-        });
-        this.$trail.on('change input', () => {
-            this.$showTrail.val(this.$trail.val());
-            this.changesMade = true;
-        });
-        this.$direction.on('change', () => {
-            this.changesMade = true;
-        });
+        this.collisionFreeCalculator = new CollisionFreeMovementCalculatorImpl(this.movementCalculator);
+        this.collisionCalculator = new CollisionCalculatorImpl(quadraticFormulaSolver, new CoordDimensionChooserImpl());
+        this.canvas.width = this.dimensions.x;
+        this.canvas.height = this.dimensions.y;
+        this.rangeValueListener(this.$gravity, this.$showGravity);
+        this.rangeValueListener(this.$trail, this.$showTrail);
+        this.rangeValueListener(this.$radius1, this.$showRadius1);
+        this.rangeValueListener(this.$radius2, this.$showRadius2);
+        this.rangeValueListener(this.$mass1, this.$showMass1);
+        this.rangeValueListener(this.$mass2, this.$showMass2);
+        this.$showVelocity.on('click', () => this.changesMade = true)
+        this.$direction.on('change', () => this.changesMade = true);
         this.$pause.on('click', () => {
             if (this.isPaused) {
                 this.$pause.removeClass(this.CLASS_PLAY);
@@ -79,6 +99,13 @@ export class App extends BaseApp {
         this.animate();
     }
 
+    private rangeValueListener($input : JQuery, $showContainer : JQuery) : void {
+        $input.on('change input', () => {
+            $showContainer.val($input.val());
+            this.changesMade = true;
+        });
+    }
+
     private animate() : void {
         if (this.dragging === null && !this.isPaused) {
             this.checkChanges();
@@ -92,14 +119,18 @@ export class App extends BaseApp {
 
     private checkChanges(force = false) : void {
         if (this.changesMade || force) {
-            let gravity = parseFloat(this.$gravity.val().toString());
-            this.movementCalculator.setGravityConstant(gravity);
+            this.movementCalculator.setGravityConstant(parseFloat(this.$gravity.val().toString()));
             this.trailLength = Math.min(parseInt(this.$trail.val().toString()), this.trailMaxLength);
             this.balls.forEach(ball => {
                 if (ball.trail.length > this.trailLength) {
                     ball.trail = ball.trail.slice(ball.trail.length-this.trailLength);
                 }
             });
+            this.balls[0].radius = parseFloat(this.$radius1.val().toString());
+            this.balls[1].radius = parseFloat(this.$radius2.val().toString());
+            this.balls[0].mass = parseFloat(this.$mass1.val().toString());
+            this.balls[1].mass = parseFloat(this.$mass2.val().toString());
+            this.showVelocity = this.$showVelocity.prop('checked');
             let direction = this.$direction.val().toString();
             this.gravityDirection = direction === '' ? null : Direction[Direction[parseInt(direction)]];
             this.changesMade = false;
@@ -108,38 +139,24 @@ export class App extends BaseApp {
 
     private calc() : void {
         this.balls.forEach(ball => this.calcBall(ball));
+        this.collidingBalls = [];
     }
 
     private calcBall(ball : Ball) : void {
-        if ([Direction.UP, Direction.DOWN, null].includes(this.gravityDirection)) {
-            let calcResult = this.movementCalculator.calcConstantMovement(ball.coord.x, ball.velocity.x, this.width, ball.radius);
-            ball.coord.x = calcResult.coord;
-            if (calcResult.newVelocity) {
+        if (!this.collidingBalls.includes(ball)) {
+            let collisionResult = this.collisionCalculator.checkCollision(this.balls, ball, this.gravityDirection);
+            if (collisionResult !== null) {
                 ball.changeColor();
-                ball.velocity.x = calcResult.newVelocity;
+                collisionResult.collidingBall.changeColor();
+                this.calcMovement(ball, collisionResult.time);
+                this.calcMovement(collisionResult.collidingBall, collisionResult.time);
+                this.collisionCalculator.calculatePostCollisionVelocities(ball, collisionResult.collidingBall, this.gravityDirection);
+                this.calcMovement(ball, App.TIMESTEP-collisionResult.time);
+                this.calcMovement(collisionResult.collidingBall, App.TIMESTEP-collisionResult.time);
+                this.collidingBalls.push(collisionResult.collidingBall);
+            } else {
+                this.calcMovement(ball, App.TIMESTEP);
             }
-        } else {
-            let calcResult = this.movementCalculator.calcAcceleratedMovement(ball.coord.x, ball.velocity.x, this.width, ball.radius, this.gravityDirection == Direction.LEFT ? -1 : 1);
-            if (calcResult.bounce) {
-                ball.changeColor();
-            }
-            ball.coord.x = calcResult.coord;
-            ball.velocity.x = calcResult.newVelocity;
-        }
-        if ([Direction.RIGHT, Direction.LEFT, null].includes(this.gravityDirection)) {
-            let calcResult = this.movementCalculator.calcConstantMovement(ball.coord.y, ball.velocity.y, ball.radius, this.height);
-            ball.coord.y = calcResult.coord;
-            if (calcResult.newVelocity) {
-                ball.changeColor();
-                ball.velocity.y = calcResult.newVelocity;
-            }
-        } else {
-            let calcResult = this.movementCalculator.calcAcceleratedMovement(ball.coord.y, ball.velocity.y, this.height, ball.radius, this.gravityDirection == Direction.UP ? -1 : 1);
-            if (calcResult.bounce) {
-                ball.changeColor();
-            }
-            ball.coord.y = calcResult.coord;
-            ball.velocity.y = calcResult.newVelocity;
         }
 
         ball.trail.push(new Coord(ball.coord.x, ball.coord.y, ball.color));
@@ -148,8 +165,25 @@ export class App extends BaseApp {
         }
     }
 
+    private calcMovement(ball : Ball, time : number) : void {
+        let movementResult = this.collisionFreeCalculator.calculateMovement(ball, this.gravityDirection, this.dimensions, time);
+
+        let otherball = this.balls.find(b => b != ball);
+        if (Math.sqrt(Math.pow(movementResult.position.x-otherball.coord.x,2)+Math.pow(movementResult.position.y-otherball.coord.y,2)) < ball.radius+otherball.radius) {
+            console.log('missed collision!');
+            debugger;
+            this.collisionCalculator.checkCollision([otherball], ball, this.gravityDirection);
+        }
+
+        ball.coord.x = movementResult.position.x;
+        ball.coord.y = movementResult.position.y;
+        ball.velocity.x = movementResult.velocity.x;
+        ball.velocity.y = movementResult.velocity.y;
+        if (movementResult.bounce) ball.changeColor();
+    }
+
     private draw() : void {
-        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.clearRect(0, 0, this.dimensions.x, this.dimensions.y);
         this.balls.forEach(ball => this.drawBall(ball));
     }
 
@@ -173,7 +207,7 @@ export class App extends BaseApp {
         this.context.fillStyle = 'hsl('+ball.color+',80%,60%)';
         this.context.fill();
 
-        if (this.isPaused && !this.dragging) {
+        if ((this.isPaused || this.showVelocity) && !this.dragging) {
             this.context.beginPath();
             this.context.moveTo(ball.coord.x, ball.coord.y);
             this.context.lineTo(ball.coord.x+ball.velocity.x, ball.coord.y+ball.velocity.y);
@@ -190,8 +224,8 @@ export class App extends BaseApp {
 
     private mouseDown(e) : void {
         let boundingRect = this.canvas.getBoundingClientRect();
-        let mouseX = (e.clientX - boundingRect.left)*(this.width/boundingRect.width);
-        let mouseY = (e.clientY - boundingRect.top)*(this.height/boundingRect.height);
+        let mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
+        let mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
 
         for (let i = 0; i < this.balls.length; i++) {
             let ball = this.balls[i];
@@ -214,19 +248,19 @@ export class App extends BaseApp {
 
     private mouseMove(e) : void {
         let boundingRect = this.canvas.getBoundingClientRect();
-        let mouseX = (e.clientX - boundingRect.left)*(this.width/boundingRect.width);
-        let mouseY = (e.clientY - boundingRect.top)*(this.height/boundingRect.height);
+        let mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
+        let mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
         let posX = mouseX - this.drag.x;
         let posY = mouseY - this.drag.y;
         if (posX < this.dragBall.radius) {
             posX = this.dragBall.radius;
-        } else if (posX > this.width-this.dragBall.radius) {
-            posX = this.width-this.dragBall.radius;
+        } else if (posX > this.dimensions.x-this.dragBall.radius) {
+            posX = this.dimensions.x-this.dragBall.radius;
         }
         if (posX < this.dragBall.radius) {
             posY = this.dragBall.radius;
-        } else if (posY > this.height-this.dragBall.radius) {
-            posY = this.height-this.dragBall.radius;
+        } else if (posY > this.dimensions.y-this.dragBall.radius) {
+            posY = this.dimensions.y-this.dragBall.radius;
         }
         this.dragBall.coord.x = posX;
         this.dragBall.coord.y = posY;

@@ -1,11 +1,18 @@
 import {MovementCalculator} from "../interface/MovementCalculator";
 import {CalcResult} from "../model/CalcResult";
+import {QuadraticFormulaSolver} from "../interface/QuadraticFormulaSolver";
 
 export class MovementCalculatorImpl implements MovementCalculator {
 
+    private readonly quadraticFormulaSolver : QuadraticFormulaSolver;
+
     private gravityConstant : number;
 
-    setGravityConstant(gravity: number) {
+    constructor(quadraticFormulaSolver: QuadraticFormulaSolver) {
+        this.quadraticFormulaSolver = quadraticFormulaSolver;
+    }
+
+    setGravityConstant(gravity: number): void {
         this.gravityConstant = gravity;
     }
 
@@ -32,12 +39,11 @@ export class MovementCalculatorImpl implements MovementCalculator {
         return new CalcResult(newCoord, newVelocity, null);
     }
 
-    calcAcceleratedMovement(currentCoord: number, velocity: number, max: number, radius : number, direction: number): CalcResult {
+    calcAcceleratedMovement(currentCoord: number, velocity: number, max: number, radius : number, direction: number, time : number): CalcResult {
         // TODO: rolling on ground
         let newCoord : number;
         let newVelocity : number;
         let bounce = false;
-        let time = 0.1;
         let directionalGravity = this.gravityConstant * (direction < 0 ? -1 : 1);
         let newCoordsWithoutBounds = this.calcAcceleratedCoordByTime(directionalGravity, time, velocity, currentCoord);
         let isAlreadyFalling = !velocity || Math.sign(velocity) == Math.sign(direction);
@@ -110,9 +116,7 @@ export class MovementCalculatorImpl implements MovementCalculator {
     }
 
     private calcAcceleratedTimeByCoord(gravity : number, coord : number, initialVelocity : number, coord0) : number {
-        let solution1 = (-initialVelocity + Math.sqrt(initialVelocity*initialVelocity - 2*gravity*(coord0-coord))) / gravity;
-        let solution2 = (-initialVelocity - Math.sqrt(initialVelocity*initialVelocity - 2*gravity*(coord0-coord))) / gravity;
-        return Math.min(solution1, solution2) > 0 ? Math.min(solution1, solution2) : Math.max(solution1, solution2);
+        return this.quadraticFormulaSolver.solve(gravity/2, initialVelocity, coord0-coord);
     }
 
     private calcAcceleratedCoordByTime(gravity : number, time : number, initialVelocity : number, coord0) : number {
