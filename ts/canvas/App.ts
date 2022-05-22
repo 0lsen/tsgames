@@ -11,7 +11,6 @@ import {CollisionFreeMovementCalculatorImpl} from "./impl/CollisionFreeMovementC
 import {CollisionCalculator} from "./interface/CollisionCalculator";
 import {CollisionCalculatorImpl} from "./impl/CollisionCalculatorImpl";
 import {QuadraticFormulaSolverImpl} from "./impl/QuadraticFormulaSolverImpl";
-import {CoordDimensionChooserImpl} from "./impl/CoordDimensionChooserImpl";
 import {CollisionFreeMovementCalculator} from "./interface/CollisionFreeMovementCalculator";
 
 export class App extends BaseApp {
@@ -49,7 +48,7 @@ export class App extends BaseApp {
     private readonly trailMaxRadiusPercentage = 0.1;
 
     private readonly balls : Ball[] = [];
-    private collidingBalls : Ball[] = [];
+    private calculatedBalls : Ball[] = [];
 
     private gravityDirection : Direction = Direction.DOWN;
     private changesMade : boolean = false;
@@ -70,7 +69,7 @@ export class App extends BaseApp {
         this.movementCalculator = new MovementCalculatorImpl(quadraticFormulaSolver);
         this.velocityCalculator = new VelocityCalculatorImpl();
         this.collisionFreeCalculator = new CollisionFreeMovementCalculatorImpl(this.movementCalculator);
-        this.collisionCalculator = new CollisionCalculatorImpl(quadraticFormulaSolver, new CoordDimensionChooserImpl());
+        this.collisionCalculator = new CollisionCalculatorImpl(quadraticFormulaSolver);
         this.canvas.width = this.dimensions.x;
         this.canvas.height = this.dimensions.y;
         this.rangeValueListener(this.$gravity, this.$showGravity);
@@ -139,12 +138,12 @@ export class App extends BaseApp {
 
     private calc() : void {
         this.balls.forEach(ball => this.calcBall(ball));
-        this.collidingBalls = [];
+        this.calculatedBalls = [];
     }
 
     private calcBall(ball : Ball) : void {
-        if (!this.collidingBalls.includes(ball)) {
-            let collisionResult = this.collisionCalculator.checkCollision(this.balls, ball, this.gravityDirection);
+        if (!this.calculatedBalls.includes(ball)) {
+            let collisionResult = this.collisionCalculator.checkCollision(this.balls.filter(b => !this.calculatedBalls.includes(b)), ball, this.gravityDirection);
             if (collisionResult !== null) {
                 ball.changeColor();
                 collisionResult.collidingBall.changeColor();
@@ -153,10 +152,11 @@ export class App extends BaseApp {
                 this.collisionCalculator.calculatePostCollisionVelocities(ball, collisionResult.collidingBall, this.gravityDirection);
                 this.calcMovement(ball, App.TIMESTEP-collisionResult.time);
                 this.calcMovement(collisionResult.collidingBall, App.TIMESTEP-collisionResult.time);
-                this.collidingBalls.push(collisionResult.collidingBall);
+                this.calculatedBalls.push(collisionResult.collidingBall);
             } else {
                 this.calcMovement(ball, App.TIMESTEP);
             }
+            this.calculatedBalls.push(ball);
         }
 
         ball.trail.push(new Coord(ball.coord.x, ball.coord.y, ball.color));

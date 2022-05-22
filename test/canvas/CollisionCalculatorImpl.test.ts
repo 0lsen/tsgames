@@ -1,6 +1,5 @@
 import {CollisionCalculatorImpl} from "../../ts/canvas/impl/CollisionCalculatorImpl";
 import {QuadraticFormulaSolverImpl} from "../../ts/canvas/impl/QuadraticFormulaSolverImpl";
-import {CoordDimensionChooserImpl} from "../../ts/canvas/impl/CoordDimensionChooserImpl";
 import {Ball} from "../../ts/canvas/model/Ball";
 import {Coord} from "../../ts/core/model/Coord";
 import {Direction} from "../../ts/core/enum/Direction";
@@ -8,7 +7,7 @@ import {Direction} from "../../ts/core/enum/Direction";
 const chai = require('chai');
 const mocha = require('mocha');
 
-const calculator = new CollisionCalculatorImpl(new QuadraticFormulaSolverImpl(), new CoordDimensionChooserImpl());
+const calculator = new CollisionCalculatorImpl(new QuadraticFormulaSolverImpl());
 
 let r1 = 20;
 let m1 = 10;
