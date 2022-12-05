@@ -35,11 +35,22 @@ export class App extends BaseApp {
         this.$start.on('click', () => this.start());
         this.$body.on('keydown', (e) => {
             if (this.directionChange) return;
-            if (e.key == 'ArrowLeft' && this.direction != Direction.RIGHT) this.changeDirection(Direction.LEFT);
-            if (e.key == 'ArrowUp' && this.direction != Direction.DOWN) this.changeDirection(Direction.UP);
-            if (e.key == 'ArrowRight' && this.direction != Direction.LEFT) this.changeDirection(Direction.RIGHT);
-            if (e.key == 'ArrowDown' && this.direction != Direction.UP) this.changeDirection(Direction.DOWN);
+            switch (e.key) {
+                case 'ArrowLeft':
+                    this.changeDirection(Direction.LEFT);
+                    break;
+                case 'ArrowUp':
+                    this.changeDirection(Direction.UP);
+                    break;
+                case 'ArrowRight':
+                    this.changeDirection(Direction.RIGHT);
+                    break;
+                case 'ArrowDown':
+                    this.changeDirection(Direction.DOWN);
+                    break;
+            }
         });
+        this.$board.on('click', e => this.changeDirectionViaClick(e));
     }
 
     private build() : void {
@@ -62,8 +73,28 @@ export class App extends BaseApp {
     }
 
     private changeDirection(direction : Direction) : void {
-        this.direction = direction;
-        this.directionChange = true;
+        if (([Direction.UP, Direction.DOWN].includes(direction) && [Direction.LEFT, Direction.RIGHT].includes(this.direction)) ||
+            ([Direction.LEFT, Direction.RIGHT].includes(direction) && [Direction.UP, Direction.DOWN].includes(this.direction))
+        ) {
+            this.direction = direction;
+            this.directionChange = true;
+        }
+    }
+
+    private changeDirectionViaClick(e) : void {
+        if (this.directionChange) return;
+        let currentDirectionIsVertical = !(this.direction%2);
+        let mouse =  currentDirectionIsVertical ? e.clientX : e.clientY;
+        let $head = this.getCell(this.headPosition);
+        let head = currentDirectionIsVertical
+            ? $head.offset().left+$head.width()/2
+            : $head.offset().top+$head.height()/2;
+        let distance = mouse-head;
+        if (distance) {
+            this.changeDirection(currentDirectionIsVertical
+                ? distance > 0 ? Direction.RIGHT : Direction.LEFT
+                : distance > 0 ? Direction.DOWN : Direction.UP);
+        }
     }
 
     private getSpeed() : number {
