@@ -1,0 +1,31 @@
+#field
+  justify-content: space-around
+
+#board
+  width: MIN(50vw, 50vh)
+  height: MIN(50vw, 50vh)
+  display: flex
+  flex-wrap: wrap
+  > div
+    width: MIN(16vh, 16vw)
+    height: MIN(16vh, 16vw)
+    margin: MIN(0.333vh, 0.333vw)
+    border: 2px solid #000
+    position: relative
+    &.fa-xmark::before
+      font-size: MIN(14vw, 14vh)
+      position: absolute
+      top: MIN(1.1vw, 1.1vh)
+      left: MIN(3vw, 3vh)
+    &.fa-circle::before
+      font-size: MIN(12vw, 12vh)
+      position: absolute
+      top: MIN(1.6vw, 1.6vh)
+      left: MIN(1.3vw, 1.3vh)
+    &.win
+      background-color: #ffdd0077
+
+#info, #option
+  padding: 10px
+  font-size: MIN(3vh, 3vw)
+  text-align: center

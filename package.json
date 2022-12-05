@@ -19,13 +19,14 @@
     "ts-node": "^10.7.0"
   },
   "scripts": {
-    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCanvas && yarn run compileGoL && yarn run compileMW && yarn run compileSnake",
+    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCanvas && yarn run compileGoL && yarn run compileMW && yarn run compileSnake && yarn run compileTTT ",
     "compileBaseSass": "node-sass --output-style compressed sass/index.sass public/style.css",
     "compileBS": "tsc -p tsconfig/bs.json && node-sass --output-style compressed sass/bs.sass public/bs/style.css",
     "compileCanvas": "tsc -p tsconfig/canvas.json && node-sass --output-style compressed sass/canvas.sass public/canvas/style.css",
     "compileGoL": "tsc -p tsconfig/gol.json && node-sass --output-style compressed sass/gol.sass public/gol/style.css",
     "compileMW": "tsc -p tsconfig/mw.json && node-sass --output-style compressed sass/mw.sass public/mw/style.css",
     "compileSnake": "tsc -p tsconfig/snake.json && node-sass --output-style compressed sass/snake.sass public/snake/style.css",
+    "compileTTT": "tsc -p tsconfig/ttt.json && node-sass --output-style compressed sass/ttt.sass public/ttt/style.css",
     "test": "tsc -p tsconfig/test.json && mocha -r ts-node/register $NODE_DEBUG_OPTION test/**/**.test.ts"
   }
 }
