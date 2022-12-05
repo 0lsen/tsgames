@@ -1,12 +1,12 @@
 import {Randomizer} from "../../ts/core/interface/Randomizer";
 
-export class RandomizerMock implements Randomizer {
+export class RandomizerMock<T> implements Randomizer {
 
     private intReturns: number[];
     private boolReturns: boolean[];
-    private enumReturns;
+    private enumReturns: any[];
 
-    constructor(intReturns: number[], boolReturns: boolean[], enumReturns) {
+    constructor(intReturns: number[], boolReturns: boolean[], enumReturns: any[]) {
         this.intReturns = intReturns;
         this.boolReturns = boolReturns;
         this.enumReturns = enumReturns;
@@ -33,7 +33,7 @@ export class RandomizerMock implements Randomizer {
         return ret;
     }
 
-    verify() {
+    verify() : void {
         if (this.intReturns.length || this.boolReturns.length || this.enumReturns.length) {
             throw new Error();
         }
