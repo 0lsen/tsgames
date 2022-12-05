@@ -63,8 +63,8 @@ export class App extends BaseApp {
 
     constructor() {
         super();
-        this.balls.push(new Ball(parseFloat(this.$radius1.val().toString()), parseFloat(this.$mass1.val().toString()), new BaseCoord(this.dimensions.x/3, this.dimensions.y/2), 0));
-        this.balls.push(new Ball(parseFloat(this.$radius2.val().toString()), parseFloat(this.$mass2.val().toString()), new BaseCoord(2*this.dimensions.x/3, this.dimensions.y/2), 180));
+        this.balls.push(new Ball(this.parseFloat(this.$radius1), this.parseFloatLog(this.$mass1), new BaseCoord(this.dimensions.x/3, this.dimensions.y/2 - this.parseFloat(this.$radius1)), 0));
+        this.balls.push(new Ball(this.parseFloat(this.$radius2), this.parseFloatLog(this.$mass2), new BaseCoord(2*this.dimensions.x/3, this.dimensions.y/2 - this.parseFloat(this.$radius2)), 180));
         let quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
         this.movementCalculator = new MovementCalculatorImpl(quadraticFormulaSolver);
         this.velocityCalculator = new VelocityCalculatorImpl();
@@ -76,8 +76,8 @@ export class App extends BaseApp {
         this.rangeValueListener(this.$trail, this.$showTrail);
         this.rangeValueListener(this.$radius1, this.$showRadius1);
         this.rangeValueListener(this.$radius2, this.$showRadius2);
-        this.rangeValueListener(this.$mass1, this.$showMass1);
-        this.rangeValueListener(this.$mass2, this.$showMass2);
+        this.rangeValueLogListener(this.$mass1, this.$showMass1);
+        this.rangeValueLogListener(this.$mass2, this.$showMass2);
         this.$showVelocity.on('click', () => this.changesMade = true)
         this.$direction.on('change', () => this.changesMade = true);
         this.$pause.on('click', () => {
@@ -98,9 +98,24 @@ export class App extends BaseApp {
         this.animate();
     }
 
+    private parseFloat($input : JQuery) : number {
+        return parseFloat($input.val().toString());
+    }
+
+    private parseFloatLog($input : JQuery) : number {
+        return Math.pow(10, this.parseFloat($input));
+    }
+
     private rangeValueListener($input : JQuery, $showContainer : JQuery) : void {
         $input.on('change input', () => {
             $showContainer.val($input.val());
+            this.changesMade = true;
+        });
+    }
+
+    private rangeValueLogListener($input : JQuery, $showContainer : JQuery) : void {
+        $input.on('change input', () => {
+            $showContainer.val(Math.round(this.parseFloatLog($input)*100)/100);
             this.changesMade = true;
         });
     }
@@ -125,10 +140,10 @@ export class App extends BaseApp {
                     ball.trail = ball.trail.slice(ball.trail.length-this.trailLength);
                 }
             });
-            this.balls[0].radius = parseFloat(this.$radius1.val().toString());
-            this.balls[1].radius = parseFloat(this.$radius2.val().toString());
-            this.balls[0].mass = parseFloat(this.$mass1.val().toString());
-            this.balls[1].mass = parseFloat(this.$mass2.val().toString());
+            this.balls[0].radius = this.parseFloat(this.$radius1);
+            this.balls[1].radius = this.parseFloat(this.$radius2);
+            this.balls[0].mass = this.parseFloatLog(this.$mass1);
+            this.balls[1].mass = this.parseFloatLog(this.$mass2);
             this.showVelocity = this.$showVelocity.prop('checked');
             let direction = this.$direction.val().toString();
             this.gravityDirection = direction === '' ? null : Direction[Direction[parseInt(direction)]];
