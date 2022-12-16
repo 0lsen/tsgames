@@ -18,20 +18,21 @@ export class App extends BaseApp {
     private readonly pegWidth = 25;
     private readonly pegHeight = 40;
     private readonly pegRaise = 20;
-    private readonly pegColorSide1 = '#f99';
-    private readonly pegColorSide2 = '#d33';
-    private readonly pegColorTop = '#d66';
+    private readonly pegLightnessMin = 50;
+    private readonly pegLightnessMax = 80;
     private readonly pegShadowColor = '#aaa';
     private readonly pegShadowLength = 0.3;
+    private readonly lightRotationMsMin = 5;
+    private readonly lightRotationMsMax = 30;
 
     private readonly dimensions : Coord;
     private readonly radChangeMs = 750;
-
     private map : boolean[][];
     private start : boolean = true;
     private hover : Coord;
     private raised : Coord;
-    private pegShadowRad = -1;
+    private pegShadowRad = 5;
+    private rotation : number;
 
     constructor() {
         super();
@@ -177,10 +178,7 @@ export class App extends BaseApp {
         this.context.closePath()
         this.context.fill();
 
-        // draw peg
-        // TODO: adjust to fillStyle to pegShadowRad
-
-        this.context.fillStyle = this.createFillStyle(i, j);
+        this.context.fillStyle = this.createPegFillStyle(i, j);
 
         this.context.beginPath();
         this.context.rect(centerX-this.pegWidth/2, 2*(centerYBase-this.pegHeight-pegRaise), this.pegWidth, 2*this.pegHeight);
@@ -190,7 +188,7 @@ export class App extends BaseApp {
         this.context.arc(centerX, 2*(centerYBase-pegRaise), this.pegWidth/2, 0, 2*Math.PI);
         this.context.fill();
 
-        this.context.fillStyle = this.pegColorTop;
+        this.context.fillStyle = 'hsl(0, 70%, '+this.pegLightnessMax+'%)';
 
         this.context.beginPath();
         this.context.arc(centerX, 2*(centerYBase-this.pegHeight-pegRaise), this.pegWidth/2, 0, 2*Math.PI);
@@ -238,11 +236,20 @@ export class App extends BaseApp {
         return Math.floor(7+(2*y - x - this.dimensions.x/2)/(2*this.tileSize));
     }
 
-    private createFillStyle(i : number, j : number) : CanvasGradient {
-        let gradient = this.context.createLinearGradient(this.mapToScreenX(i, j), 0, this.mapToScreenX(i, j)+this.pegWidth, 0);
-        gradient.addColorStop(0, this.pegColorSide1);
-        gradient.addColorStop(1, this.pegColorSide2);
+    private createPegFillStyle(i : number, j : number) : CanvasGradient {
+        let gradient = this.context.createLinearGradient(this.mapToScreenX(i, j)-this.pegWidth/2, 0, this.mapToScreenX(i, j)+this.pegWidth/2, 0);
+        gradient.addColorStop(0, 'hsl(0, 70%, '+this.sineValue(3*Math.PI/4)+'%)');
+        gradient.addColorStop(0.25, 'hsl(0, 70%, '+this.sineValue(4*Math.PI/4)+'%)');
+        gradient.addColorStop(0.5, 'hsl(0, 70%, '+this.sineValue(5*Math.PI/4)+'%)');
+        gradient.addColorStop(0.75, 'hsl(0, 70%, '+this.sineValue(6*Math.PI/4)+'%)');
+        gradient.addColorStop(1, 'hsl(0, 70%, '+this.sineValue(7*Math.PI/4)+'%)');
         return gradient;
+    }
+
+    private sineValue(offset : number) : number {
+        let average = (this.pegLightnessMax+this.pegLightnessMin)/2;
+        let amplitude = (this.pegLightnessMax-this.pegLightnessMin)/2;
+        return Math.sin(this.pegShadowRad+offset) * amplitude + average
     }
 
     private clickFunc = (e) => this.click(e);
@@ -315,12 +322,33 @@ export class App extends BaseApp {
         this.populateMap();
         this.start = true;
         this.raised = undefined;
+        if (this.rotation === undefined) {
+            this.rotation = 0;
+            this.rotateLight();
+        }
         window.requestAnimationFrame(() => this.animate());
     }
 
+    private rotateLight() : void {
+        if (this.rotation !== undefined && this.rotation < Math.PI*2) {
+            this.pegShadowRad = (this.pegShadowRad + 0.05) % (2 * Math.PI);
+            this.rotation += 0.05;
+            window.requestAnimationFrame(() => this.animate());
+            setTimeout(() => this.rotateLight(), this.rotationTime());
+        } else {
+            this.rotation = undefined;
+        }
+    }
+
+    private rotationTime() : number {
+        return ((this.lightRotationMsMax-this.lightRotationMsMin)/(Math.PI*Math.PI))*Math.pow(this.rotation-Math.PI, 2) + this.lightRotationMsMin;
+    }
+
     private time() : void {
-        this.pegShadowRad = (this.pegShadowRad+0.01)%(2*Math.PI);
-        window.requestAnimationFrame(() => this.animate());
+        if (this.rotation === undefined) {
+            this.pegShadowRad = (this.pegShadowRad + 0.01) % (2 * Math.PI);
+            window.requestAnimationFrame(() => this.animate());
+        }
         setTimeout(() => this.time(), this.radChangeMs);
     }
 }
