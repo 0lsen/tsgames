@@ -5,6 +5,14 @@ export class RandomizerImpl implements Randomizer {
         return Math.floor(Math.random()*max);
     }
 
+    // see: https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
+    randomGaussian(mean : number = 0, stdev : number = 1): number {
+        let u = 1 - Math.random();
+        let v = Math.random();
+        let z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+        return z * stdev + mean;
+    }
+
     randomBool(): boolean {
         return Math.round(Math.random()) < 0.5;
     }

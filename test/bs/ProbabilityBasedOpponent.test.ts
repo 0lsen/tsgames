@@ -6,11 +6,7 @@ import {SpaceCalculatorImpl} from "../../ts/bs/impl/SpaceCalculatorImpl";
 const chai = require('chai');
 const mocha = require('mocha');
 
-const randomizer = new RandomizerMock(
-    [],
-    [],
-    []
-);
+const randomizer = new RandomizerMock();
 
 
 const spaceCalc = new SpaceCalculatorImpl();

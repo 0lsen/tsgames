@@ -152,7 +152,8 @@ mocha.describe('TTT Opponent', () => {
 });
 
 const makeMove = (top : booleanUndefined[], middle : booleanUndefined[], bottom : booleanUndefined[], randomChoice : number = 0) : GameState => {
-    let randomizerMock = new RandomizerMock([randomChoice], [], []);
+    let randomizerMock = new RandomizerMock();
+    randomizerMock.intReturns = [randomChoice];
     let opponent = new SmartOpponent(randomizerMock);
     let state = new GameState([...top, ...middle, ...bottom], false);
     opponent.makeMove(state);

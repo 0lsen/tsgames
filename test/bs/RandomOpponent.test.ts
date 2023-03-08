@@ -13,11 +13,9 @@ import {Shot} from "../../ts/bs/model/Shot";
 const chai = require('chai');
 const mocha = require('mocha');
 
-const randomizer = new RandomizerMock(
-    [1,1,2,1,3,1,1,1,2,2],
-    [],
-    [1,1,1]
-);
+const randomizer = new RandomizerMock();
+randomizer.intReturns = [1,1,2,1,3,1,1,1,2,2];
+randomizer.enumReturns = [1,1,1];
 
 const opponent = new RandomOpponent(randomizer);
 
