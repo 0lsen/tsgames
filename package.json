@@ -19,11 +19,12 @@
     "ts-node": "^10.7.0"
   },
   "scripts": {
-    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCanvas && yarn run compileGoL && yarn run compileMW && yarn run compilePeSo && yarn run compileSabo && yarn run compileSnake && yarn run compileTTT ",
+    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCaDi && yarn run compileGoL && yarn run compileLiRo && yarn run compileMW && yarn run compilePeSo && yarn run compileSabo && yarn run compileSnake && yarn run compileTTT ",
     "compileBaseSass": "node-sass --output-style compressed sass/index.sass public/style.css",
     "compileBS": "tsc -p tsconfig/bs.json && node-sass --output-style compressed sass/bs.sass public/bs/style.css",
-    "compileCanvas": "tsc -p tsconfig/canvas.json && node-sass --output-style compressed sass/canvas.sass public/canvas/style.css",
+    "compileCaDi": "tsc -p tsconfig/cadi.json && node-sass --output-style compressed sass/cadi.sass public/cadi/style.css",
     "compileGoL": "tsc -p tsconfig/gol.json && node-sass --output-style compressed sass/gol.sass public/gol/style.css",
+    "compileLiRo": "tsc -p tsconfig/liro.json && node-sass --output-style compressed sass/liro.sass public/liro/style.css",
     "compileMW": "tsc -p tsconfig/mw.json && node-sass --output-style compressed sass/mw.sass public/mw/style.css",
     "compilePeSo": "tsc -p tsconfig/peso.json && node-sass --output-style compressed sass/peso.sass public/peso/style.css",
     "compileSabo": "tsc -p tsconfig/sabo.json && node-sass --output-style compressed sass/sabo.sass public/sabo/style.css",

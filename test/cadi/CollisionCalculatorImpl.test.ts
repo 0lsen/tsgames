@@ -1,6 +1,6 @@
-import {CollisionCalculatorImpl} from "../../ts/canvas/impl/CollisionCalculatorImpl";
-import {QuadraticFormulaSolverImpl} from "../../ts/canvas/impl/QuadraticFormulaSolverImpl";
-import {Ball} from "../../ts/canvas/model/Ball";
+import {CollisionCalculatorImpl} from "../../ts/cadi/impl/CollisionCalculatorImpl";
+import {QuadraticFormulaSolverImpl} from "../../ts/cadi/impl/QuadraticFormulaSolverImpl";
+import {Ball} from "../../ts/cadi/model/Ball";
 import {Coord} from "../../ts/core/model/Coord";
 import {Direction} from "../../ts/core/enum/Direction";
 

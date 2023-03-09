@@ -3,10 +3,10 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/canvas/app.js"
+    "outFile": "../public/liro/app.js"
   },
   "include": [
-    "../ts/canvas",
+    "../ts/liro",
     "../ts/core"
   ]
 }

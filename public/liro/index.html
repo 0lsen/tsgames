@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        Lightroom
+    </title>
+    <meta name="viewport" content="initial-scale=1, width=device-width"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.js" integrity="sha384-WKPjHIEhBzyEuCp8//j0gXBM/TP1OwKdWMPBRFZ6q8g66Pce1n6o0M/q4duEXrmA" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="../index.html" class="fas fa-chevron-left"></a> LIGHTROOM
+        </div>
+    </div>
+</header>
+<div class="container" id="field">
+    <div class="card">
+        <div id="board">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <h2 class="subtitle">LIGHT SOURCE</h2>
+        <div class="columns">
+            <div class="column is-4">
+                <label class="label" for="lsHue">HUE</label>
+                <input type="range" value="30" min="0" max="359" step="1" class="input" id="lsHue">
+            </div>
+            <div class="column is-4">
+                <label class="label" for="lsSat">SATURATION</label>
+                <input type="range" value="70" min="0" max="100" step="1" class="input" id="lsSat">
+            </div>
+            <div class="column is-4">
+                <label class="label" for="lsLig">LIGHTNESS</label>
+                <input type="range" value="90" min="0" max="100" step="1" class="input" id="lsLig">
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-4">
+                <label class="label" for="lsRad">RADIUS</label>
+                <input type="range" value="10" min="5" max="50" step="1" class="input" id="lsRad">
+            </div>
+            <div class="column is-4">
+                <label class="label" for="lsRea">REACH</label>
+                <input type="range" value="70" min="10" max="100" step="1" class="input" id="lsRea">
+            </div>
+        </div>
+        <h2 class="subtitle">PILLARS</h2>
+        <div class="columns">
+            <div class="column is-4">
+                <label class="label" for="piHue">HUE</label>
+                <input type="range" value="130" min="0" max="359" step="1" class="input" id="piHue">
+            </div>
+            <div class="column is-4">
+                <label class="label" for="piSat">SATURATION</label>
+                <input type="range" value="10" min="0" max="100" step="1" class="input" id="piSat">
+            </div>
+            <div class="column is-4">
+                <label class="label" for="piLig">LIGHTNESS</label>
+                <input type="range" value="30" min="0" max="100" step="1" class="input" id="piLig">
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-4">
+                <label class="label" for="piRad">RADIUS</label>
+                <input type="range" value="30" min="15" max="50" step="1" class="input" id="piRad">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <button type="button" class="button" id="reset">Reset</button>
+    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
+</div>
+
+<div id="overlay">
+    <div class="card"></div>
+</div>
+
+<script>
+    let app;
+    $(function () {
+        require(
+            ['liro/App'],
+            (main) => {
+                app = new main.App();
+            }
+        );
+    })
+</script>
+</body>
+</html>

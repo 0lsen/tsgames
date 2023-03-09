@@ -1,4 +1,4 @@
-import {VelocityCalculatorImpl} from "../../ts/canvas/impl/VelocityCalculatorImpl";
+import {VelocityCalculatorImpl} from "../../ts/cadi/impl/VelocityCalculatorImpl";
 
 const chai = require('chai');
 const mocha = require('mocha');

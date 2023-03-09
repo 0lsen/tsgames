@@ -1,5 +1,5 @@
-import {MovementCalculatorImpl} from "../../ts/canvas/impl/MovementCalculatorImpl";
-import {QuadraticFormulaSolverImpl} from "../../ts/canvas/impl/QuadraticFormulaSolverImpl";
+import {MovementCalculatorImpl} from "../../ts/cadi/impl/MovementCalculatorImpl";
+import {QuadraticFormulaSolverImpl} from "../../ts/cadi/impl/QuadraticFormulaSolverImpl";
 
 const chai = require('chai');
 const mocha = require('mocha');
