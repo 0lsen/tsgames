@@ -14,14 +14,14 @@ export class CollisionFreeMovementCalculatorImpl implements CollisionFreeMovemen
     }
 
     calculateMovement(ball : Ball, gravityDirection : Direction, dimensions : Coord, time : number): MovementResult {
-        let newXPosition = ball.coord.x;
+        let newXPosition = ball.x;
         let newXVelocity = ball.velocity.x;
-        let newYPosition = ball.coord.y;
+        let newYPosition = ball.y;
         let newYVelocity = ball.velocity.y;
         let bounce = false;
         if ([Direction.UP, Direction.DOWN, null].includes(gravityDirection)) {
             let calcResult = this.movementCalculator.calcConstantMovement(
-                ball.coord.x,
+                ball.x,
                 ball.velocity.x,
                 dimensions.x,
                 ball.radius
@@ -33,7 +33,7 @@ export class CollisionFreeMovementCalculatorImpl implements CollisionFreeMovemen
             }
         } else {
             let calcResult = this.movementCalculator.calcAcceleratedMovement(
-                ball.coord.x,
+                ball.x,
                 ball.velocity.x,
                 dimensions.x,
                 ball.radius,
@@ -48,7 +48,7 @@ export class CollisionFreeMovementCalculatorImpl implements CollisionFreeMovemen
         }
         if ([Direction.RIGHT, Direction.LEFT, null].includes(gravityDirection)) {
             let calcResult = this.movementCalculator.calcConstantMovement(
-                ball.coord.y,
+                ball.y,
                 ball.velocity.y,
                 dimensions.y,
                 ball.radius
@@ -60,7 +60,7 @@ export class CollisionFreeMovementCalculatorImpl implements CollisionFreeMovemen
             }
         } else {
             let calcResult = this.movementCalculator.calcAcceleratedMovement(
-                ball.coord.y,
+                ball.y,
                 ball.velocity.y,
                 dimensions.y,
                 ball.radius,

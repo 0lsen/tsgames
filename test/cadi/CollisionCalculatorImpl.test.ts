@@ -1,8 +1,8 @@
 import {CollisionCalculatorImpl} from "../../ts/cadi/impl/CollisionCalculatorImpl";
 import {QuadraticFormulaSolverImpl} from "../../ts/cadi/impl/QuadraticFormulaSolverImpl";
 import {Ball} from "../../ts/cadi/model/Ball";
-import {Coord} from "../../ts/core/model/Coord";
 import {Direction} from "../../ts/core/enum/Direction";
+import {HSL} from "../../ts/canvas/model/HSL";
 
 const chai = require('chai');
 const mocha = require('mocha');
@@ -25,18 +25,20 @@ let v2y = 20;
 
 let createBalls = () => {
     let ball1 = new Ball(
+        x1,
+        y1,
         r1,
         m1,
-        new Coord(x1, y1),
-        0
+        new HSL(0, 0, 0)
     );
     ball1.velocity.x = v1x;
     ball1.velocity.y = v1y;
     let ball2 = new Ball(
+        x2,
+        y2,
         r2,
         m2,
-        new Coord(x2, y2),
-        0
+        new HSL(0, 0, 0)
     );
     ball2.velocity.x = v2x;
     ball2.velocity.y = v2y;

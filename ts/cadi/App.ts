@@ -1,4 +1,3 @@
-import {BaseApp} from "../core/BaseApp";
 import {Direction} from "../core/enum/Direction";
 import {MovementCalculator} from "./interface/MovementCalculator";
 import {MovementCalculatorImpl} from "./impl/MovementCalculatorImpl";
@@ -12,8 +11,11 @@ import {CollisionCalculator} from "./interface/CollisionCalculator";
 import {CollisionCalculatorImpl} from "./impl/CollisionCalculatorImpl";
 import {QuadraticFormulaSolverImpl} from "./impl/QuadraticFormulaSolverImpl";
 import {CollisionFreeMovementCalculator} from "./interface/CollisionFreeMovementCalculator";
+import {CanvasApp} from "../canvas/CanvasApp";
+import {CanvasTools} from "../canvas/CanvasTools";
+import {HSL} from "../canvas/model/HSL";
 
-export class App extends BaseApp {
+export class App extends CanvasApp {
 
     public static readonly TIMESTEP = 0.1;
 
@@ -25,8 +27,6 @@ export class App extends BaseApp {
     private collisionFreeCalculator : CollisionFreeMovementCalculator;
     private collisionCalculator : CollisionCalculator;
 
-    private readonly canvas = $('#canvas')[0] as HTMLCanvasElement;
-    private readonly context = this.canvas.getContext("2d");
     private readonly $gravity = $('#gravity');
     private readonly $showGravity = $('#showGravity');
     private readonly $trail = $('#trail');
@@ -43,7 +43,7 @@ export class App extends BaseApp {
     private readonly $direction = $('#direction');
     private readonly $pause = $('#pause');
 
-    private readonly dimensions = new BaseCoord(800, 600);
+    protected readonly dimensions = new BaseCoord(800, 600);
     private readonly trailMaxLength = 200;
     private readonly trailMaxRadiusPercentage = 0.1;
 
@@ -63,15 +63,25 @@ export class App extends BaseApp {
 
     constructor() {
         super();
-        this.balls.push(new Ball(this.parseFloat(this.$radius1), this.parseFloatLog(this.$mass1), new BaseCoord(this.dimensions.x/3, this.dimensions.y/2 - this.parseFloat(this.$radius1)), 0));
-        this.balls.push(new Ball(this.parseFloat(this.$radius2), this.parseFloatLog(this.$mass2), new BaseCoord(2*this.dimensions.x/3, this.dimensions.y/2 - this.parseFloat(this.$radius2)), 180));
+        this.balls.push(new Ball(
+            this.dimensions.x/3,
+            this.dimensions.y/2 - this.parseFloat(this.$radius1),
+            this.parseFloat(this.$radius1),
+            this.parseFloatLog(this.$mass1),
+            new HSL(0, 80, 60)
+        ));
+        this.balls.push(new Ball(
+            2*this.dimensions.x/3,
+            this.dimensions.y/2 - this.parseFloat(this.$radius2),
+            this.parseFloat(this.$radius2),
+            this.parseFloatLog(this.$mass2),
+            new HSL(180, 80, 60)
+        ));
         let quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
         this.movementCalculator = new MovementCalculatorImpl(quadraticFormulaSolver);
         this.velocityCalculator = new VelocityCalculatorImpl();
         this.collisionFreeCalculator = new CollisionFreeMovementCalculatorImpl(this.movementCalculator);
         this.collisionCalculator = new CollisionCalculatorImpl(quadraticFormulaSolver);
-        this.canvas.width = this.dimensions.x;
-        this.canvas.height = this.dimensions.y;
         this.rangeValueListener(this.$gravity, this.$showGravity);
         this.rangeValueListener(this.$trail, this.$showTrail);
         this.rangeValueListener(this.$radius1, this.$showRadius1);
@@ -174,7 +184,7 @@ export class App extends BaseApp {
             this.calculatedBalls.push(ball);
         }
 
-        ball.trail.push(new Coord(ball.coord.x, ball.coord.y, ball.color));
+        ball.trail.push(new Coord(ball.x, ball.y, ball.color.hue));
         if (ball.trail.length > this.trailLength) {
             ball.trail.shift();
         }
@@ -184,14 +194,14 @@ export class App extends BaseApp {
         let movementResult = this.collisionFreeCalculator.calculateMovement(ball, this.gravityDirection, this.dimensions, time);
 
         let otherball = this.balls.find(b => b != ball);
-        if (Math.sqrt(Math.pow(movementResult.position.x-otherball.coord.x,2)+Math.pow(movementResult.position.y-otherball.coord.y,2)) < ball.radius+otherball.radius) {
+        if (CanvasTools.isBallCollision(ball, otherball)) {
             console.log('missed collision!');
             debugger;
             this.collisionCalculator.checkCollision([otherball], ball, this.gravityDirection);
         }
 
-        ball.coord.x = movementResult.position.x;
-        ball.coord.y = movementResult.position.y;
+        ball.x = movementResult.position.x;
+        ball.y = movementResult.position.y;
         ball.velocity.x = movementResult.velocity.x;
         ball.velocity.y = movementResult.velocity.y;
         if (movementResult.bounce) ball.changeColor();
@@ -216,16 +226,16 @@ export class App extends BaseApp {
         }
 
         this.context.beginPath();
-        this.context.arc(ball.coord.x, ball.coord.y, ball.radius, 0, Math.PI * 2, false);
+        this.context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, false);
         this.context.closePath();
 
-        this.context.fillStyle = 'hsl('+ball.color+',80%,60%)';
+        this.context.fillStyle = ball.color.toString();
         this.context.fill();
 
         if ((this.isPaused || this.showVelocity) && !this.dragging) {
             this.context.beginPath();
-            this.context.moveTo(ball.coord.x, ball.coord.y);
-            this.context.lineTo(ball.coord.x+ball.velocity.x, ball.coord.y+ball.velocity.y);
+            this.context.moveTo(ball.x, ball.y);
+            this.context.lineTo(ball.x+ball.velocity.x, ball.y+ball.velocity.y);
             this.context.closePath();
             this.context.lineWidth = 2;
             this.context.strokeStyle = '#000';
@@ -238,17 +248,13 @@ export class App extends BaseApp {
     private mouseUpFunc = (e) => this.mouseUp(e);
 
     private mouseDown(e) : void {
-        let boundingRect = this.canvas.getBoundingClientRect();
-        let mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
-        let mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
+        let mouseCoord = this.getMouseCoord(e);
 
         for (let i = 0; i < this.balls.length; i++) {
             let ball = this.balls[i];
-            let dx = mouseX-ball.coord.x;
-            let dy = mouseY-ball.coord.y;
-            if (dx*dx+dy*dy < ball.radius*ball.radius) {
+            if (CanvasTools.isBallGrab(mouseCoord, ball)) {
                 this.dragging = Date.now();
-                this.drag = new BaseCoord(mouseX-ball.coord.x, mouseY-ball.coord.y);
+                this.drag = new BaseCoord(mouseCoord.x-ball.x, mouseCoord.y-ball.y);
                 this.dragBall = ball;
                 this.dragTracking = [];
                 this.dragTracking.push(new Coord(this.drag.x, this.drag.y, Date.now()));
@@ -262,11 +268,9 @@ export class App extends BaseApp {
     }
 
     private mouseMove(e) : void {
-        let boundingRect = this.canvas.getBoundingClientRect();
-        let mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
-        let mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
-        let posX = mouseX - this.drag.x;
-        let posY = mouseY - this.drag.y;
+        let mouseCoord = this.getMouseCoord(e);
+        let posX = mouseCoord.x - this.drag.x;
+        let posY = mouseCoord.y - this.drag.y;
         if (posX < this.dragBall.radius) {
             posX = this.dragBall.radius;
         } else if (posX > this.dimensions.x-this.dragBall.radius) {
@@ -277,8 +281,8 @@ export class App extends BaseApp {
         } else if (posY > this.dimensions.y-this.dragBall.radius) {
             posY = this.dimensions.y-this.dragBall.radius;
         }
-        this.dragBall.coord.x = posX;
-        this.dragBall.coord.y = posY;
+        this.dragBall.x = posX;
+        this.dragBall.y = posY;
         this.dragTracking.push(new Coord(posX, posY, Date.now()));
         this.draw();
     }
