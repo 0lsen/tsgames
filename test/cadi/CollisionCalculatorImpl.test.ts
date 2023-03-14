@@ -1,5 +1,5 @@
 import {CollisionCalculatorImpl} from "../../ts/cadi/impl/CollisionCalculatorImpl";
-import {QuadraticFormulaSolverImpl} from "../../ts/cadi/impl/QuadraticFormulaSolverImpl";
+import {QuadraticFormulaSolverImpl} from "../../ts/core/impl/QuadraticFormulaSolverImpl";
 import {Ball} from "../../ts/cadi/model/Ball";
 import {Direction} from "../../ts/core/enum/Direction";
 import {HSL} from "../../ts/canvas/model/HSL";

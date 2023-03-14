@@ -9,6 +9,6 @@ export class HSLA extends HSL {
     }
 
     toString(): string {
-        return 'hsla('+this.hue+','+this.saturation+'%,'+this.lightness+'%,'+this.alpha+'%)';
+        return 'hsla('+this.hue+','+this._saturation+'%,'+this._lightness+'%,'+this.alpha+'%)';
     }
 }

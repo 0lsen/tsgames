@@ -18,8 +18,8 @@ export class App extends CanvasApp {
     private lightSaturation = 70;
     private lightBrightest = 90;
     private readonly lightDarkest = 0;
-    private lightBrightestHsl : HSL;
-    private lightDarkestHsl : HSL;
+    private readonly lightBrightestHsl = new HSL(this.lightHue, this.lightSaturation, this.lightBrightest);
+    private readonly lightDarkestHsl = new HSL(this.lightHue, this.lightSaturation, this.lightDarkest);
 
     private lightSourceRadius = 10;
     private lightSourceMaxReach = 70;
@@ -28,7 +28,7 @@ export class App extends CanvasApp {
     private pillarHue = 130;
     private pillarSaturation = 10;
     private pillarLightness = 30;
-    private pillarHsl : HSL;
+    private readonly pillarHsl = new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness);
 
     private readonly pillarShadowHue = 130;
     private readonly pillarShadowSaturation = 0;
@@ -58,7 +58,14 @@ export class App extends CanvasApp {
     constructor() {
         super();
         this.lightSource = new CanvasBall(this.dimensions.x/2, this.dimensions.y/2, this.lightSourceRadius);
-        this.shadowCalculator = new ShadowCalculatorImpl(this.dimensions, this.lightSource);
+        this.shadowCalculator = new ShadowCalculatorImpl(
+            this.dimensions,
+            this.context,
+            this.lightSource,
+            this.lightBrightestHsl,
+            this.lightDarkestHsl,
+            this.pillarHsl
+        );
 
         this.canvas.addEventListener('mousedown', (e) => this.mouseDown(e));
         this.canvas.addEventListener('mousemove', (e) => this.mouseMove(e));
@@ -157,26 +164,23 @@ export class App extends CanvasApp {
     }
 
     private setParameters() : void {
-        this.lightBrightestHsl = new HSL(this.lightHue, this.lightSaturation, this.lightBrightest);
-        this.lightDarkestHsl = new HSL(this.lightHue, this.lightSaturation, this.lightDarkest);
+        this.lightBrightestHsl.hue = this.lightHue;
+        this.lightBrightestHsl.saturation = this.lightSaturation;
+        this.lightBrightestHsl.lightness = this.lightBrightest;
+
+        this.lightDarkestHsl.hue = this.lightHue;
+        this.lightDarkestHsl.saturation = this.lightSaturation;
+        this.lightDarkestHsl.lightness = this.lightDarkest;
+
         this.lightSource.radius = this.lightSourceRadius;
 
-        this.pillarHsl = new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness);
+        this.pillarHsl.hue = this.pillarHue;
+        this.pillarHsl.saturation = this.pillarSaturation;
+        this.pillarHsl.lightness = this.pillarLightness;
     }
 
     private drawLightSource() : void {
-        let maxDim = Math.max(this.dimensions.x, this.dimensions.y);
-        let gradient = this.context.createRadialGradient(
-            this.lightSource.x,
-            this.lightSource.y,
-            this.lightSource.radius,
-            this.lightSource.x,
-            this.lightSource.y,
-            this.lightSource.radius+maxDim*this.lightSourceMaxReach/100
-        );
-        gradient.addColorStop(0, this.lightBrightestHsl.toString());
-        gradient.addColorStop(1, this.lightDarkestHsl.toString());
-        this.context.fillStyle = gradient;
+        this.context.fillStyle = this.shadowCalculator.calcLightSourceGradient(this.lightSourceMaxReach);
         this.context.beginPath();
         this.context.rect(0, 0, this.dimensions.x, this.dimensions.y);
         this.context.fill();
@@ -192,7 +196,7 @@ export class App extends CanvasApp {
     }
 
     private calculatePillarShadows(pillars : Pillar[]) : void {
-        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcShadow(p, pillars.slice(0, i-1)));
+        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcPillarShadow(p, pillars.slice(0, i-1)));
     }
 
     private drawPillar(pillar : Pillar) : void {
@@ -210,8 +214,7 @@ export class App extends CanvasApp {
         this.context.fill();
         this.context.closePath();
 
-        let darkeningFactor = CanvasTools.distance(pillar, this.lightSource)/(CanvasTools.distance(new Coord(0, 0), new Coord(this.dimensions.x, this.dimensions.y))*this.lightSourceMaxReach/100);
-        this.context.fillStyle = this.pillarHsl.darken(darkeningFactor).toString();
+        this.context.fillStyle = this.shadowCalculator.calcPillarGradient(pillar, this.lightSourceMaxReach);
         this.context.shadowBlur = 0;
         this.context.beginPath();
         this.context.arc(pillar.x, pillar.y, pillar.radius, 0, 2*Math.PI);

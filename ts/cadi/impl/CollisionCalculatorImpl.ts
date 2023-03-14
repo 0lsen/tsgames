@@ -1,7 +1,7 @@
 import {CollisionCalculator} from "../interface/CollisionCalculator";
 import {Ball} from "../model/Ball";
 import {Direction} from "../../core/enum/Direction";
-import {QuadraticFormulaSolver} from "../interface/QuadraticFormulaSolver";
+import {QuadraticFormulaSolver} from "../../core/interface/QuadraticFormulaSolver";
 import {CollisionResult} from "../model/CollisionResult";
 import {App} from "../App";
 import {CanvasTools} from "../../canvas/CanvasTools";
@@ -83,6 +83,6 @@ export class CollisionCalculatorImpl implements CollisionCalculator {
             + y2*y2 - 2*y1*y2 + y1*y1
             - distance*distance;
 
-        return this.quadraticFormulaSolver.solve(a, b, c);
+        return this.quadraticFormulaSolver.solveOne(a, b, c);
     }
 }

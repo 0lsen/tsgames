@@ -9,7 +9,7 @@ import {Ball} from "./model/Ball";
 import {CollisionFreeMovementCalculatorImpl} from "./impl/CollisionFreeMovementCalculatorImpl";
 import {CollisionCalculator} from "./interface/CollisionCalculator";
 import {CollisionCalculatorImpl} from "./impl/CollisionCalculatorImpl";
-import {QuadraticFormulaSolverImpl} from "./impl/QuadraticFormulaSolverImpl";
+import {QuadraticFormulaSolverImpl} from "../core/impl/QuadraticFormulaSolverImpl";
 import {CollisionFreeMovementCalculator} from "./interface/CollisionFreeMovementCalculator";
 import {CanvasApp} from "../canvas/CanvasApp";
 import {CanvasTools} from "../canvas/CanvasTools";

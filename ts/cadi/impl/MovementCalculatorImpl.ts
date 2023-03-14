@@ -1,6 +1,6 @@
 import {MovementCalculator} from "../interface/MovementCalculator";
 import {CalcResult} from "../model/CalcResult";
-import {QuadraticFormulaSolver} from "../interface/QuadraticFormulaSolver";
+import {QuadraticFormulaSolver} from "../../core/interface/QuadraticFormulaSolver";
 
 export class MovementCalculatorImpl implements MovementCalculator {
 
@@ -116,7 +116,7 @@ export class MovementCalculatorImpl implements MovementCalculator {
     }
 
     private calcAcceleratedTimeByCoord(gravity : number, coord : number, initialVelocity : number, coord0) : number {
-        return this.quadraticFormulaSolver.solve(gravity/2, initialVelocity, coord0-coord);
+        return this.quadraticFormulaSolver.solveOne(gravity/2, initialVelocity, coord0-coord);
     }
 
     private calcAcceleratedCoordByTime(gravity : number, time : number, initialVelocity : number, coord0) : number {
