@@ -3,6 +3,7 @@ import {Pillar} from "../model/Pillar";
 import {PillarShadow} from "../model/PillarShadow";
 import {CanvasBall} from "../../canvas/model/CanvasBall";
 import {Coord} from "../../core/model/Coord";
+import {Line} from "../model/Line";
 
 export class ShadowCalculatorImpl implements ShadowCalculator {
 
@@ -19,9 +20,8 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         let p2 = this.calcTangentPoint(pillar, true, false);
         let l1 = this.calcTangentPoint(pillar, false, true);
         let l2 = this.calcTangentPoint(pillar, true, true);
-        let e1 = this.calcEdgePoint(l1, p1);
-        let e2 = this.calcEdgePoint(l2, p2);
-        // TODO: if light source has larger radius than pillar the tangents might meet
+        let e1 = this.lightSource.radius > pillar.radius ? this.calcMeetingPoint(l1, p1, l2, p2) : this.calcEdgePoint(l1, p1);
+        let e2 = this.lightSource.radius > pillar.radius ? e1 : this.calcEdgePoint(l2, p2);
         // TODO: check (partly) enclosing shadows
         return new PillarShadow(p1, p2, e1, e2);
     }
@@ -37,22 +37,37 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         );
     }
 
-    private calcEdgePoint(lightSourcePoint : Coord, pillarPoint : Coord) : Coord {
-        let deltaX = lightSourcePoint.x - pillarPoint.x;
-        let deltaY = lightSourcePoint.y - pillarPoint.y;
+    private calcMeetingPoint(ligthSourcePoint1 : Coord, pillarPoint1 : Coord, ligthSourcePoint2 : Coord, pillarPoint2 : Coord) : Coord {
+        let line1 = new Line(ligthSourcePoint1, pillarPoint1);
+        let line2 = new Line(ligthSourcePoint2, pillarPoint2);
+        let x : number;
+        let y : number;
+        if (line1.m === undefined) {
+            x = line1.b;
+            y = line2.yForX(x);
+        } else if (line2.m === undefined) {
+            x = line2.b;
+            y = line1.yForX(x);
+        } else {
+            x = (line2.b-line1.b)/(line1.m-line2.m);
+            y = line1.yForX(x);
+        }
+        return new Coord(x, y);
+    }
 
-        if (!deltaX) {
+    private calcEdgePoint(lightSourcePoint : Coord, pillarPoint : Coord) : Coord {
+        let line = new Line(lightSourcePoint, pillarPoint);
+
+        if (line.m === undefined) {
             return new Coord(
                 lightSourcePoint.x,
-                deltaY > 0 ? 0 : this.dimensions.y
+                lightSourcePoint.y - pillarPoint.y > 0 ? 0 : this.dimensions.y
             );
         } else {
-            let m = deltaY/deltaX;
-            let b = pillarPoint.y-m*pillarPoint.x;
-            let edgeX = deltaX > 0 ? 0 : this.dimensions.x;
+            let edgeX = lightSourcePoint.x - pillarPoint.x > 0 ? 0 : this.dimensions.x;
             return new Coord(
                 edgeX,
-                m*edgeX+b
+                line.yForX(edgeX)
             );
         }
     }
