@@ -12,7 +12,7 @@ export class Line {
     }
 
     yForX(x : number) : number {
-        return this._m === undefined ? this.b : this._m * x + this.b;
+        return this._m === undefined ? this._b : this._m * x + this._b;
     }
 
     get m(): number {

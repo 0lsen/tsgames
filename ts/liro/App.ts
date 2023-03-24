@@ -7,6 +7,7 @@ import {HSLA} from "../canvas/model/HSLA";
 import {Pillar} from "./model/Pillar";
 import {ShadowCalculator} from "./interface/ShadowCalculator";
 import {ShadowCalculatorImpl} from "./impl/ShadowCalculatorImpl";
+import {PillarShadow} from "./model/PillarShadow";
 
 export class App extends CanvasApp {
 
@@ -196,28 +197,34 @@ export class App extends CanvasApp {
     }
 
     private calculatePillarShadows(pillars : Pillar[]) : void {
-        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcPillarShadow(p, pillars.slice(0, i-1)));
+        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcPillarShadow(p, pillars.slice(0, i)));
     }
 
     private drawPillar(pillar : Pillar) : void {
-        this.context.fillStyle = this.pillarShadowHsla.toString();
-        this.context.shadowBlur = 20;
-        this.context.shadowColor = this.pillarShadowHsla.toString();
-
-        this.context.beginPath();
-        this.context.moveTo(pillar.shadow.pillarEdge1.x, pillar.shadow.pillarEdge1.y);
-        this.context.lineTo(pillar.shadow.canvasEdge1.x, pillar.shadow.canvasEdge1.y);
-        //todo: corner point if necessary
-        this.context.lineTo(pillar.shadow.canvasEdge2.x, pillar.shadow.canvasEdge2.y);
-        this.context.lineTo(pillar.shadow.pillarEdge2.x, pillar.shadow.pillarEdge2.y);
-        this.context.lineTo(pillar.shadow.pillarEdge1.x, pillar.shadow.pillarEdge1.y);
-        this.context.fill();
-        this.context.closePath();
+        this.drawPillarShadow(pillar.shadow);
 
         this.context.fillStyle = this.shadowCalculator.calcPillarGradient(pillar, this.lightSourceMaxReach);
         this.context.shadowBlur = 0;
         this.context.beginPath();
         this.context.arc(pillar.x, pillar.y, pillar.radius, 0, 2*Math.PI);
+        this.context.fill();
+        this.context.closePath();
+    }
+
+    private drawPillarShadow(shadow : PillarShadow) : void {
+        if (shadow === undefined) return;
+
+        this.context.fillStyle = this.pillarShadowHsla.toString();
+        this.context.shadowBlur = 20;
+        this.context.shadowColor = this.pillarShadowHsla.toString();
+
+        this.context.beginPath();
+        this.context.moveTo(shadow.pillarEdge1.x, shadow.pillarEdge1.y);
+        this.context.lineTo(shadow.canvasEdge1.x, shadow.canvasEdge1.y);
+        //todo: corner point if necessary
+        this.context.lineTo(shadow.canvasEdge2.x, shadow.canvasEdge2.y);
+        this.context.lineTo(shadow.pillarEdge2.x, shadow.pillarEdge2.y);
+        this.context.lineTo(shadow.pillarEdge1.x, shadow.pillarEdge1.y);
         this.context.fill();
         this.context.closePath();
     }
