@@ -29,8 +29,8 @@ export class App extends CanvasApp {
     private readonly lightSourceGrabMargin = 20;
 
     private pillarHue = 130;
-    private pillarSaturation = 10;
-    private pillarLightness = 30;
+    private pillarSaturation = 30;
+    private pillarLightness = 60;
     private readonly pillarHsl = new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness);
 
     private readonly pillarShadowHue = 130;

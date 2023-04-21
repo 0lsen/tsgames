@@ -21,15 +21,19 @@ export class HSL {
         this._saturation = value;
     }
 
+    get lightness(): number {
+        return this._lightness;
+    }
+
     set lightness(value: number) {
         this._lightness = value;
     }
 
-    darken(factor : number) : HSL {
+    darken(factor : number, lightSourceLightness : number) : HSL {
         return new HSL(
             this._hue,
             factor > 1 ? 0 : this._saturation*(1-factor)/2,
-            factor > 1 ? 0 : this._lightness*(1-factor)*(1-factor)
+            factor > 1 ? 0 : this._lightness*(1-factor)*(1-factor)*(lightSourceLightness/100)
         );
     }
 

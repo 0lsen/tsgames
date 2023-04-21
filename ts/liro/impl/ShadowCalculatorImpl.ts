@@ -85,8 +85,8 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         }
 
         let gradient = this.context.createLinearGradient(x1, y1, x2, y2);
-        gradient.addColorStop(0, this.pillarHsl.darken(darkeningFactor1).toString());
-        gradient.addColorStop(1, this.pillarHsl.darken(darkeningFactor2).toString());
+        gradient.addColorStop(0, this.pillarHsl.darken(darkeningFactor1, this.lightBrightestHsl.lightness).toString());
+        gradient.addColorStop(1, this.pillarHsl.darken(darkeningFactor2, this.lightBrightestHsl.lightness).toString());
         return gradient;
     }
 
