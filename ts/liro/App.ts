@@ -26,6 +26,7 @@ export class App extends CanvasApp {
 
     private lightSourceRadius = 10;
     private lightSourceMaxReach = 70;
+    private lightSourceShadowAlpha = 30;
     private readonly lightSourceGrabMargin = 20;
 
     private pillarHue = 130;
@@ -33,11 +34,7 @@ export class App extends CanvasApp {
     private pillarLightness = 60;
     private readonly pillarHsl = new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness);
 
-    private readonly pillarShadowHue = 130;
-    private readonly pillarShadowSaturation = 0;
-    private readonly pillarShadowLightness = 0;
-    private readonly pillarShadowAlpha = 30;
-    private readonly pillarShadowHsla = new HSLA(this.pillarShadowHue, this.pillarShadowSaturation, this.pillarShadowLightness, this.pillarShadowAlpha);
+    private readonly lightSourceShadowHsla = new HSLA(0, 0, 0, this.lightSourceShadowAlpha);
 
     private pillarRadius = 30;
 
@@ -46,6 +43,7 @@ export class App extends CanvasApp {
     private readonly $lsLig = $('#lsLig');
     private readonly $lsRad = $('#lsRad');
     private readonly $lsRea = $('#lsRea');
+    private readonly $lsShadAlpha = $('#lsShadAlpha');
 
     private readonly $piHue = $('#piHue');
     private readonly $piSat = $('#piSat');
@@ -84,6 +82,7 @@ export class App extends CanvasApp {
         this.changeListen(this.$piSat, 'pillarSaturation');
         this.changeListen(this.$piLig, 'pillarLightness');
         this.changeListen(this.$piRad, 'pillarRadius');
+        this.changeListen(this.$lsShadAlpha, 'lightSourceShadowAlpha');
     }
 
     protected init() {
@@ -178,6 +177,8 @@ export class App extends CanvasApp {
 
         this.lightSource.radius = this.lightSourceRadius;
 
+        this.lightSourceShadowHsla.alpha = this.lightSourceShadowAlpha;
+
         this.pillarHsl.hue = this.pillarHue;
         this.pillarHsl.saturation = this.pillarSaturation;
         this.pillarHsl.lightness = this.pillarLightness;
@@ -192,6 +193,7 @@ export class App extends CanvasApp {
     }
 
     private sortPillars() : Pillar[] {
+        // TODO: .filter those out of light source reach
         return [...this.pillars].sort((p1, p2) => CanvasTools.distance(p1, this.lightSource) - CanvasTools.distance(p2, this.lightSource));
     }
 
@@ -217,9 +219,9 @@ export class App extends CanvasApp {
     private drawPillarShadow(shadow : PillarShadow) : void {
         if (shadow === undefined) return;
 
-        this.context.fillStyle = this.pillarShadowHsla.toString();
+        this.context.fillStyle = this.lightSourceShadowHsla.toString();
         this.context.shadowBlur = 20;
-        this.context.shadowColor = this.pillarShadowHsla.toString();
+        this.context.shadowColor = this.lightSourceShadowHsla.toString();
 
         this.context.beginPath();
         this.context.moveTo(shadow.pillarEdge1.x, shadow.pillarEdge1.y);
