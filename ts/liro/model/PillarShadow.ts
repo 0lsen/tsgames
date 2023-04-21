@@ -17,6 +17,14 @@ export class PillarShadow {
         return this._pillarEdge1;
     }
 
+    set pillarEdge1(value: Coord) {
+        this._pillarEdge1 = value;
+    }
+
+    set pillarEdge2(value: Coord) {
+        this._pillarEdge2 = value;
+    }
+
     get pillarEdge2(): Coord {
         return this._pillarEdge2;
     }
@@ -25,7 +33,15 @@ export class PillarShadow {
         return this._canvasEdge1;
     }
 
+    set canvasEdge1(value: Coord) {
+        this._canvasEdge1 = value;
+    }
+
     get canvasEdge2(): Coord {
         return this._canvasEdge2;
+    }
+
+    set canvasEdge2(value: Coord) {
+        this._canvasEdge2 = value;
     }
 }

@@ -31,6 +31,7 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
     }
 
     calcPillarShadow(pillar: Pillar, otherPillars: Pillar[]): PillarShadow {
+        // TODO: consider if otherPillars block part of light source
         let p1 = this.calcTangentPoint(pillar, false, false);
         let p2 = this.calcTangentPoint(pillar, true, false);
         let l1 = this.calcTangentPoint(pillar, false, true);
@@ -40,38 +41,16 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         let shadow = new PillarShadow(p1, p2, e1, e2);
 
         if (typeof DEBUG !== 'undefined' && DEBUG) {
-            this.context.strokeStyle = '#fcc';
-            this.context.beginPath();
-            this.context.moveTo(l1.x, l1.y);
-            this.context.lineTo(p1.x, p1.y);
-            this.context.stroke();
-            this.context.closePath();
-            this.context.strokeStyle = '#f00';
-            this.context.beginPath();
-            this.context.moveTo(p1.x, p1.y);
-            this.context.lineTo(e1.x, e1.y);
-            this.context.stroke();
-            this.context.closePath();
-            this.context.strokeStyle = '#cfc';
-            this.context.beginPath();
-            this.context.moveTo(l2.x, l2.y);
-            this.context.lineTo(p2.x, p2.y);
-            this.context.stroke();
-            this.context.closePath();
-            this.context.strokeStyle = '#0f0';
-            this.context.beginPath();
-            this.context.moveTo(p2.x, p2.y);
-            this.context.lineTo(e2.x, e2.y);
-            this.context.stroke();
-            this.context.closePath();
+            this.debugDrawShadowLines(l1, p1, e1, l2, p2, e2);
         }
 
         for (let i = 0; i < otherPillars.length; i++) {
-            let other = otherPillars[i].shadow;
-            if (this.isFullyEnclosed(shadow, other)) {
+            if (this.isFullyEnclosed(shadow, otherPillars[i].shadow)) {
                 return undefined;
             }
-            this.calcPartiallyEnclosed(pillar, shadow, other);
+            if (otherPillars[i].shadow !== undefined) {
+                this.calcPartiallyEnclosed(pillar, shadow, otherPillars[i]);
+            }
         }
 
         return shadow;
@@ -196,12 +175,7 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         let maxOtherX = Math.max(x1, x2);
 
         if (typeof DEBUG !== 'undefined' && DEBUG) {
-            this.context.strokeStyle = '#00f';
-            this.context.beginPath();
-            this.context.moveTo(x1, secant.yForX(x1));
-            this.context.lineTo(x2, secant.yForX(x2));
-            this.context.stroke();
-            this.context.closePath();
+            this.debugDrawEnclosingSecant(x1, x2, secant);
         }
 
         return minShadowX >= minOtherX && maxShadowX <= maxOtherX &&
@@ -212,7 +186,115 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
             (secant.m !== undefined || (Math.min(line1.yForX(x1), line2.yForX(x1)) <= Math.min(shadow.pillarEdge1.y, shadow.pillarEdge2.y) && Math.max(line1.yForX(x1), line2.yForX(x1)) >= Math.max(shadow.pillarEdge1.y, shadow.pillarEdge2.y)));
     }
 
-    private calcPartiallyEnclosed(pillar : Pillar, shadow : PillarShadow, other : PillarShadow) : void {
-        // TODO: if one of other's lines is a secant of pillar circle and constricts pillar's shadow calc new pillar shadow line
+    private calcPartiallyEnclosed(pillar : Pillar, shadow : PillarShadow, other : Pillar) : void {
+        let intersection1 = this.calcIntersection(pillar, other.shadow.pillarEdge1, other.shadow.canvasEdge1);
+        let intersection2 = this.calcIntersection(pillar, other.shadow.pillarEdge2, other.shadow.canvasEdge2);
+
+        if (intersection1 !== undefined && intersection2 !== undefined) {
+            // TODO: if two intersections: limit other edge points to intersection
+        } else if (intersection1 !== undefined) {
+            let areOnSameSideOfLightSource = Math.sign(other.x-this.lightSource.x) == Math.sign(pillar.x-this.lightSource.x);
+            let secant = new Line(other.shadow.pillarEdge1, other.shadow.canvasEdge1);
+            if (areOnSameSideOfLightSource) {
+                shadow.pillarEdge2 = new Coord(secant.m === undefined ? secant.b : intersection1[0], secant.m === undefined ? intersection1[0] : secant.yForX(intersection1[0]));
+                shadow.canvasEdge2 = other.shadow.canvasEdge1;
+            } else {
+                shadow.pillarEdge1 = new Coord(secant.m === undefined ? secant.b : intersection1[0], secant.m === undefined ? intersection1[0] : secant.yForX(intersection1[0]));
+                shadow.canvasEdge1 = other.shadow.canvasEdge1;
+            }
+        } else if (intersection2 !== undefined) {
+            let areOnSameSideOfLightSource = Math.sign(other.x-this.lightSource.x) == Math.sign(pillar.x-this.lightSource.x);
+            let secant = new Line(other.shadow.pillarEdge2, other.shadow.canvasEdge2);
+            if (areOnSameSideOfLightSource) {
+                shadow.pillarEdge1 = new Coord(secant.m === undefined ? secant.b : intersection2[0], secant.m === undefined ? intersection2[0] : secant.yForX(intersection2[0]));
+                shadow.canvasEdge1 = other.shadow.canvasEdge2;
+            } else {
+                shadow.pillarEdge2 = new Coord(secant.m === undefined ? secant.b : intersection2[0], secant.m === undefined ? intersection2[0] : secant.yForX(intersection2[0]));
+                shadow.canvasEdge2 = other.shadow.canvasEdge2;
+            }
+        }
+    }
+
+    private calcIntersection(pillar : Pillar, point1 : Coord, point2 : Coord) : number[]|undefined {
+        let secant = new Line(point1, point2);
+        let intersection = secant.m === undefined
+            ? this.quadraticFormulaSolver.solveAll(
+                1,
+                -2*pillar.y,
+                pillar.y*pillar.y + (secant.b-pillar.x)*(secant.b-pillar.x) - pillar.radius*pillar.radius
+            )
+            : this.quadraticFormulaSolver.solveAll(
+                1 + secant.m*secant.m,
+                2*(secant.m*secant.b - pillar.x - secant.m*pillar.y),
+                pillar.x*pillar.x + pillar.y*pillar.y + secant.b*secant.b - pillar.radius*pillar.radius - 2*secant.b*pillar.y
+            );
+        let hasIntersection = intersection !== undefined &&
+            this.pointLiesBetween(new Coord(
+                secant.m === undefined ? secant.b : intersection[0],
+                secant.m === undefined ? intersection[0] : secant.yForX(intersection[0])
+            ), point1, point2);
+        if (hasIntersection && typeof DEBUG !== 'undefined' && DEBUG) {
+            this.debugMarkPoint(new Coord(secant.m === undefined ? secant.b : intersection[0], secant.m === undefined ? intersection[0] : secant.yForX(intersection[0])), '#ff0');
+            this.debugMarkPoint(new Coord(secant.m === undefined ? secant.b : intersection[1], secant.m === undefined ? intersection[1] : secant.yForX(intersection[1])), '#ff0');
+        }
+        return hasIntersection ? intersection : undefined;
+    }
+
+    private pointLiesBetween(point : Coord, reference1 : Coord, reference2 : Coord) : boolean {
+        return point.x >= Math.min(reference1.x, reference2.x) &&
+               point.x <= Math.max(reference1.x, reference2.x) &&
+               point.y >= Math.min(reference1.y, reference2.y) &&
+               point.y <= Math.max(reference1.y, reference2.y);
+    }
+
+    // debug tools
+
+    private debugDrawShadowLines(ligthSourcePoint1 : Coord,
+                                 pillarPoint1 : Coord,
+                                 edgePoint1 : Coord,
+                                 ligthSourcePoint2 : Coord,
+                                 pillarPoint2 : Coord,
+                                 edgePoint2 : Coord) : void {
+        this.context.strokeStyle = '#fcc';
+        this.context.beginPath();
+        this.context.moveTo(ligthSourcePoint1.x, ligthSourcePoint1.y);
+        this.context.lineTo(pillarPoint1.x, pillarPoint1.y);
+        this.context.stroke();
+        this.context.closePath();
+        this.context.strokeStyle = '#f00';
+        this.context.beginPath();
+        this.context.moveTo(pillarPoint1.x, pillarPoint1.y);
+        this.context.lineTo(edgePoint1.x, edgePoint1.y);
+        this.context.stroke();
+        this.context.closePath();
+        this.context.strokeStyle = '#cfc';
+        this.context.beginPath();
+        this.context.moveTo(ligthSourcePoint2.x, ligthSourcePoint2.y);
+        this.context.lineTo(pillarPoint2.x, pillarPoint2.y);
+        this.context.stroke();
+        this.context.closePath();
+        this.context.strokeStyle = '#0f0';
+        this.context.beginPath();
+        this.context.moveTo(pillarPoint2.x, pillarPoint2.y);
+        this.context.lineTo(edgePoint2.x, edgePoint2.y);
+        this.context.stroke();
+        this.context.closePath();
+    }
+
+    private debugDrawEnclosingSecant(x1 : number, x2 : number, secant : Line) : void {
+        this.context.strokeStyle = '#00f';
+        this.context.beginPath();
+        this.context.moveTo(x1, secant.yForX(x1));
+        this.context.lineTo(x2, secant.yForX(x2));
+        this.context.stroke();
+        this.context.closePath();
+    }
+
+    private debugMarkPoint(coord : Coord, color : string) : void {
+        this.context.strokeStyle = color;
+        this.context.beginPath();
+        this.context.arc(coord.x, coord.y, 5, 0, 2*Math.PI);
+        this.context.stroke();
+        this.context.closePath();
     }
 }

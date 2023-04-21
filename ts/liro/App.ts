@@ -9,6 +9,8 @@ import {ShadowCalculator} from "./interface/ShadowCalculator";
 import {ShadowCalculatorImpl} from "./impl/ShadowCalculatorImpl";
 import {PillarShadow} from "./model/PillarShadow";
 
+declare const DEBUG;
+
 export class App extends CanvasApp {
 
     protected readonly dimensions = new Coord(700, 700);
@@ -162,6 +164,7 @@ export class App extends CanvasApp {
         this.calculatePillarShadows(sortedPillars);
         sortedPillars.reverse();
         this.drawPillars(sortedPillars);
+        this.drawGrid();
     }
 
     private setParameters() : void {
@@ -227,5 +230,30 @@ export class App extends CanvasApp {
         this.context.lineTo(shadow.pillarEdge1.x, shadow.pillarEdge1.y);
         this.context.fill();
         this.context.closePath();
+    }
+
+    private drawGrid() : void {
+        if (typeof DEBUG !== 'undefined' && DEBUG) {
+            this.context.strokeStyle = 'rgba(255,255,255,0.3)';
+            this.context.fillStyle = 'rgba(255,255,255,0.3)';
+            let offset = 10;
+            let step = 100;
+            for (let x = step; x < this.dimensions.x; x += step) {
+                this.context.beginPath();
+                this.context.moveTo(x, 0);
+                this.context.lineTo(x, this.dimensions.y);
+                this.context.stroke();
+                this.context.closePath();
+                this.context.fillText(x.toString(), x+offset, offset);
+            }
+            for (let y = step; y < this.dimensions.y; y += step) {
+                this.context.beginPath();
+                this.context.moveTo(0, y);
+                this.context.lineTo(this.dimensions.x, y);
+                this.context.stroke();
+                this.context.closePath();
+                this.context.fillText(y.toString(), offset, y+offset);
+            }
+        }
     }
 }
