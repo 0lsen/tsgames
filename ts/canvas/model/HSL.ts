@@ -26,7 +26,11 @@ export class HSL {
     }
 
     darken(factor : number) : HSL {
-        return new HSL(this._hue, factor > 1 ? 0 : this._saturation*(1-factor)/2, factor > 1 ? 0 : this._lightness*(1-factor));
+        return new HSL(
+            this._hue,
+            factor > 1 ? 0 : this._saturation*(1-factor)/2,
+            factor > 1 ? 0 : this._lightness*(1-factor)*(1-factor)
+        );
     }
 
     toString() : string {
