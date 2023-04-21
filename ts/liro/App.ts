@@ -109,7 +109,7 @@ export class App extends CanvasApp {
                 this.grabbingPillar = this.pillars.indexOf(pillar);
             } else {
                 this.grabbingPillar = undefined;
-                if (this.noCollision(mouseCoord, undefined)) {
+                if (this.noNewPillarCollision(mouseCoord)) {
                     this.createPillar(mouseCoord);
                     this.draw();
                 }
@@ -133,6 +133,12 @@ export class App extends CanvasApp {
     private mouseUp(e : MouseEvent) : void {
         this.grabbingLightSource = false;
         this.grabbingPillar = undefined;
+    }
+
+    private noNewPillarCollision(mouseCoord : Coord) : boolean {
+        let newPillar = new CanvasBall(mouseCoord.x, mouseCoord.y, this.pillarRadius);
+        return !CanvasTools.isBallCollision(newPillar, this.lightSource) &&
+            this.pillars.every(p => !CanvasTools.isBallCollision(newPillar, p));
     }
 
     private noCollision(mouseCoord : Coord, pillarIndex : number) : boolean {
