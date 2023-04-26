@@ -20,7 +20,7 @@ const lightSource = new CanvasBall(100, 50, 10);
 const lightHslBrightest = new HSL(lightHue, lightSaturation, lightLightnessBrightest);
 const lightHslDarkest = new HSL(lightHue, lightSaturation, lightLightnessDarkest);
 const pillarHsl = new HSL(pillarHue, pillarSaturation, pillarLightness);
-const calc = new ShadowCalculatorImpl(dimensions, context, lightSource, lightHslBrightest, lightHslDarkest, pillarHsl);
+const calc = new ShadowCalculatorImpl(dimensions, context, lightSource, lightHslBrightest, lightHslDarkest);
 
 mocha.describe('ShadowCalculator', () => {
     mocha.it('TODO', () => {

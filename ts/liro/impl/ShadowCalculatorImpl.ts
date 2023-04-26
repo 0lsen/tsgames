@@ -19,15 +19,13 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
     private readonly lightSource : CanvasBall;
     private readonly lightBrightestHsl : HSL;
     private readonly lightDarkestHsl : HSL;
-    private readonly pillarHsl : HSL;
 
-    constructor(dimensions: Coord, context: CanvasRenderingContext2D, lightSource: CanvasBall, lightBrightestHsl: HSL, lightDarkestHsl: HSL, pillarHsl: HSL) {
+    constructor(dimensions: Coord, context: CanvasRenderingContext2D, lightSource: CanvasBall, lightBrightestHsl: HSL, lightDarkestHsl: HSL) {
         this.dimensions = dimensions;
         this.context = context;
         this.lightSource = lightSource;
         this.lightBrightestHsl = lightBrightestHsl;
         this.lightDarkestHsl = lightDarkestHsl;
-        this.pillarHsl = pillarHsl;
     }
 
     calcPillarShadow(pillar: Pillar, otherPillars: Pillar[]): PillarShadow {
@@ -85,8 +83,8 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         }
 
         let gradient = this.context.createLinearGradient(x1, y1, x2, y2);
-        gradient.addColorStop(0, this.pillarHsl.darken(darkeningFactor1, this.lightBrightestHsl.lightness).toString());
-        gradient.addColorStop(1, this.pillarHsl.darken(darkeningFactor2, this.lightBrightestHsl.lightness).toString());
+        gradient.addColorStop(0, pillar.hsl.darken(darkeningFactor1, this.lightBrightestHsl.lightness).toString());
+        gradient.addColorStop(1, pillar.hsl.darken(darkeningFactor2, this.lightBrightestHsl.lightness).toString());
         return gradient;
     }
 

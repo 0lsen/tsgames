@@ -8,6 +8,7 @@ import {Pillar} from "./model/Pillar";
 import {ShadowCalculator} from "./interface/ShadowCalculator";
 import {ShadowCalculatorImpl} from "./impl/ShadowCalculatorImpl";
 import {PillarShadow} from "./model/PillarShadow";
+import {PillarProperty} from "./enum/PillarProperty";
 
 declare const DEBUG;
 
@@ -32,11 +33,9 @@ export class App extends CanvasApp {
     private pillarHue = 130;
     private pillarSaturation = 30;
     private pillarLightness = 60;
-    private readonly pillarHsl = new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness);
+    private pillarRadius = 30;
 
     private readonly lightSourceShadowHsla = new HSLA(0, 0, 0, this.lightSourceShadowAlpha);
-
-    private pillarRadius = 30;
 
     private readonly $lsHue = $('#lsHue');
     private readonly $lsSat = $('#lsSat');
@@ -50,11 +49,27 @@ export class App extends CanvasApp {
     private readonly $piLig = $('#piLig');
     private readonly $piRad = $('#piRad');
 
-    private lightSource : CanvasBall;
+    private readonly $piSel = $('#selectedPillar');
+    private readonly $piSelHue = $('#piSelHue');
+    private readonly $piSelSat = $('#piSelSat');
+    private readonly $piSelLig = $('#piSelLig');
+    private readonly $piSelRad = $('#piSelRad');
+    private readonly $piSelRem = $('#piSelRem');
+
+    private readonly $piAllHue = $('#piAllHue');
+    private readonly $piAllSat = $('#piAllSat');
+    private readonly $piAllLig = $('#piAllLig');
+    private readonly $piAllRad = $('#piAllRad');
+    private readonly $piAllRem = $('#piAllRem');
+
+    private readonly lightSource : CanvasBall;
     private grabbingLightSource : boolean = false;
 
-    private pillars : Pillar[] = [];
+    private readonly pillars : Pillar[] = [];
     private grabbingPillar : number = undefined;
+
+    private readonly selectedPillarStroke = new HSLA(0, 0, 100, 40);
+    private selectedPillar : number = undefined;
 
     constructor() {
         super();
@@ -64,8 +79,7 @@ export class App extends CanvasApp {
             this.context,
             this.lightSource,
             this.lightBrightestHsl,
-            this.lightDarkestHsl,
-            this.pillarHsl
+            this.lightDarkestHsl
         );
 
         this.canvas.addEventListener('mousedown', (e) => this.mouseDown(e));
@@ -83,6 +97,19 @@ export class App extends CanvasApp {
         this.changeListen(this.$piLig, 'pillarLightness');
         this.changeListen(this.$piRad, 'pillarRadius');
         this.changeListen(this.$lsShadAlpha, 'lightSourceShadowAlpha');
+
+        this.changeListenSelected(this.$piSelHue, PillarProperty.HUE);
+        this.changeListenSelected(this.$piSelSat, PillarProperty.SATURATION);
+        this.changeListenSelected(this.$piSelLig, PillarProperty.LIGHTNESS);
+        this.changeListenSelected(this.$piSelRad, PillarProperty.RADIUS);
+        this.$piSelRem.on('click', () => this.removeSelectedPillar());
+
+        this.$piAllHue.on('click', () => this.setAll(PillarProperty.HUE, this.pillarHue));
+        this.$piAllSat.on('click', () => this.setAll(PillarProperty.SATURATION, this.pillarSaturation));
+        this.$piAllLig.on('click', () => this.setAll(PillarProperty.LIGHTNESS, this.pillarLightness));
+        this.$piAllRad.on('click', () => this.setAll(PillarProperty.RADIUS, this.pillarRadius));
+        this.$piAllRem.on('click', () => this.removeAllPillars());
+
     }
 
     protected init() {
@@ -97,24 +124,83 @@ export class App extends CanvasApp {
         });
     }
 
+    private changeListenSelected($input : JQuery, property : PillarProperty) : void {
+        $input.on('change input', () => {
+            let value = parseInt($input.val().toString());
+            this.setPillarProperty(this.pillars[this.selectedPillar], property, value);
+            this.draw();
+        });
+    }
+
+    private setAll(property : PillarProperty, value : number) : void {
+        this.pillars.forEach(p => this.setPillarProperty(p, property, value));
+        this.draw();
+    }
+
+    private setPillarProperty(pillar : Pillar, property : PillarProperty, value : number) : void {
+        switch (property) {
+            case PillarProperty.HUE:
+                pillar.hsl.hue = value;
+                break;
+            case PillarProperty.SATURATION:
+                pillar.hsl.saturation = value;
+                break;
+            case PillarProperty.LIGHTNESS:
+                pillar.hsl.lightness = value;
+                break;
+            case PillarProperty.RADIUS:
+                // TODO: check collision
+                pillar.radius = value;
+                break;
+        }
+    }
+
+    private removeSelectedPillar() : void {
+        this.pillars.splice(this.selectedPillar, 1);
+        this.draw();
+    }
+
+    private removeAllPillars() : void {
+        this.pillars.splice(0, this.pillars.length);
+        this.draw();
+    }
+
+    private setSelectedPillar(index : number|undefined = undefined) : void {
+        this.selectedPillar = index;
+        if (index === undefined) {
+            this.$piSel.hide();
+        } else {
+            this.$piSel.show();
+            this.$piSelHue.val(this.pillars[index].hsl.hue);
+            this.$piSelSat.val(this.pillars[index].hsl.saturation);
+            this.$piSelLig.val(this.pillars[index].hsl.lightness);
+            this.$piSelRad.val(this.pillars[index].radius);
+        }
+    }
+
     private mouseDown(e : MouseEvent) : void {
         let mouseCoord = this.getMouseCoord(e);
         if (CanvasTools.isBallGrab(mouseCoord, this.lightSource, this.lightSourceGrabMargin)) {
             this.grabbingLightSource = true;
             this.grabbingPillar = undefined;
+            this.setSelectedPillar();
         } else {
             this.grabbingLightSource = false;
             let pillar = this.pillars.find(p => CanvasTools.isBallGrab(mouseCoord, p));
             if (pillar !== undefined) {
                 this.grabbingPillar = this.pillars.indexOf(pillar);
+                this.setSelectedPillar(this.grabbingPillar);
             } else {
                 this.grabbingPillar = undefined;
                 if (this.noNewPillarCollision(mouseCoord)) {
                     this.createPillar(mouseCoord);
-                    this.draw();
+                    this.setSelectedPillar(this.pillars.length-1);
+                } else {
+                    this.setSelectedPillar();
                 }
             }
         }
+        this.draw();
     }
 
     private mouseMove(e : MouseEvent) : void {
@@ -158,7 +244,8 @@ export class App extends CanvasApp {
     }
 
     private createPillar(coord : Coord) : void {
-        this.pillars.push(new Pillar(coord.x, coord.y, this.pillarRadius));
+        this.pillars.push(new Pillar(coord.x, coord.y, this.pillarRadius, new HSL(this.pillarHue, this.pillarSaturation, this.pillarLightness)));
+        this.selectedPillar = this.pillars.length-1;
     }
 
     private draw() : void {
@@ -184,10 +271,6 @@ export class App extends CanvasApp {
         this.lightSource.radius = this.lightSourceRadius;
 
         this.lightSourceShadowHsla.alpha = this.lightSourceShadowAlpha;
-
-        this.pillarHsl.hue = this.pillarHue;
-        this.pillarHsl.saturation = this.pillarSaturation;
-        this.pillarHsl.lightness = this.pillarLightness;
     }
 
     private drawLightSource() : void {
@@ -219,6 +302,10 @@ export class App extends CanvasApp {
         this.context.beginPath();
         this.context.arc(pillar.x, pillar.y, pillar.radius, 0, 2*Math.PI);
         this.context.fill();
+        if (this.selectedPillar !== undefined && this.pillars[this.selectedPillar] === pillar) {
+            this.context.strokeStyle = this.selectedPillarStroke.toString();
+            this.context.stroke();
+        }
         this.context.closePath();
     }
 

@@ -57,25 +57,62 @@
                 <input type="range" value="30" min="10" max="100" step="1" class="input" id="lsShadAlpha">
             </div>
         </div>
-        <h2 class="subtitle">PILLARS</h2>
+        <hr/>
+        <h2 class="subtitle">NEW PILLARS</h2>
         <div class="columns">
             <div class="column is-4">
-                <label class="label" for="piHue">HUE</label>
+                <label class="label" for="piHue">HUE <span class="tag button is-primary" id="piAllHue">set all</span></label>
                 <input type="range" value="130" min="0" max="359" step="1" class="input" id="piHue">
             </div>
             <div class="column is-4">
-                <label class="label" for="piSat">SATURATION</label>
+                <label class="label" for="piSat">SATURATION <span class="tag button is-primary" id="piAllSat">set all</span></label>
                 <input type="range" value="30" min="0" max="100" step="1" class="input" id="piSat">
             </div>
             <div class="column is-4">
-                <label class="label" for="piLig">LIGHTNESS</label>
+                <label class="label" for="piLig">LIGHTNESS <span class="tag button is-primary" id="piAllLig">set all</span></label>
                 <input type="range" value="60" min="0" max="100" step="1" class="input" id="piLig">
             </div>
         </div>
         <div class="columns">
             <div class="column is-4">
-                <label class="label" for="piRad">RADIUS</label>
+                <label class="label" for="piRad">RADIUS <span class="tag button is-primary" id="piAllRad">set all</span></label>
                 <input type="range" value="30" min="15" max="50" step="1" class="input" id="piRad">
+            </div>
+            <div class="column is-4">
+            </div>
+            <div class="column is-4">
+                <label class="label">&nbsp;</label>
+                <button class="button is-danger is-outlined" id="piAllRem">Remove all</button>
+            </div>
+        </div>
+        <div id="selectedPillar" style="display: none;">
+            <hr/>
+            <h2 class="subtitle">SELECTED PILLAR</h2>
+            <div class="columns">
+                <div class="column is-4">
+                    <label class="label" for="piSelHue">HUE</label>
+                    <input type="range" value="130" min="0" max="359" step="1" class="input" id="piSelHue">
+                </div>
+                <div class="column is-4">
+                    <label class="label" for="piSelSat">SATURATION</label>
+                    <input type="range" value="30" min="0" max="100" step="1" class="input" id="piSelSat">
+                </div>
+                <div class="column is-4">
+                    <label class="label" for="piSelLig">LIGHTNESS</label>
+                    <input type="range" value="60" min="0" max="100" step="1" class="input" id="piSelLig">
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4">
+                    <label class="label" for="piSelRad">RADIUS</label>
+                    <input type="range" value="30" min="15" max="50" step="1" class="input" id="piSelRad">
+                </div>
+                <div class="column is-4">
+                </div>
+                <div class="column is-4">
+                    <label class="label">&nbsp;</label>
+                    <button class="button is-danger is-outlined" id="piSelRem">Remove</button>
+                </div>
             </div>
         </div>
     </div>
