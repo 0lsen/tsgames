@@ -6,6 +6,7 @@
     </title>
     <meta name="viewport" content="initial-scale=1, width=device-width"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/css/bulma-slider.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="style.css">
@@ -32,29 +33,29 @@
         <div class="columns">
             <div class="column is-4">
                 <label class="label" for="lsHue">HUE</label>
-                <input type="range" value="30" min="0" max="359" step="1" class="input" id="lsHue">
+                <input type="range" value="30" min="0" max="359" step="1" class="slider is-fullwidth is-warning" id="lsHue">
             </div>
             <div class="column is-4">
                 <label class="label" for="lsSat">SATURATION</label>
-                <input type="range" value="70" min="0" max="100" step="1" class="input" id="lsSat">
+                <input type="range" value="70" min="0" max="100" step="1" class="slider is-fullwidth is-warning" id="lsSat">
             </div>
             <div class="column is-4">
                 <label class="label" for="lsLig">LIGHTNESS</label>
-                <input type="range" value="90" min="0" max="100" step="1" class="input" id="lsLig">
+                <input type="range" value="90" min="0" max="100" step="1" class="slider is-fullwidth is-warning" id="lsLig">
             </div>
         </div>
         <div class="columns">
             <div class="column is-4">
                 <label class="label" for="lsRad">RADIUS</label>
-                <input type="range" value="10" min="5" max="50" step="1" class="input" id="lsRad">
+                <input type="range" value="10" min="5" max="50" step="1" class="slider is-fullwidth is-warning" id="lsRad">
             </div>
             <div class="column is-4">
                 <label class="label" for="lsRea">REACH</label>
-                <input type="range" value="70" min="10" max="100" step="1" class="input" id="lsRea">
+                <input type="range" value="70" min="10" max="100" step="1" class="slider is-fullwidth is-warning" id="lsRea">
             </div>
             <div class="column is-4">
                 <label class="label" for="lsShadAlpha">SHADOW ALPHA</label>
-                <input type="range" value="30" min="10" max="100" step="1" class="input" id="lsShadAlpha">
+                <input type="range" value="30" min="10" max="100" step="1" class="slider is-fullwidth is-warning" id="lsShadAlpha">
             </div>
         </div>
         <hr/>
@@ -62,25 +63,25 @@
         <div class="columns">
             <div class="column is-4">
                 <label class="label" for="piHue">HUE <span class="tag button is-primary" id="piAllHue">set all</span></label>
-                <input type="range" value="130" min="0" max="359" step="1" class="input" id="piHue">
+                <input type="range" value="130" min="0" max="359" step="1" class="slider is-fullwidth is-danger" id="piHue">
             </div>
             <div class="column is-4">
                 <label class="label" for="piSat">SATURATION <span class="tag button is-primary" id="piAllSat">set all</span></label>
-                <input type="range" value="30" min="0" max="100" step="1" class="input" id="piSat">
+                <input type="range" value="30" min="0" max="100" step="1" class="slider is-fullwidth is-danger" id="piSat">
             </div>
             <div class="column is-4">
                 <label class="label" for="piLig">LIGHTNESS <span class="tag button is-primary" id="piAllLig">set all</span></label>
-                <input type="range" value="60" min="0" max="100" step="1" class="input" id="piLig">
+                <input type="range" value="60" min="0" max="100" step="1" class="slider is-fullwidth is-danger" id="piLig">
             </div>
         </div>
         <div class="columns">
             <div class="column is-4">
                 <label class="label" for="piRad">RADIUS <span class="tag button is-primary" id="piAllRad">set all</span></label>
-                <input type="range" value="30" min="15" max="50" step="1" class="input" id="piRad">
+                <input type="range" value="30" min="15" max="50" step="1" class="slider is-fullwidth is-danger" id="piRad">
             </div>
             <div class="column is-4">
             </div>
-            <div class="column is-4">
+            <div class="column is-4 has-text-right">
                 <label class="label">&nbsp;</label>
                 <button class="button is-danger is-outlined" id="piAllRem">Remove all</button>
             </div>
@@ -91,25 +92,25 @@
             <div class="columns">
                 <div class="column is-4">
                     <label class="label" for="piSelHue">HUE</label>
-                    <input type="range" value="130" min="0" max="359" step="1" class="input" id="piSelHue">
+                    <input type="range" value="130" min="0" max="359" step="1" class="slider is-fullwidth is-info" id="piSelHue">
                 </div>
                 <div class="column is-4">
                     <label class="label" for="piSelSat">SATURATION</label>
-                    <input type="range" value="30" min="0" max="100" step="1" class="input" id="piSelSat">
+                    <input type="range" value="30" min="0" max="100" step="1" class="slider is-fullwidth is-info" id="piSelSat">
                 </div>
                 <div class="column is-4">
                     <label class="label" for="piSelLig">LIGHTNESS</label>
-                    <input type="range" value="60" min="0" max="100" step="1" class="input" id="piSelLig">
+                    <input type="range" value="60" min="0" max="100" step="1" class="slider is-fullwidth is-info" id="piSelLig">
                 </div>
             </div>
             <div class="columns">
                 <div class="column is-4">
                     <label class="label" for="piSelRad">RADIUS</label>
-                    <input type="range" value="30" min="15" max="50" step="1" class="input" id="piSelRad">
+                    <input type="range" value="30" min="15" max="50" step="1" class="slider is-fullwidth is-info" id="piSelRad">
                 </div>
                 <div class="column is-4">
                 </div>
-                <div class="column is-4">
+                <div class="column is-4 has-text-right">
                     <label class="label">&nbsp;</label>
                     <button class="button is-danger is-outlined" id="piSelRem">Remove</button>
                 </div>
