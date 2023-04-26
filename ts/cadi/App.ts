@@ -43,7 +43,7 @@ export class App extends CanvasApp {
     private readonly $direction = $('#direction');
     private readonly $pause = $('#pause');
 
-    protected readonly dimensions = new BaseCoord(800, 600);
+    protected readonly _dimensions = new BaseCoord(800, 600);
     private readonly trailMaxLength = 200;
     private readonly trailMaxRadiusPercentage = 0.1;
 
