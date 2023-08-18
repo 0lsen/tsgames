@@ -28,14 +28,14 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         this.lightDarkestHsl = lightDarkestHsl;
     }
 
-    calcPillarShadow(pillar: Pillar, otherPillars: Pillar[]): PillarShadow {
+    calcPillarShadow(pillar: Pillar, otherPillars: Pillar[], flickeringFactor : number): PillarShadow {
         // TODO: consider if otherPillars block part of light source
-        let p1 = this.calcTangentPoint(pillar, false, false);
-        let p2 = this.calcTangentPoint(pillar, true, false);
-        let l1 = this.calcTangentPoint(pillar, false, true);
-        let l2 = this.calcTangentPoint(pillar, true, true);
-        let e1 = this.lightSource.radius > pillar.radius ? this.calcMeetingPoint(l1, p1, l2, p2) : this.calcEdgePoint(l1, p1);
-        let e2 = this.lightSource.radius > pillar.radius ? e1 : this.calcEdgePoint(l2, p2);
+        let p1 = this.calcTangentPoint(pillar, false, false, flickeringFactor);
+        let p2 = this.calcTangentPoint(pillar, true, false, flickeringFactor);
+        let l1 = this.calcTangentPoint(pillar, false, true, flickeringFactor);
+        let l2 = this.calcTangentPoint(pillar, true, true, flickeringFactor);
+        let e1 = this.lightSource.radius*flickeringFactor > pillar.radius ? this.calcMeetingPoint(l1, p1, l2, p2) : this.calcEdgePoint(l1, p1);
+        let e2 = this.lightSource.radius*flickeringFactor > pillar.radius ? e1 : this.calcEdgePoint(l2, p2);
         let shadow = new PillarShadow(p1, p2, e1, e2);
 
         if (typeof DEBUG !== 'undefined' && DEBUG) {
@@ -88,29 +88,29 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
         return gradient;
     }
 
-    calcLightSourceGradient(lightSourceMaxReach : number) : CanvasGradient {
+    calcLightSourceGradient(lightSourceMaxReach : number, flickeringFactor : number) : CanvasGradient {
         let maxDim = Math.max(this.dimensions.x, this.dimensions.y);
         let gradient = this.context.createRadialGradient(
             this.lightSource.x,
             this.lightSource.y,
-            this.lightSource.radius,
+            this.lightSource.radius*flickeringFactor,
             this.lightSource.x,
             this.lightSource.y,
-            this.lightSource.radius+maxDim*lightSourceMaxReach/100
+            this.lightSource.radius*flickeringFactor+maxDim*lightSourceMaxReach*flickeringFactor/100
         );
         gradient.addColorStop(0, this.lightBrightestHsl.toString());
         gradient.addColorStop(1, this.lightDarkestHsl.toString());
         return gradient;
     }
 
-    private calcTangentPoint(pillar : CanvasBall, sign : boolean, lightsource : boolean) : Coord {
+    private calcTangentPoint(pillar : CanvasBall, sign : boolean, lightsource : boolean, flickeringFactor : number) : Coord {
         let gamma = -Math.atan((pillar.y-this.lightSource.y)/(pillar.x-this.lightSource.x));
         // this sign decision is sketchy as fuck and possibly wrong for lightsource but that one isn't very impactful
-        let beta = (pillar.x < this.lightSource.x == sign ? -1 : 1)*Math.asin((pillar.radius-this.lightSource.radius)/Math.sqrt(Math.pow(pillar.x-this.lightSource.x, 2)+Math.pow(pillar.y-this.lightSource.y, 2)));
+        let beta = (pillar.x < this.lightSource.x == sign ? -1 : 1)*Math.asin((pillar.radius-this.lightSource.radius*flickeringFactor)/Math.sqrt(Math.pow(pillar.x-this.lightSource.x, 2)+Math.pow(pillar.y-this.lightSource.y, 2)));
         let alpha = gamma-beta;
         return new Coord(
-            (lightsource ? this.lightSource.x : pillar.x) + (sign ? 1 : -1)*(lightsource ? this.lightSource.radius : pillar.radius)*Math.sin(alpha),
-            (lightsource ? this.lightSource.y : pillar.y) + (sign ? 1 : -1)*(lightsource ? this.lightSource.radius : pillar.radius)*Math.cos(alpha)
+            (lightsource ? this.lightSource.x : pillar.x) + (sign ? 1 : -1)*(lightsource ? this.lightSource.radius*flickeringFactor : pillar.radius)*Math.sin(alpha),
+            (lightsource ? this.lightSource.y : pillar.y) + (sign ? 1 : -1)*(lightsource ? this.lightSource.radius*flickeringFactor : pillar.radius)*Math.cos(alpha)
         );
     }
 

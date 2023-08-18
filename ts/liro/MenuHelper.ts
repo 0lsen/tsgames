@@ -84,7 +84,6 @@ export class MenuHelper {
                     this.app.settings.lightSourceShadowAlpha = value;
                     break;
             }
-            this.app.draw();
         });
     }
 
@@ -105,7 +104,6 @@ export class MenuHelper {
                     this.app.settings.pillarRadius = value;
                     break;
             }
-            this.app.draw();
         });
     }
 
@@ -113,13 +111,11 @@ export class MenuHelper {
         $input.on('change input', () => {
             let value = parseInt($input.val().toString());
             this.setPillarProperty(this.app.pillars[this.app.selectedPillar], property, value);
-            this.app.draw();
         });
     }
 
     private setAll(property : PillarProperty, value : number) : void {
         this.app.pillars.forEach(p => this.setPillarProperty(p, property, value));
-        this.app.draw();
     }
 
     private setPillarProperty(pillar : Pillar, property : PillarProperty, value : number) : void {
@@ -142,12 +138,10 @@ export class MenuHelper {
 
     private removeSelectedPillar() : void {
         this.app.pillars.splice(this.app.selectedPillar, 1);
-        this.app.draw();
     }
 
     private removeAllPillars() : void {
         this.app.pillars.splice(0, this.app.pillars.length);
-        this.app.draw();
     }
 
     public setSelectedPillar(index : number|undefined = undefined) : void {

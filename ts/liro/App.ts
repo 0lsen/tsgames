@@ -7,6 +7,7 @@ import {Pillar} from "./model/Pillar";
 import {DrawHelper} from "./DrawHelper";
 import {MenuHelper} from "./MenuHelper";
 import {Settings} from "./model/Settings";
+import {FlickerSectionCalculatorImpl} from "./impl/FlickerSectionCalculatorImpl";
 
 export class App extends CanvasApp {
 
@@ -27,7 +28,7 @@ export class App extends CanvasApp {
     constructor() {
         super();
         this._lightSource = new CanvasBall(this.dimensions.x/2, this.dimensions.y/2, this.settings.lightSourceRadius);
-        this.drawHelper = new DrawHelper(this);
+        this.drawHelper = new DrawHelper(this, new FlickerSectionCalculatorImpl(this.randomizer));
         this.menuHelper = new MenuHelper(this);
 
         this.canvas.addEventListener('mousedown', (e) => this.mouseDown(e));
@@ -67,7 +68,6 @@ export class App extends CanvasApp {
                 }
             }
         }
-        this.draw();
     }
 
     private mouseMove(e : MouseEvent) : void {
@@ -75,11 +75,9 @@ export class App extends CanvasApp {
         if (this.grabbingLightSource && this.noCollision(mouseCoord, undefined)) {
             this._lightSource.x = mouseCoord.x;
             this._lightSource.y = mouseCoord.y;
-            this.draw();
         } else if (this.grabbingPillar !== undefined && this.noCollision(mouseCoord, this.grabbingPillar)) {
             this._pillars[this.grabbingPillar].x = mouseCoord.x;
             this._pillars[this.grabbingPillar].y = mouseCoord.y;
-            this.draw();
         }
     }
 
@@ -115,9 +113,10 @@ export class App extends CanvasApp {
         this._selectedPillar = this._pillars.length-1;
     }
 
-    public draw() : void {
+    private draw() : void {
         this.setParameters();
         this.drawHelper.draw();
+        window.requestAnimationFrame(() => this.draw());
     }
 
     private setParameters() : void {

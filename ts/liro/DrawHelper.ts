@@ -5,6 +5,8 @@ import {HSLA} from "../canvas/model/HSLA";
 import {ShadowCalculator} from "./interface/ShadowCalculator";
 import {ShadowCalculatorImpl} from "./impl/ShadowCalculatorImpl";
 import {App} from "./App";
+import {FlickerSectionCalculator} from "./interface/FlickerSectionCalculator";
+import {CanvasBall} from "../canvas/model/CanvasBall";
 
 declare const DEBUG;
 
@@ -12,10 +14,14 @@ export class DrawHelper {
 
     private readonly app : App;
     private readonly shadowCalculator : ShadowCalculator;
+    private readonly flickerSectionCalculator : FlickerSectionCalculator;
 
     private readonly selectedPillarStroke = new HSLA(0, 0, 100, 40);
+    private readonly gridHsla = new HSLA(0, 0, 100, 30);
 
-    constructor(app: App) {
+    private flickering : number[];
+
+    constructor(app: App, flickerSectionCalculator : FlickerSectionCalculator) {
         this.app = app;
         this.shadowCalculator = new ShadowCalculatorImpl(
             this.app.dimensions,
@@ -24,6 +30,8 @@ export class DrawHelper {
             this.app.settings.lightBrightestHsl,
             this.app.settings.lightDarkestHsl
         );
+        this.flickerSectionCalculator = flickerSectionCalculator;
+        this.flickering = this.flickerSectionCalculator.createSection();
     }
 
     public draw() : void {
@@ -34,10 +42,11 @@ export class DrawHelper {
         sortedPillars.reverse();
         this.drawPillars(sortedPillars);
         this.drawGrid();
+        this.updateFlickering();
     }
 
     private drawLightSource() : void {
-        this.app.context.fillStyle = this.shadowCalculator.calcLightSourceGradient(this.app.settings.lightSourceMaxReach);
+        this.app.context.fillStyle = this.shadowCalculator.calcLightSourceGradient(this.app.settings.lightSourceMaxReach, this.flickeringFactor());
         this.app.context.beginPath();
         this.app.context.rect(0, 0, this.app.dimensions.x, this.app.dimensions.y);
         this.app.context.fill();
@@ -46,11 +55,11 @@ export class DrawHelper {
 
     private sortPillars() : Pillar[] {
         // TODO: .filter those out of light source reach
-        return [...this.app.pillars].sort((p1, p2) => CanvasTools.distance(p1, this.app.lightSource) - CanvasTools.distance(p2, this.app.lightSource));
+        return [...this.app.pillars].sort((p1, p2) => CanvasTools.distance(p1, this.flickeringLightSource()) - CanvasTools.distance(p2, this.flickeringLightSource()));
     }
 
     private calculatePillarShadows(pillars : Pillar[]) : void {
-        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcPillarShadow(p, pillars.slice(0, i)));
+        pillars.forEach((p, i) => p.shadow = this.shadowCalculator.calcPillarShadow(p, pillars.slice(0, i), this.flickeringFactor()));
     }
 
     private drawPillars(pillars : Pillar[]) : void {
@@ -90,10 +99,26 @@ export class DrawHelper {
         this.app.context.closePath();
     }
 
+    private flickeringFactor() : number {
+        return (1+this.flickering[0]);
+    }
+
+    private flickeringLightSource() : CanvasBall {
+        return new CanvasBall(this.app.lightSource.x, this.app.lightSource.y, this.app.lightSource.radius*this.flickeringFactor());
+    }
+
+    private updateFlickering() : void {
+        if (this.flickering.length > 1) {
+            this.flickering.shift();
+        } else {
+            this.flickering = this.flickering.concat(this.flickerSectionCalculator.createSection());
+        }
+    }
+
     private drawGrid() : void {
         if (typeof DEBUG !== 'undefined' && DEBUG) {
-            this.app.context.strokeStyle = 'rgba(255,255,255,0.3)';
-            this.app.context.fillStyle = 'rgba(255,255,255,0.3)';
+            this.app.context.strokeStyle = this.gridHsla.toString();
+            this.app.context.fillStyle = this.gridHsla.toString();
             let offset = 10;
             let step = 100;
             for (let x = step; x < this.app.dimensions.x; x += step) {
