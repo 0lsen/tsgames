@@ -1,17 +1,15 @@
-import {BaseApp} from "../core/BaseApp";
 import {Coord} from "../core/model/Coord";
 import {AngleCalculator} from "./interface/AngleCalculator";
 import {AngleCalculatorImpl} from "./impl/AngleCalculatorImpl";
+import {CanvasApp} from "../canvas/CanvasApp";
 
-export class App extends BaseApp {
+export class App extends CanvasApp {
 
     private angleCalculator : AngleCalculator;
 
-    private readonly canvas = $('#canvas')[0] as HTMLCanvasElement;
-    private readonly context = this.canvas.getContext("2d");
     private readonly $angleOfRepose = $('#angleOfRepose');
 
-    private readonly dimensions = new Coord(1000, 500);
+    protected readonly _dimensions = new Coord(1000, 500);
     private readonly grainSize = 5;
 
     private angleOfRepose : number;
@@ -31,8 +29,6 @@ export class App extends BaseApp {
         super();
         this.angleCalculator = new AngleCalculatorImpl(this.dimensions.x/this.grainSize, this.profile);
         this.setAngleOfRepose();
-        this.canvas.width = this.dimensions.x;
-        this.canvas.height = this.dimensions.y;
         this.canvas.addEventListener('mousedown', (e) => this.startSpawn(e));
         this.canvas.addEventListener('mousemove', (e) => this.setSpawn(e));
         this.canvas.addEventListener('mouseup', () => this.stopSpawn());
@@ -176,7 +172,7 @@ export class App extends BaseApp {
     }
 
     private draw() : void {
-        this.context.clearRect(0, 0, this.dimensions.x, this.dimensions.y);
+        this.clear();
         this.floating = this.floating.filter(f => f.y >= 0);
         this.floating.forEach(f => {
             this.context.beginPath();

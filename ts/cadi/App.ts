@@ -105,6 +105,10 @@ export class App extends CanvasApp {
         })
         this.canvas.addEventListener('mousedown', this.mouseDownFunc);
         this.checkChanges(true);
+    }
+
+    protected init() {
+        super.init();
         this.animate();
     }
 
@@ -208,7 +212,7 @@ export class App extends CanvasApp {
     }
 
     private draw() : void {
-        this.context.clearRect(0, 0, this.dimensions.x, this.dimensions.y);
+        this.clear();
         this.balls.forEach(ball => this.drawBall(ball));
     }
 

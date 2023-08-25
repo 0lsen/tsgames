@@ -18,6 +18,10 @@ export abstract class CanvasApp extends BaseApp {
         this._canvas.height = this._dimensions.y;
     }
 
+    public clear() : void {
+        this.context.clearRect(0, 0, this.dimensions.x, this.dimensions.y);
+    }
+
     protected getMouseCoord(e: MouseEvent) : Coord {
         let boundingRect = this._canvas.getBoundingClientRect();
         return new Coord(

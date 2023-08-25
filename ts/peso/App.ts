@@ -1,14 +1,12 @@
-import {BaseApp} from "../core/BaseApp";
 import {Coord} from "../core/model/Coord";
 import {IsometricCalc} from "./interface/IsometricCalc";
 import {CanvasHelper} from "./interface/CanvasHelper";
 import {IsometricCalcImpl} from "./impl/IsometricCalcImpl";
 import {CanvasHelperImpl} from "./impl/CanvasHelperImpl";
+import {CanvasApp} from "../canvas/CanvasApp";
 
-export class App extends BaseApp {
+export class App extends CanvasApp {
 
-    private readonly canvas = $('#canvas')[0] as HTMLCanvasElement;
-    private readonly context = this.canvas.getContext("2d");
     private readonly isometricCalc : IsometricCalc;
     private readonly canvasHelper : CanvasHelper;
 
@@ -17,7 +15,7 @@ export class App extends BaseApp {
     private readonly lightRotationMsMin = 5;
     private readonly lightRotationMsMax = 30;
 
-    private readonly dimensions : Coord;
+    protected readonly _dimensions = new Coord(2*7*this.tileSize, 7*this.tileSize);
     private readonly radChangeMs = 750;
     private map : boolean[][];
     private start : boolean = true;
@@ -27,16 +25,17 @@ export class App extends BaseApp {
 
     constructor() {
         super();
-        this.dimensions = new Coord(2*7*this.tileSize, 7*this.tileSize);
         this.isometricCalc = new IsometricCalcImpl(this.dimensions, this.tileSize);
         this.canvasHelper = new CanvasHelperImpl(this.isometricCalc, this.context, this.tileSize);
-        this.canvas.width = this.dimensions.x;
-        this.canvas.height = this.dimensions.y;
         this.canvas.addEventListener('click', this.clickFunc);
         this.canvas.addEventListener('mousemove', this.mousemoveFunc);
         this.canvas.addEventListener('mouseout', this.mouseoutFunc);
         this.$resetButton.on('click', () => this.reset());
         this.populateMap();
+    }
+
+    protected init() {
+        super.init();
         this.animate();
         this.time();
     }

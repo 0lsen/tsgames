@@ -35,7 +35,7 @@ export class DrawHelper {
     }
 
     public draw() : void {
-        this.app.context.clearRect(0, 0, this.app.dimensions.x, this.app.dimensions.y);
+        this.app.clear();
         this.drawLightSource();
         let sortedPillars = this.sortPillars();
         this.calculatePillarShadows(sortedPillars);
