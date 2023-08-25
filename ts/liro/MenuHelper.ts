@@ -2,10 +2,16 @@ import {PillarProperty} from "./enum/PillarProperty";
 import {Pillar} from "./model/Pillar";
 import {App} from "./App";
 import {LightSourceProperty} from "./enum/LightSourceProperty";
+import {Coord} from "../core/model/Coord";
+import {HSL} from "../canvas/model/HSL";
 
 export class MenuHelper {
 
     private readonly app : App;
+
+    private readonly preview = $('#preview')[0] as HTMLCanvasElement;
+    private readonly previewContext = this.preview.getContext("2d");
+    private readonly previewDimensions = new Coord(100, 100);
 
     private readonly $lsHue = $('#lsHue');
     private readonly $lsSat = $('#lsSat');
@@ -59,6 +65,10 @@ export class MenuHelper {
         this.$piAllLig.on('click', () => this.setAll(PillarProperty.LIGHTNESS, this.app.settings.pillarLightness));
         this.$piAllRad.on('click', () => this.setAll(PillarProperty.RADIUS, this.app.settings.pillarRadius));
         this.$piAllRem.on('click', () => this.removeAllPillars());
+
+        this.preview.width = this.previewDimensions.x;
+        this.preview.height = this.previewDimensions.y;
+        this.drawPreview();
     }
 
     private changeListenLightSource($input : JQuery, property : LightSourceProperty) : void {
@@ -104,6 +114,7 @@ export class MenuHelper {
                     this.app.settings.pillarRadius = value;
                     break;
             }
+            this.drawPreview();
         });
     }
 
@@ -112,6 +123,15 @@ export class MenuHelper {
             let value = parseInt($input.val().toString());
             this.setPillarProperty(this.app.pillars[this.app.selectedPillar], property, value);
         });
+    }
+
+    private drawPreview() : void {
+        this.previewContext.clearRect(0, 0, this.previewDimensions.x, this.previewDimensions.y);
+        this.previewContext.beginPath();
+        this.previewContext.fillStyle = new HSL(this.app.settings.pillarHue, this.app.settings.pillarSaturation, this.app.settings.pillarLightness).toString();
+        this.previewContext.arc(this.previewDimensions.x/2, this.previewDimensions.y/2, this.app.settings.pillarRadius, 0, Math.PI*2);
+        this.previewContext.fill();
+        this.previewContext.closePath();
     }
 
     private setAll(property : PillarProperty, value : number) : void {
