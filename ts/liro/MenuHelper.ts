@@ -39,7 +39,7 @@ export class MenuHelper {
     private readonly $piAllRem = $('#piAllRem');
 
 
-    constructor(app: App) {
+    constructor(app: App, loadFromStorage : boolean) {
         this.app = app;
 
         this.changeListenLightSource(this.$lsHue, LightSourceProperty.HUE);
@@ -65,6 +65,20 @@ export class MenuHelper {
         this.$piAllLig.on('click', () => this.setAll(PillarProperty.LIGHTNESS, this.app.settings.pillarLightness));
         this.$piAllRad.on('click', () => this.setAll(PillarProperty.RADIUS, this.app.settings.pillarRadius));
         this.$piAllRem.on('click', () => this.removeAllPillars());
+
+        if (loadFromStorage) {
+            this.$lsHue.val(this.app.settings.lightHue);
+            this.$lsSat.val(this.app.settings.lightSaturation);
+            this.$lsLig.val(this.app.settings.lightBrightest);
+            this.$lsRad.val(this.app.settings.lightSourceRadius);
+            this.$lsRea.val(this.app.settings.lightSourceMaxReach);
+            this.$lsShadAlpha.val(this.app.settings.lightSourceShadowAlpha);
+
+            this.$piHue.val(this.app.settings.pillarHue);
+            this.$piSat.val(this.app.settings.pillarSaturation);
+            this.$piLig.val(this.app.settings.pillarLightness);
+            this.$piRad.val(this.app.settings.pillarRadius);
+        }
 
         this.preview.width = this.previewDimensions.x;
         this.preview.height = this.previewDimensions.y;
@@ -94,6 +108,7 @@ export class MenuHelper {
                     this.app.settings.lightSourceShadowAlpha = value;
                     break;
             }
+            this.app.saveHelper.save();
         });
     }
 
@@ -114,6 +129,7 @@ export class MenuHelper {
                     this.app.settings.pillarRadius = value;
                     break;
             }
+            this.app.saveHelper.save();
             this.drawPreview();
         });
     }
@@ -154,14 +170,17 @@ export class MenuHelper {
                 pillar.radius = value;
                 break;
         }
+        this.app.saveHelper.save();
     }
 
     private removeSelectedPillar() : void {
         this.app.pillars.splice(this.app.selectedPillar, 1);
+        this.app.saveHelper.save();
     }
 
     private removeAllPillars() : void {
         this.app.pillars.splice(0, this.app.pillars.length);
+        this.app.saveHelper.save();
     }
 
     public setSelectedPillar(index : number|undefined = undefined) : void {

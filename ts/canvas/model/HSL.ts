@@ -3,7 +3,7 @@ export class HSL {
     protected _saturation : number;
     protected _lightness : number;
 
-    constructor(hue: number, saturation: number, lightness: number) {
+    constructor(hue: number = undefined, saturation: number = undefined, lightness: number = undefined) {
         this._hue = hue;
         this._saturation = saturation;
         this._lightness = lightness;

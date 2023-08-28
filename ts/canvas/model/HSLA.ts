@@ -3,7 +3,7 @@ import {HSL} from "./HSL";
 export class HSLA extends HSL {
     private _alpha : number;
 
-    constructor(hue: number, saturation: number, lightness: number, alpha: number) {
+    constructor(hue: number = undefined, saturation: number = undefined, lightness: number = undefined, alpha: number = undefined) {
         super(hue, saturation, lightness);
         this._alpha = alpha;
     }

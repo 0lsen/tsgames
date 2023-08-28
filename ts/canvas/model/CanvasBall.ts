@@ -3,7 +3,7 @@ import {Coord} from "../../core/model/Coord";
 export class CanvasBall extends Coord {
     private _radius : number;
 
-    constructor(x: number, y: number, radius: number) {
+    constructor(x: number = undefined, y: number = undefined, radius: number = undefined) {
         super(x, y);
         this._radius = radius;
     }

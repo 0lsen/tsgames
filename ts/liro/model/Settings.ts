@@ -6,40 +6,60 @@ export class Settings {
     private _lightHue = 30;
     private _lightSaturation = 70;
     private _lightBrightest = 90;
-    private readonly _lightDarkest = 0;
+    private _lightDarkest = 0;
 
     private _lightSourceRadius = 10;
     private _lightSourceMaxReach = 70;
     private _lightSourceShadowAlpha = 30;
-    private readonly _lightSourceGrabMargin = 20;
+    private _lightSourceGrabMargin = 20;
 
     private _pillarHue = 130;
     private _pillarSaturation = 30;
     private _pillarLightness = 60;
     private _pillarRadius = 30;
 
-    private readonly _lightBrightestHsl = new HSL(this._lightHue, this._lightSaturation, this._lightBrightest);
-    private readonly _lightDarkestHsl = new HSL(this._lightHue, this._lightSaturation, this._lightDarkest);
-    private readonly _lightSourceShadowHsla = new HSLA(0, 0, 0, this._lightSourceShadowAlpha);
+    private _lightBrightestHsl = new HSL(this._lightHue, this._lightSaturation, this._lightBrightest);
+    private _lightDarkestHsl = new HSL(this._lightHue, this._lightSaturation, this._lightDarkest);
+    private _lightSourceShadowHsla = new HSLA(0, 0, 0, this._lightSourceShadowAlpha);
 
     get lightDarkest(): number {
         return this._lightDarkest;
+    }
+
+    set lightDarkest(value: number) {
+        this._lightDarkest = value;
     }
 
     get lightSourceGrabMargin(): number {
         return this._lightSourceGrabMargin;
     }
 
+    set lightSourceGrabMargin(value: number) {
+        this._lightSourceGrabMargin = value;
+    }
+
     get lightBrightestHsl(): HSL {
         return this._lightBrightestHsl;
+    }
+
+    set lightBrightestHsl(value: HSL) {
+        this._lightBrightestHsl = value;
     }
 
     get lightDarkestHsl(): HSL {
         return this._lightDarkestHsl;
     }
 
+    set lightDarkestHsl(value: HSL) {
+        this._lightDarkestHsl = value;
+    }
+
     get lightSourceShadowHsla(): HSLA {
         return this._lightSourceShadowHsla;
+    }
+
+    set lightSourceShadowHsla(value: HSLA) {
+        this._lightSourceShadowHsla = value;
     }
 
     get lightHue(): number {
