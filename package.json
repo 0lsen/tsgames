@@ -19,6 +19,7 @@
     "@types/node": "^17.0.33",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "ts-node": "^10.7.0"
   },
   "scripts": {
@@ -33,6 +34,6 @@
     "compileSabo": "tsc -p tsconfig/sabo.json && sass --style compressed sass/sabo.sass public/sabo/style.css",
     "compileSnake": "tsc -p tsconfig/snake.json && sass --style compressed sass/snake.sass public/snake/style.css",
     "compileTTT": "tsc -p tsconfig/ttt.json && sass --style compressed sass/ttt.sass public/ttt/style.css",
-    "test": "tsc -p tsconfig/test.json && mocha -r ts-node/register $NODE_DEBUG_OPTION test/**/**.test.ts"
+    "test": "tsc -p tsconfig/test.json && nyc --reporter=text-summary --reporter=html mocha -r ts-node/register $NODE_DEBUG_OPTION test/**/**.test.ts"
   }
 }
