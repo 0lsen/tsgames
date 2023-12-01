@@ -1,6 +1,5 @@
 import {OutOfBoundsException} from "../core/exception/OutOfBoundsException";
-
-export type booleanUndefined = boolean | undefined
+import {booleanUndefined} from "../core/types";
 
 export class GameState {
 

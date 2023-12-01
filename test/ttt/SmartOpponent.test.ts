@@ -1,6 +1,7 @@
 import {RandomizerMock} from "../core/RandomizerMock";
 import {SmartOpponent} from "../../ts/ttt/opponent/SmartOpponent";
-import {booleanUndefined, GameState} from "../../ts/ttt/GameState";
+import {GameState} from "../../ts/ttt/GameState";
+import {booleanUndefined} from "../../ts/core/types";
 
 const chai = require('chai');
 const mocha = require('mocha');

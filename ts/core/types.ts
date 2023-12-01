@@ -1,0 +1,1 @@
+export type booleanUndefined = boolean | undefined
