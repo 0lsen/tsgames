@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "module": "amd",
+    "target": "es6",
+    "outFile": "../public/cotra/app.js"
+  },
+  "include": [
+    "../ts/cotra",
+    "../ts/core"
+  ]
+}

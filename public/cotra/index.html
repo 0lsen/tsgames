@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        Complex Number 2D Transformation
+    </title>
+    <meta name="viewport" content="initial-scale=1, width=device-width"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/css/bulma-slider.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.js" integrity="sha384-WKPjHIEhBzyEuCp8//j0gXBM/TP1OwKdWMPBRFZ6q8g66Pce1n6o0M/q4duEXrmA" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="../index.html" class="fas fa-chevron-left"></a> COMPLEX NUMBER 2D TRANSFORMATION
+        </div>
+    </div>
+</header>
+<div class="container" id="field">
+    <div class="card">
+        <div id="board">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <label class="label" for="scale">SCALE</label>
+        <div class="columns">
+            <div class="column is-3">
+                <input type="text" class="input" id="showScale" value="1" disabled>
+            </div>
+            <div class="column is-9">
+                <input type="range" value="1" min="0.1" max="4" step="0.1" class="slider is-fullwidth" id="scale">
+            </div>
+        </div>
+        <label class="label" for="rotation">ROTATION</label>
+        <div class="columns">
+            <div class="column is-3">
+                <input type="text" class="input" id="showRotation" value="0 * &pi;" disabled>
+            </div>
+            <div class="column is-9">
+                <input type="range" value="0" min="-2" max="2" step="0.1" class="slider is-fullwidth" id="rotation">
+            </div>
+        </div>
+        <label class="label">TRANSLATION</label>
+        <div class="columns">
+            <div class="column is-1">
+                <label class="label" for="x">T<sub>X</sub></label>
+            </div>
+            <div class="column is-2">
+                <input type="number" class="input" id="x" value="0" step="0.1">
+            </div>
+            <div class="column is-1">
+                <label class="label" for="y">T<sub>Y</sub></label>
+            </div>
+            <div class="column is-2">
+                <input type="number" class="input" id="y" value="0" step="0.1">
+            </div>
+        </div>
+        <div>
+            <div class="button" id="animate">ANIMATE STEPS</div>
+            <div class="button" id="animateAll">ANIMATE ALL</div>
+        </div>
+        <label class="label" style="margin-top: 5rem; margin-bottom: 2rem;">CALCULATION FOR P1</label>
+        <div class="equation">
+            <div>
+                <span id="s" class="variable"></span> * &radic;2 * <i>e</i>
+            </div>
+            <div class="divided">
+                <div>
+                    (<span id="r" class="variable"></span> * &pi; + &pi;/4) * <i>i</i>
+                </div>
+                <div>&nbsp;</div>
+            </div>
+            <div class="spaced">
+                =
+            </div>
+            <div>
+                <span class="re"></span> + <span class="im"></span> <i>i</i>
+            </div>
+        </div>
+        <div class="equation">
+            <div class="divided">
+                <div>x</div>
+                <div>y</div>
+            </div>
+            <div class="divided spaced">
+                <div>=</div>
+                <div>=</div>
+            </div>
+            <div class="divided">
+                <div><span class="re"></span></div>
+                <div><span class="im"></span></div>
+            </div>
+            <div class="divided spaced">
+                <div>+</div>
+                <div>+</div>
+            </div>
+            <div class="divided">
+                <div><span class="variable" id="tx"></span></div>
+                <div><span class="variable" id="ty"></span></div>
+            </div>
+            <div class="divided spaced">
+                <div>=</div>
+                <div>=</div>
+            </div>
+            <div class="divided">
+                <div id="px"></div>
+                <div id="py"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <button type="button" class="button" id="reset">Reset</button>
+    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
+</div>
+
+<div id="overlay">
+    <div class="card"></div>
+</div>
+
+<script>
+    let app;
+    $(function () {
+        require(
+            ['cotra/App'],
+            (main) => {
+                app = new main.App();
+            }
+        );
+    })
+</script>
+</body>
+</html>
