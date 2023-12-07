@@ -2,10 +2,9 @@ import {App} from "./App";
 import {Settings} from "./model/Settings";
 import {CanvasBall} from "../canvas/model/CanvasBall";
 import {Pillar} from "./model/Pillar";
+import {LocalStorage} from "../core/impl/LocalStorage";
 
-export class SaveHelper {
-
-    private readonly IGNORED_PROPERTIES = ['_shadow'];
+export class SaveHelper extends LocalStorage {
 
     private readonly KEY_SETTINGS = 'liroSettings';
     private readonly KEY_LIGHTSOURCE = 'liroLightsource';
@@ -14,6 +13,7 @@ export class SaveHelper {
     private readonly app : App;
 
     constructor(app: App) {
+        super(['_shadow']);
         this.app = app;
     }
 
@@ -37,50 +37,5 @@ export class SaveHelper {
 
     public loadPillars() : Pillar[] {
         return this.loadList(this.KEY_PILLARS, Pillar);
-    }
-
-    private toJsonString(object : object) : string {
-        return JSON.stringify(Object.assign({}, object));
-    }
-
-    private storeObject(key : string, value : object) : void {
-        window.localStorage.setItem(key, this.toJsonString(value));
-    }
-
-    private storeList(key : string, values : object[]) : void {
-        let list = [];
-        for (let value of values) {
-            list.push(this.toJsonString(value))
-        }
-        window.localStorage.setItem(key, '{"list":['+list.join(',')+']}');
-    }
-
-    private exists(key : string) : boolean {
-        return window.localStorage.getItem(key) !== null;
-    }
-
-    private loadObject<T>(key : string, type : new () => T) : T {
-        let jsonObject = JSON.parse(window.localStorage.getItem(key)) as T;
-        return this.toObject(jsonObject, type);
-    }
-
-    private toObject<T>(jsonObject : T, type : new() => T) : T {
-        let object = new type();
-        Object.assign(object, jsonObject);
-        for (let key of Object.keys(object)) {
-            if (this.IGNORED_PROPERTIES.includes(key)) {
-                delete object[key];
-            }
-            if (typeof object[key] === 'object') {
-                let obj = new ((new type())[key].constructor);
-                object[key] = Object.assign(obj, object[key]);
-            }
-        }
-        return object;
-    }
-
-    private loadList<T>(key : string, type : new () => T) : T[] {
-        let list = JSON.parse(window.localStorage.getItem(key)).list as T[];
-        return list.map(item => this.toObject(item, type));
     }
 }
