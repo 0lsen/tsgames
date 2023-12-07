@@ -9,7 +9,7 @@ export class Settings {
     public static readonly boardSize = 10;
 
     public static standardSetup(): Setup {
-        let setup = new Setup();
+        const setup = new Setup();
         setup.addToConfig(new ShipConfig(Carrier.name, 1));
         setup.addToConfig(new ShipConfig(Battleship.name, 1));
         setup.addToConfig(new ShipConfig(Destroyer.name, 2));

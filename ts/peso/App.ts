@@ -53,7 +53,7 @@ export class App extends CanvasApp {
     private animate() : void {
         this.context.clearRect(0, 0, this.dimensions.x, this.dimensions.y);
         this.drawBoard();
-        let raisedExists = this.raised !== undefined;
+        const raisedExists = this.raised !== undefined;
         this.drawTiles(raisedExists);
         this.drawPegs(raisedExists);
     }
@@ -81,14 +81,14 @@ export class App extends CanvasApp {
     private drawTiles(raisedExists : boolean) : void {
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
-                let tile = new Coord(i, j);
+                const tile = new Coord(i, j);
                 if (!this.isValidTile(tile)) {
                     continue;
                 }
-                let isHovered = this.isHovered(tile);
-                let isPopulated = this.map[i][j];
-                let isRaised = raisedExists && isPopulated && tile.equals(this.raised);
-                let isJumpable = (raisedExists && !isRaised && isHovered) ? this.isJumpable(tile) : undefined;
+                const isHovered = this.isHovered(tile);
+                const isPopulated = this.map[i][j];
+                const isRaised = raisedExists && isPopulated && tile.equals(this.raised);
+                const isJumpable = (raisedExists && !isRaised && isHovered) ? this.isJumpable(tile) : undefined;
 
                 this.canvasHelper.drawTile(tile, isHovered, isJumpable);
             }
@@ -98,12 +98,12 @@ export class App extends CanvasApp {
     private drawPegs(raisedExists : boolean) : void {
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
-                let tile = new Coord(i, j);
+                const tile = new Coord(i, j);
                 if (!this.isValidTile(tile)) {
                     continue;
                 }
-                let isPopulated = this.map[i][j];
-                let isRaised = raisedExists && isPopulated && tile.equals(this.raised);
+                const isPopulated = this.map[i][j];
+                const isRaised = raisedExists && isPopulated && tile.equals(this.raised);
 
                 if (isPopulated) {
                     this.canvasHelper.drawPeg(tile, isRaised);
@@ -125,12 +125,12 @@ export class App extends CanvasApp {
             return false;
         }
         if (tile.x == this.raised.x) {
-            let distance = tile.y - this.raised.y;
-            let yBetween = tile.y - distance/2;
+            const distance = tile.y - this.raised.y;
+            const yBetween = tile.y - distance/2;
             return Math.abs(distance) == 2 && this.map[tile.x][yBetween] === true;
         } else {
-            let distance = tile.x - this.raised.x;
-            let xBetween = tile.x - distance/2;
+            const distance = tile.x - this.raised.x;
+            const xBetween = tile.x - distance/2;
             return Math.abs(distance) == 2 && this.map[xBetween][tile.y] === true;
         }
     }
@@ -138,7 +138,7 @@ export class App extends CanvasApp {
     private clickFunc = (e) => this.click(e);
 
     private click(e) : void {
-        let coord = this.getMapCoord(e);
+        const coord = this.getMapCoord(e);
         if (coord !== undefined) {
             if (this.start) {
                 this.map[coord.x][coord.y] = false;
@@ -166,10 +166,10 @@ export class App extends CanvasApp {
     }
 
     private getMapCoord(e) : Coord {
-        let boundingRect = this.canvas.getBoundingClientRect();
-        let mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
-        let mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
-        let coord = this.isometricCalc.screenToTile(new Coord(mouseX, mouseY));
+        const boundingRect = this.canvas.getBoundingClientRect();
+        const mouseX = (e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width);
+        const mouseY = (e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height);
+        const coord = this.isometricCalc.screenToTile(new Coord(mouseX, mouseY));
         return this.isValidTile(coord) ? coord : undefined;
     }
 
@@ -184,15 +184,15 @@ export class App extends CanvasApp {
             return;
         }
         if (jumpCoord.x == this.raised.x) {
-            let distance = jumpCoord.y - this.raised.y;
-            let yBetween = jumpCoord.y - distance/2;
+            const distance = jumpCoord.y - this.raised.y;
+            const yBetween = jumpCoord.y - distance/2;
             this.map[jumpCoord.x][jumpCoord.y] = true;
             this.map[jumpCoord.x][yBetween] = false;
             this.map[this.raised.x][this.raised.y] = false;
             this.raised = undefined;
         } else {
-            let distance = jumpCoord.x - this.raised.x;
-            let xBetween = jumpCoord.x - distance/2;
+            const distance = jumpCoord.x - this.raised.x;
+            const xBetween = jumpCoord.x - distance/2;
             this.map[jumpCoord.x][jumpCoord.y] = true;
             this.map[xBetween][jumpCoord.y] = false;
             this.map[this.raised.x][this.raised.y] = false;

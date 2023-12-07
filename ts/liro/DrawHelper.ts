@@ -37,7 +37,7 @@ export class DrawHelper {
     public draw() : void {
         this.app.clear();
         this.drawLightSource();
-        let sortedPillars = this.sortPillars();
+        const sortedPillars = this.sortPillars();
         this.calculatePillarShadows(sortedPillars);
         sortedPillars.reverse();
         this.drawPillars(sortedPillars);
@@ -119,8 +119,8 @@ export class DrawHelper {
         if (typeof DEBUG !== 'undefined' && DEBUG) {
             this.app.context.strokeStyle = this.gridHsla.toString();
             this.app.context.fillStyle = this.gridHsla.toString();
-            let offset = 10;
-            let step = 100;
+            const offset = 10;
+            const step = 100;
             for (let x = step; x < this.app.dimensions.x; x += step) {
                 this.app.context.beginPath();
                 this.app.context.moveTo(x, 0);

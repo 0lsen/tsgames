@@ -207,13 +207,13 @@ export class App extends CanvasApp {
     }
 
     private onMouseMove(e : MouseEvent) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
         if (this.rotation) {
             if (!this.isMouseOverCube(mouseCoord, this.cube)) {
                 this.calcRotation(mouseCoord);
             }
         } else {
-            let cube = this.playerWin === undefined && this.isMouseOverCube(mouseCoord, this.cube)
+            const cube = this.playerWin === undefined && this.isMouseOverCube(mouseCoord, this.cube)
                 ? [...this.cube.cubes]
                     .sort((c1, c2) => this.projectZ(c2.center) - this.projectZ(c1.center))
                     .sort((c1, c2) => CanvasTools.distance(mouseCoord, this.projectXY(c1)) - CanvasTools.distance(mouseCoord, this.projectXY(c2)))
@@ -227,7 +227,7 @@ export class App extends CanvasApp {
     private onMouseClick() : void {
         if (this.hoveredCube !== undefined && this.state[this.hoveredCube] === undefined) {
             this.state[this.hoveredCube] = this.playerTurn;
-            let winCombo = this.winCombos.find(c => this.checkStateIndices(c));
+            const winCombo = this.winCombos.find(c => this.checkStateIndices(c));
             if (winCombo !== undefined) {
                 this.winCombo = winCombo;
                 this.playerWin = this.playerTurn;
@@ -239,7 +239,7 @@ export class App extends CanvasApp {
     }
 
     private onMouseDown(e : MouseEvent) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
         if (!this.isMouseOverCube(mouseCoord, this.cube)) {
             this.rotation = true;
             this.calcRotation(mouseCoord);
@@ -258,7 +258,7 @@ export class App extends CanvasApp {
 
     private isMouseOverCube(mouseCoord : Coord, cube : Cube) : boolean {
         const corners = cube.getCorners();
-        for (let surface of this.surfaces) {
+        for (const surface of this.surfaces) {
             if (surface.includes(this.hiddenCorner)) {
                 continue;
             }

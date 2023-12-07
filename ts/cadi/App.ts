@@ -77,7 +77,7 @@ export class App extends CanvasApp {
             this.parseFloatLog(this.$mass2),
             new HSL(180, 80, 60)
         ));
-        let quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
+        const quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
         this.movementCalculator = new MovementCalculatorImpl(quadraticFormulaSolver);
         this.velocityCalculator = new VelocityCalculatorImpl();
         this.collisionFreeCalculator = new CollisionFreeMovementCalculatorImpl(this.movementCalculator);
@@ -159,7 +159,7 @@ export class App extends CanvasApp {
             this.balls[0].mass = this.parseFloatLog(this.$mass1);
             this.balls[1].mass = this.parseFloatLog(this.$mass2);
             this.showVelocity = this.$showVelocity.prop('checked');
-            let direction = this.$direction.val().toString();
+            const direction = this.$direction.val().toString();
             this.gravityDirection = direction === '' ? null : Direction[Direction[parseInt(direction)]];
             this.changesMade = false;
         }
@@ -172,7 +172,7 @@ export class App extends CanvasApp {
 
     private calcBall(ball : Ball) : void {
         if (!this.calculatedBalls.includes(ball)) {
-            let collisionResult = this.collisionCalculator.checkCollision(this.balls.filter(b => !this.calculatedBalls.includes(b)), ball, this.gravityDirection);
+            const collisionResult = this.collisionCalculator.checkCollision(this.balls.filter(b => !this.calculatedBalls.includes(b)), ball, this.gravityDirection);
             if (collisionResult !== null) {
                 ball.changeColor();
                 collisionResult.collidingBall.changeColor();
@@ -195,9 +195,9 @@ export class App extends CanvasApp {
     }
 
     private calcMovement(ball : Ball, time : number) : void {
-        let movementResult = this.collisionFreeCalculator.calculateMovement(ball, this.gravityDirection, this.dimensions, time);
+        const movementResult = this.collisionFreeCalculator.calculateMovement(ball, this.gravityDirection, this.dimensions, time);
 
-        let otherball = this.balls.find(b => b != ball);
+        const otherball = this.balls.find(b => b != ball);
         if (CanvasTools.isBallCollision(ball, otherball)) {
             console.log('missed collision!');
             debugger;
@@ -252,10 +252,10 @@ export class App extends CanvasApp {
     private mouseUpFunc = (e) => this.mouseUp(e);
 
     private mouseDown(e) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
 
         for (let i = 0; i < this.balls.length; i++) {
-            let ball = this.balls[i];
+            const ball = this.balls[i];
             if (CanvasTools.isBallGrab(mouseCoord, ball)) {
                 this.dragging = Date.now();
                 this.drag = new BaseCoord(mouseCoord.x-ball.x, mouseCoord.y-ball.y);
@@ -272,7 +272,7 @@ export class App extends CanvasApp {
     }
 
     private mouseMove(e) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
         let posX = mouseCoord.x - this.drag.x;
         let posY = mouseCoord.y - this.drag.y;
         if (posX < this.dragBall.radius) {
@@ -296,7 +296,7 @@ export class App extends CanvasApp {
         window.removeEventListener("mouseup", this.mouseUpFunc);
         if (this.dragging !== null) {
             window.removeEventListener("mousemove", this.mouseMoveFunc);
-            let velocity = this.velocityCalculator.calc(this.dragTracking);
+            const velocity = this.velocityCalculator.calc(this.dragTracking);
             if (velocity !== null) {
                 this.dragBall.velocity.x = velocity.x;
                 this.dragBall.velocity.y = velocity.y;

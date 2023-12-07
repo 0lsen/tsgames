@@ -62,19 +62,19 @@ export class App extends BaseApp {
         this.$board.empty();
         if (!this.started) {
             for (let i=0; i < this.settings.HEIGHT; i++) {
-                let $line = $('<div></div>');
+                const $line = $('<div></div>');
                 for (let j=0; j < this.settings.WIDTH; j++) {
                     $line.append($('<div id="f'+i+'-'+j+'"></div>'));
                 }
                 this.$board.append($line);
             }
         } else {
-            let view = this.field.view();
+            const view = this.field.view();
             for (let i=0; i < this.settings.HEIGHT; i++) {
-                let $line = $('<div></div>');
+                const $line = $('<div></div>');
                 for (let j=0; j < this.settings.WIDTH; j++) {
-                    let $element = $('<div id="f'+i+'-'+j+'"></div>');
-                    let value = view[i*this.settings.WIDTH+j];
+                    const $element = $('<div id="f'+i+'-'+j+'"></div>');
+                    const value = view[i*this.settings.WIDTH+j];
                     if (value === null) $element.addClass('mine');
                     if (value !== null && value > -1) $element.addClass(this.CLASS_REVEALED+' value'+value);
                     if (value !== null && value > 0) $element.text(value);
@@ -89,9 +89,9 @@ export class App extends BaseApp {
     }
 
     private click(e: ClickEvent): void {
-        let $target = $(e.target);
+        const $target = $(e.target);
         if ($target.hasClass('marked')) return;
-        let coords = this.coords($target);
+        const coords = this.coords($target);
         if (this.started) {
             this.field.click(coords[0], coords[1], true);
         } else {
@@ -112,10 +112,10 @@ export class App extends BaseApp {
 
     private mark(e: ContextMenuEvent): void {
         e.preventDefault();
-        let $target = $(e.target);
+        const $target = $(e.target);
         if (!$target.hasClass(this.CLASS_REVEALED)) {
-            let coords = this.coords($target);
-            let index = coords[1]*this.settings.WIDTH+coords[0];
+            const coords = this.coords($target);
+            const index = coords[1]*this.settings.WIDTH+coords[0];
             if ($target.hasClass(this.CLASS_MARKED)) {
                 this.marked.splice(this.marked.indexOf(index), 1);
             } else {
@@ -127,8 +127,8 @@ export class App extends BaseApp {
     }
 
     private coords($target: JQuery): number[] {
-        let id = $target.prop('id');
-        let coords = id.substr(1).split('-');
+        const id = $target.prop('id');
+        const coords = id.substr(1).split('-');
         return [parseInt(coords[1]), parseInt(coords[0])];
     }
 
@@ -158,23 +158,23 @@ export class App extends BaseApp {
     private end(win: boolean): void {
         let text = "YOU " + (win ? "WON!" : "FAILED.")+ "<br/><br/>";
         if (win) {
-            let timeString = this.$time.val().toString();
-            let time = parseFloat(timeString.substr(0, timeString.length-2));
+            const timeString = this.$time.val().toString();
+            const time = parseFloat(timeString.substr(0, timeString.length-2));
             this.setRecord(time);
             text += "Your time: " + time + "<br/>";
         }
-        let record = this.getRecord();
+        const record = this.getRecord();
         text += "Personal best: " + (record ? record.value : "-");
         this.overlay(text);
     }
 
     private fetchRecords(): void {
-        let string = localStorage.getItem(this.STORAGE_KEY);
+        const string = localStorage.getItem(this.STORAGE_KEY);
         this.records = string ? string.split(this.RECORD_SEPARATOR).map(s => new Record(s)) : [];
     }
 
     private setRecord(time: number): void {
-        let existingRecord = this.getRecord();
+        const existingRecord = this.getRecord();
         if (existingRecord && existingRecord.value > time) {
              existingRecord.value = time;
         } else {

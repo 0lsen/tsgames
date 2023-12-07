@@ -56,7 +56,7 @@ export class App extends BaseApp {
     private build() : void {
         this.$board.empty();
         for (let i = 0; i < this.settings.height; i++) {
-            let $row = $('<div></div>');
+            const $row = $('<div></div>');
             for (let j = 0; j < this.settings.width; j++) {
                 $row.append(this.cell);
             }
@@ -65,7 +65,7 @@ export class App extends BaseApp {
     }
 
     private cell() : JQuery {
-        let $cell = $('<div></div>');
+        const $cell = $('<div></div>');
         for (let i = 0; i < 9; i++) {
             $cell.append('<div></div>');
         }
@@ -83,13 +83,13 @@ export class App extends BaseApp {
 
     private changeDirectionViaClick(e) : void {
         if (this.directionChange) return;
-        let currentDirectionIsVertical = !(this.direction%2);
-        let mouse =  currentDirectionIsVertical ? e.clientX : e.clientY;
-        let $head = this.getCell(this.headPosition);
-        let head = currentDirectionIsVertical
+        const currentDirectionIsVertical = !(this.direction%2);
+        const mouse =  currentDirectionIsVertical ? e.clientX : e.clientY;
+        const $head = this.getCell(this.headPosition);
+        const head = currentDirectionIsVertical
             ? $head.offset().left+$head.width()/2
             : $head.offset().top+$head.height()/2;
-        let distance = mouse-head;
+        const distance = mouse-head;
         if (distance) {
             this.changeDirection(currentDirectionIsVertical
                 ? distance > 0 ? Direction.RIGHT : Direction.LEFT
@@ -127,13 +127,13 @@ export class App extends BaseApp {
         if (this.direction == Direction.RIGHT) newX++;
         if (this.direction == Direction.LEFT) newX--;
         this.directionChange = false;
-        let newHeadPosition = new Coord(newX, newY);
+        const newHeadPosition = new Coord(newX, newY);
 
         if (this.collision(newHeadPosition)) {
             this.$board.addClass(this.CLASS_LOST);
             this.isRunning = false;
         } else {
-            let foodConsumed = newHeadPosition.equals(this.foodPosition);
+            const foodConsumed = newHeadPosition.equals(this.foodPosition);
             if (foodConsumed) {
                 this.placeFood();
             } else {
@@ -192,7 +192,7 @@ export class App extends BaseApp {
     private setHeadOrientation() : void {
         this.removeDirections(this.headPosition);
         if (this.bodyPositions.length) {
-            let neck = this.bodyPositions.at(-1);
+            const neck = this.bodyPositions.at(-1);
             if (neck.x != this.headPosition.x) {
                 this.addClass(neck, neck.x > this.headPosition.x ? this.CLASS_WEST : this.CLASS_EAST);
                 this.addClass(this.headPosition, neck.x > this.headPosition.x ? this.CLASS_EAST : this.CLASS_WEST);
@@ -205,8 +205,8 @@ export class App extends BaseApp {
 
     private setTailOrientation() : void {
         if (this.bodyPositions.length) {
-            let tail = this.bodyPositions[0];
-            let torso = this.bodyPositions.length > 1 ? this.bodyPositions[1] : this.headPosition;
+            const tail = this.bodyPositions[0];
+            const torso = this.bodyPositions.length > 1 ? this.bodyPositions[1] : this.headPosition;
             this.removeDirections(tail);
             if (tail.x != torso.x) {
                 this.addClass(tail, torso.x > tail.x ? this.CLASS_EAST : this.CLASS_WEST);

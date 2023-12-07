@@ -23,7 +23,7 @@ import {Opponent} from "./interface/Opponent";
 import {ThisShouldNeverHappenException} from "../core/exception/ThisShouldNeverHappenException";
 import {BaseApp} from "../core/BaseApp";
 
-declare var PlainDraggable: any;
+declare let PlainDraggable: any;
 
 export class App extends BaseApp {
     private $playerBoard =  $('#playerBoard');
@@ -42,7 +42,7 @@ export class App extends BaseApp {
 
         this.game = new GameImpl(Settings.standardSetup());
 
-        let spaceCalculator = new SpaceCalculatorImpl();
+        const spaceCalculator = new SpaceCalculatorImpl();
 
         this.randomOpponent = new RandomOpponent(this.randomizer);
         this.probabilityBasedOpponent = new ProbabilityBasedOpponent(this.randomizer, new HeatMapperImpl(spaceCalculator), spaceCalculator);
@@ -64,7 +64,7 @@ export class App extends BaseApp {
     }
 
     private placeShips(): void {
-        let list = [];
+        const list = [];
         this.$playerBoard.find('.ship')
             .each((i, s) => {
                     list.push(this.parseShipArrangement(s));
@@ -79,16 +79,16 @@ export class App extends BaseApp {
     }
 
     private parseShipArrangement(ship): ShipArrangement {
-        let $ship = $(ship);
+        const $ship = $(ship);
         let type;
         if ($ship.hasClass(Carrier.name.toLowerCase())) type = Carrier.name;
         if ($ship.hasClass(Battleship.name.toLowerCase())) type = Battleship.name;
         if ($ship.hasClass(Destroyer.name.toLowerCase())) type = Destroyer.name;
         if ($ship.hasClass(Patrol.name.toLowerCase())) type = Patrol.name;
-        let o = $ship.hasClass('horizontal') ? Orientation.HORIZONTAL : Orientation.VERTICAL;
+        const o = $ship.hasClass('horizontal') ? Orientation.HORIZONTAL : Orientation.VERTICAL;
 
-        let x = Math.round(($ship.offset().left - this.$playerBoard.offset().left)/40);
-        let y = Math.round(($ship.offset().top - this.$playerBoard.offset().top)/40);
+        const x = Math.round(($ship.offset().left - this.$playerBoard.offset().left)/40);
+        const y = Math.round(($ship.offset().top - this.$playerBoard.offset().top)/40);
 
         return new ShipArrangement(Helper.shipConstructors[type](), new Coord(x, y, o));
     }
@@ -100,8 +100,8 @@ export class App extends BaseApp {
 
     private placeShot(e): void {
         if ($(e.target).hasClass('hit')) return;
-        let x = Math.round((e.offsetX-20)/40);
-        let y = Math.round((e.offsetY-20)/40);
+        const x = Math.round((e.offsetX-20)/40);
+        const y = Math.round((e.offsetY-20)/40);
         try {
             this.game.shoot(x, y, this.probabilityBasedOpponent);
             this.drawBoards(this.game.getState());
@@ -158,7 +158,7 @@ export class App extends BaseApp {
 
     private placeShipSetup(setup:Setup): void {
         setup.getShips().forEach((s, i) => {
-            let ship = $('<div/>');
+            const ship = $('<div/>');
             ship.append('<div><i class="fas fa-sync-alt"></i></div>');
             ship.addClass('ship');
             ship.addClass('horizontal');
@@ -168,7 +168,7 @@ export class App extends BaseApp {
             this.makeDraggable(ship[0]);
         });
         $('.ship > div > i').on('click touchstart', (e) => {
-            let $ship = $(e.target).closest('.ship');
+            const $ship = $(e.target).closest('.ship');
             $ship.toggleClass('horizontal').toggleClass('vertical');
             this.makeDraggable($ship[0]);
         });
@@ -179,7 +179,7 @@ export class App extends BaseApp {
     }
 
     private createShip(ship:IShip, coord:Coord): JQuery {
-        let s = $('<div/>');
+        const s = $('<div/>');
         s.addClass('ship');
         s.addClass(ship.constructor.name.toLowerCase());
         s.addClass(Orientation[coord.o].toLowerCase());
@@ -196,7 +196,7 @@ export class App extends BaseApp {
     }
 
     private createHit(x:number, y:number, hit: boolean): JQuery {
-        let h = $('<div/>');
+        const h = $('<div/>');
         h.addClass('hit');
         h.addClass('x'+x);
         h.addClass('y'+y);

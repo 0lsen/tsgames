@@ -87,7 +87,7 @@ export class MenuHelper {
 
     private changeListenLightSource($input : JQuery, property : LightSourceProperty) : void {
         $input.on('change input', () => {
-            let value = parseInt($input.val().toString());
+            const value = parseInt($input.val().toString());
             switch (property) {
                 case LightSourceProperty.HUE:
                     this.app.settings.lightHue = value;
@@ -114,7 +114,7 @@ export class MenuHelper {
 
     private changeListenPillar($input : JQuery, property : PillarProperty) : void {
         $input.on('change input', () => {
-            let value = parseInt($input.val().toString());
+            const value = parseInt($input.val().toString());
             switch (property) {
                 case PillarProperty.HUE:
                     this.app.settings.pillarHue = value;
@@ -136,7 +136,7 @@ export class MenuHelper {
 
     private changeListenSelectedPillar($input : JQuery, property : PillarProperty) : void {
         $input.on('change input', () => {
-            let value = parseInt($input.val().toString());
+            const value = parseInt($input.val().toString());
             this.setPillarProperty(this.app.pillars[this.app.selectedPillar], property, value);
         });
     }

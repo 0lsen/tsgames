@@ -107,7 +107,7 @@ export class App extends CanvasApp {
         this.drawSquare();
         this.fillEquations();
         if (this.phase !== undefined) {
-            let timeDiff = new Date().getTime() - this.timer;
+            const timeDiff = new Date().getTime() - this.timer;
             switch (this.phase) {
                 case Phase.SCALE:
                     if (timeDiff > this.timePerStep) {
@@ -227,10 +227,10 @@ export class App extends CanvasApp {
         this.context.fillStyle = this.squareFillStyle.toString();
         this.context.lineWidth = 1;
 
-        let p1 = this.calcPoint(0);
-        let p2 = this.calcPoint(1);
-        let p3 = this.calcPoint(2);
-        let p4 = this.calcPoint(3);
+        const p1 = this.calcPoint(0);
+        const p2 = this.calcPoint(1);
+        const p3 = this.calcPoint(2);
+        const p4 = this.calcPoint(3);
 
         this.context.beginPath();
         this.context.moveTo(p1.x, p1.y);
@@ -257,7 +257,7 @@ export class App extends CanvasApp {
     }
 
     private fillEquations() : void {
-        let p1 = this.calcPoint(0);
+        const p1 = this.calcPoint(0);
 
         this.$s.text(this.calcScale().toFixed(1));
         this.$r.text((this.rotation*this.currentRotation).toFixed(1));
@@ -270,14 +270,14 @@ export class App extends CanvasApp {
     }
 
     private drawText(index : number, p : Coord) : void {
-        let center = this.calcCurrentCenter();
-        let x = (p.x - this.dimensions.x/2)/50;
-        let y = -(p.y - this.dimensions.y/2)/50;
-        let xDiff = p.x - center.x;
-        let xOffset = xDiff === 0 ? 0 : (xDiff > 0 ? 10 : -10);
+        const center = this.calcCurrentCenter();
+        const x = (p.x - this.dimensions.x/2)/50;
+        const y = -(p.y - this.dimensions.y/2)/50;
+        const xDiff = p.x - center.x;
+        const xOffset = xDiff === 0 ? 0 : (xDiff > 0 ? 10 : -10);
         this.context.textAlign = xOffset >= 0 ? 'left' : 'right';
-        let yDiff = p.y - center.y;
-        let yOffset = yDiff === 0 ? 0 : (yDiff > 0 ? 24 : -10);
+        const yDiff = p.y - center.y;
+        const yOffset = yDiff === 0 ? 0 : (yDiff > 0 ? 24 : -10);
         this.context.fillText('P'+index+'('+x.toFixed(2)+' , '+y.toFixed(2)+')', p.x + xOffset, p.y + yOffset);
     }
 
@@ -333,8 +333,8 @@ export class App extends CanvasApp {
 
     private drawRotationIllustration() : void {
         this.context.strokeStyle = this.illustrationStrokeStyle;
-        let x = 50 * (this.calcScale() * Math.cos(this.rotation * this.currentRotation * Math.PI));
-        let y = 50 * (this.calcScale() * Math.sin(this.rotation * this.currentRotation * Math.PI));
+        const x = 50 * (this.calcScale() * Math.cos(this.rotation * this.currentRotation * Math.PI));
+        const y = 50 * (this.calcScale() * Math.sin(this.rotation * this.currentRotation * Math.PI));
         this.context.beginPath();
         this.context.moveTo(this.calcCurrentCenter().x, this.calcCurrentCenter().y);
         this.context.lineTo(x + this.calcCurrentCenter().x, -y + this.calcCurrentCenter().y);

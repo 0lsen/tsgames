@@ -40,7 +40,7 @@ export class App extends BaseApp {
             return;
         }
         if (this.playerTurn) {
-            let $tile = $(e.target);
+            const $tile = $(e.target);
             let index: number;
             for (let i = 0; i < this.$tiles.length; i++) {
                 if ($tile.is(this.$tiles[i])) {
@@ -77,7 +77,7 @@ export class App extends BaseApp {
         }
         this.$info.text(infoText);
 
-        let state = this.state.state;
+        const state = this.state.state;
 
         state.forEach((player, index) => {
             if (player === true) {

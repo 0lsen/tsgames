@@ -58,7 +58,7 @@ export class App extends CanvasApp {
 
     private setSpawn(e) : void {
         if (this.spawning) {
-            let boundingRect = this.canvas.getBoundingClientRect();
+            const boundingRect = this.canvas.getBoundingClientRect();
             this.spawnPosition = new Coord(
                 Math.round((e.clientX - boundingRect.left)*(this.dimensions.x/boundingRect.width)/this.grainSize),
                 this.dimensions.y/this.grainSize-Math.round((e.clientY - boundingRect.top)*(this.dimensions.y/boundingRect.height)/this.grainSize)
@@ -81,9 +81,9 @@ export class App extends CanvasApp {
     }
 
     private spawn() : void {
-        let now = Date.now();
+        const now = Date.now();
         if (this.lastSpawn <= now-this.spawnDelay) {
-            let spawn = new Coord(
+            const spawn = new Coord(
                 this.spawnPosition.x + Math.round(this.randomizer.randomGaussian(0, this.spawnVariance)),
                 this.spawnPosition.y + Math.round(this.randomizer.randomGaussian(0, this.spawnVariance))
             );
@@ -114,9 +114,9 @@ export class App extends CanvasApp {
     }
 
     private processFloating(level : number) : boolean {
-        let changes = !!this.floating.length;
+        const changes = !!this.floating.length;
         for (let i = this.floating.length - 1; i >= 0; i--) {
-            let grain = this.floating[i];
+            const grain = this.floating[i];
             if (grain.y == level) {
                 if (grain.y-1 == this.profile[grain.x]) {
                     this.profile[grain.x]++;
@@ -134,15 +134,15 @@ export class App extends CanvasApp {
         let indexLeft = 0;
         let indexRight = this.dimensions.x-1;
         while (indexLeft != indexRight) {
-            let useLeft = this.randomizer.randomBool();
-            let index = useLeft ? indexLeft : indexRight;
-            let p = this.profile[index];
+            const useLeft = this.randomizer.randomBool();
+            const index = useLeft ? indexLeft : indexRight;
+            const p = this.profile[index];
             if (p == level) {
-                let angleLeft = this.angleCalculator.calcAngle(index, true);
-                let angleRight = this.angleCalculator.calcAngle(index, false);
+                const angleLeft = this.angleCalculator.calcAngle(index, true);
+                const angleRight = this.angleCalculator.calcAngle(index, false);
                 if ((angleLeft !== undefined && angleLeft) || (angleRight !== undefined && angleRight > 0)) {
-                    let leftSide = this.chooseLeftSide(angleLeft, angleRight);
-                    let angle = leftSide ? angleLeft : angleRight;
+                    const leftSide = this.chooseLeftSide(angleLeft, angleRight);
+                    const angle = leftSide ? angleLeft : angleRight;
                     if (angle > this.angleOfRepose) {
                         changes = true;
                         this.profile[index]--;

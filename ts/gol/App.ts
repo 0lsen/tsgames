@@ -46,9 +46,9 @@ export class App extends BaseApp {
             this.tickDelay = this.getTick();
         }
         for (let i = 0; i < this.height; i++) {
-            let $tr = $('<tr></tr>');
+            const $tr = $('<tr></tr>');
             for (let j = 0; j < this.width; j++) {
-                let $td = $('<td></td>');
+                const $td = $('<td></td>');
                 $td.on('click', (e) => {
                     this.setActive($td, !this.isActive($td));
                 });
@@ -66,7 +66,7 @@ export class App extends BaseApp {
         if (this.isRunning) return;
 
         this.isRunning = true;
-        let $tds = this.getTds();
+        const $tds = this.getTds();
         if (this.iteration === 0) {
             this.startState = [];
             for (let i = 0; i < $tds.length; i++) {
@@ -86,7 +86,7 @@ export class App extends BaseApp {
 
         this.isRunning = false;
         this.iteration = 0;
-        let $tds = this.getTds();
+        const $tds = this.getTds();
         for (let i = 0; i < $tds.length; i++) {
             this.setActive($tds[i], this.startState[i]);
         }
@@ -127,10 +127,10 @@ export class App extends BaseApp {
         if (!this.isRunning) return;
 
         this.iteration++;
-        let state = [];
+        const state = [];
         for (let i = 0; i < $tds.length; i++) {
             let active = this.isActive($tds[i]);
-            let no = this.activeNeighbours($tds, i);
+            const no = this.activeNeighbours($tds, i);
             if (no < 2 && active) {
                 active = false;
             } else if (no < 4 && active) {
@@ -163,17 +163,17 @@ export class App extends BaseApp {
     }
 
     private activeNeighbours(tds : JQuery<JQuery>, index : number) : number {
-        let row = Math.floor(index/this.width);
-        let col = index - row*this.width;
+        const row = Math.floor(index/this.width);
+        const col = index - row*this.width;
 
-        let ul = (row ? row-1 : this.height-1)*this.width + (col ? col-1 : this.width-1);
-        let um = (row ? row-1 : this.height-1)*this.width + col;
-        let ur = (row ? row-1 : this.height-1)*this.width + (col < this.width-1 ? col+1 : 0);
-        let cr = row*this.width + (col < this.width-1 ? col+1 : 0);
-        let br = (row < this.height-1 ? row+1 : 0)*this.width + (col < this.width-1 ? col+1 : 0);
-        let bm = (row < this.height-1 ? row+1 : 0)*this.width + col;
-        let bl = (row < this.height-1 ? row+1 : 0)*this.width + (col ? col-1 : this.width-1);
-        let cl = row*this.width + (col ? col-1 : this.width-1);
+        const ul = (row ? row-1 : this.height-1)*this.width + (col ? col-1 : this.width-1);
+        const um = (row ? row-1 : this.height-1)*this.width + col;
+        const ur = (row ? row-1 : this.height-1)*this.width + (col < this.width-1 ? col+1 : 0);
+        const cr = row*this.width + (col < this.width-1 ? col+1 : 0);
+        const br = (row < this.height-1 ? row+1 : 0)*this.width + (col < this.width-1 ? col+1 : 0);
+        const bm = (row < this.height-1 ? row+1 : 0)*this.width + col;
+        const bl = (row < this.height-1 ? row+1 : 0)*this.width + (col ? col-1 : this.width-1);
+        const cl = row*this.width + (col ? col-1 : this.width-1);
 
         let no = 0;
         if (this.isActive(tds[ul])) no++;

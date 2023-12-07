@@ -31,7 +31,7 @@ export class App extends CanvasApp {
         super();
         this._saveHelper = new SaveHelper(this);
 
-        let loadFromStorage = this.saveHelper.checkStorage();
+        const loadFromStorage = this.saveHelper.checkStorage();
         this._settings = loadFromStorage
             ? this.saveHelper.loadSettings()
             : new Settings();
@@ -61,14 +61,14 @@ export class App extends CanvasApp {
     }
 
     private mouseDown(e : MouseEvent) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
         if (CanvasTools.isBallGrab(mouseCoord, this._lightSource, this.settings.lightSourceGrabMargin)) {
             this.grabbingLightSource = true;
             this.grabbingPillar = undefined;
             this.setSelectedPillar();
         } else {
             this.grabbingLightSource = false;
-            let pillar = this._pillars.find(p => CanvasTools.isBallGrab(mouseCoord, p));
+            const pillar = this._pillars.find(p => CanvasTools.isBallGrab(mouseCoord, p));
             if (pillar !== undefined) {
                 this.grabbingPillar = this._pillars.indexOf(pillar);
                 this.setSelectedPillar(this.grabbingPillar);
@@ -85,7 +85,7 @@ export class App extends CanvasApp {
     }
 
     private mouseMove(e : MouseEvent) : void {
-        let mouseCoord = this.getMouseCoord(e);
+        const mouseCoord = this.getMouseCoord(e);
         if (this.grabbingLightSource && this.noCollision(mouseCoord, undefined)) {
             this._lightSource.x = mouseCoord.x;
             this._lightSource.y = mouseCoord.y;
@@ -103,13 +103,13 @@ export class App extends CanvasApp {
     }
 
     private noNewPillarCollision(mouseCoord : Coord) : boolean {
-        let newPillar = new CanvasBall(mouseCoord.x, mouseCoord.y, this.settings.pillarRadius);
+        const newPillar = new CanvasBall(mouseCoord.x, mouseCoord.y, this.settings.pillarRadius);
         return !CanvasTools.isBallCollision(newPillar, this._lightSource) &&
             this._pillars.every(p => !CanvasTools.isBallCollision(newPillar, p));
     }
 
     private noCollision(mouseCoord : Coord, pillarIndex : number) : boolean {
-        let ball = new CanvasBall(
+        const ball = new CanvasBall(
             mouseCoord.x,
             mouseCoord.y,
             pillarIndex === undefined ? this.settings.lightSourceRadius : this._pillars[pillarIndex].radius

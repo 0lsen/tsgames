@@ -7,7 +7,7 @@ import {Patrol} from "./model/ship/Patrol";
 
 export class Helper {
     public static shipCoordinates(length: number, coord: Coord): number[][] {
-        let list = [];
+        const list = [];
         let x = coord.x;
         let y = coord.y;
         for (let i = 0; i < length; i++) {

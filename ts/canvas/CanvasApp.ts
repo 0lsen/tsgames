@@ -23,7 +23,7 @@ export abstract class CanvasApp extends BaseApp {
     }
 
     protected getMouseCoord(e: MouseEvent) : Coord {
-        let boundingRect = this._canvas.getBoundingClientRect();
+        const boundingRect = this._canvas.getBoundingClientRect();
         return new Coord(
             (e.clientX - boundingRect.left)*(this._dimensions.x/boundingRect.width),
             (e.clientY - boundingRect.top)*(this._dimensions.y/boundingRect.height)
