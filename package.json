@@ -39,8 +39,8 @@
     "compileSnake": "tsc -p tsconfig/snake.json && sass --style compressed sass/snake.sass public/snake/style.css",
     "compileTTT": "tsc -p tsconfig/ttt.json && sass --style compressed sass/ttt.sass public/ttt/style.css",
     "compileTTT3d": "tsc -p tsconfig/ttt3d.json && sass --style compressed sass/ttt3d.sass public/ttt3d/style.css",
-    "eslint": "eslint ts/*/*.ts",
-    "eslintFix": "eslint ts/*/*.ts --fix",
+    "eslint": "eslint ts/*/*.ts test/*/*.ts",
+    "eslintFix": "eslint ts/*/*.ts test/*/*.ts --fix",
     "test": "tsc -p tsconfig/test.json && nyc --reporter=text-summary --reporter=html mocha -r ts-node/register $NODE_DEBUG_OPTION test/**/**.test.ts"
   }
 }
