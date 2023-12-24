@@ -14,6 +14,10 @@ export class RandomizerMock<T> implements Randomizer {
         return ret;
     }
 
+    randomIntBetween(min: number, max: number): number {
+        return this.randomInt(max);
+    }
+
     randomGaussian(mean: number, stdev: number): number {
         if (!this._gaussReturns.length) throw new Error();
         let ret = this._gaussReturns[0];
@@ -33,6 +37,14 @@ export class RandomizerMock<T> implements Randomizer {
         let ret = this._enumReturns[0];
         this._enumReturns.splice(0, 1);
         return ret;
+    }
+
+    randomListEntry<T>(list: T[]) : T {
+        if (!this._enumReturns.length) throw new Error();
+        let ret = this._enumReturns[0];
+        if (ret > list.length-1) throw new Error();
+        this._enumReturns.splice(0, 1);
+        return list[ret];
     }
 
     verify() : void {
