@@ -26,10 +26,11 @@
     "ts-node": "^10.7.0"
   },
   "scripts": {
-    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCaDi && yarn run compileCoTra && yarn run compileGoL && yarn run compileLiRo && yarn run compileMW && yarn run compilePeSo && yarn run compileSabo && yarn run compileSnake && yarn run compileTTT && yarn run compileTTT3d && yarn run compileXmas",
+    "compileAll": "yarn run compileBaseSass && yarn run compileBS && yarn run compileCaDi && yarn run compileCiSo  && yarn run compileCoTra && yarn run compileGoL && yarn run compileLiRo && yarn run compileMW && yarn run compilePeSo && yarn run compileSabo && yarn run compileSnake && yarn run compileTTT && yarn run compileTTT3d && yarn run compileXmas",
     "compileBaseSass": "sass --style compressed sass/index.sass public/style.css",
     "compileBS": "tsc -p tsconfig/bs.json && sass --style compressed sass/bs.sass public/bs/style.css",
     "compileCaDi": "tsc -p tsconfig/cadi.json && sass --style compressed sass/cadi.sass public/cadi/style.css",
+    "compileCiSo": "tsc -p tsconfig/ciso.json && sass --style compressed sass/ciso.sass public/ciso/style.css",
     "compileCoTra": "tsc -p tsconfig/cotra.json && sass --style compressed sass/cotra.sass public/cotra/style.css",
     "compileGoL": "tsc -p tsconfig/gol.json && sass --style compressed sass/gol.sass public/gol/style.css",
     "compileLiRo": "tsc -p tsconfig/liro.json && sass --style compressed sass/liro.sass public/liro/style.css",
