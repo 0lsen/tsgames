@@ -55,10 +55,11 @@ export class App extends CanvasApp {
 
     private draw(pillars : Pillar[], progress = undefined) : void {
         this.clear();
+        const progressAnimation = progress !== undefined && this.algorithm.movingFrom() !== this.algorithm.movingTo();
         this.drawHelper.draw(
             pillars,
-            progress === undefined ? undefined : this.algorithm.movingFrom(),
-            progress === undefined ? undefined : this.algorithm.movingTo(),
+            progressAnimation ? this.algorithm.movingFrom() : undefined,
+            progressAnimation ? this.algorithm.movingTo() : undefined,
             progress
         );
     }
@@ -71,7 +72,6 @@ export class App extends CanvasApp {
         } else if (this.algorithm.isSorted()) {
             this.isSorting = false;
             this.draw(this.algorithm.getState());
-            console.log('finished');
         } else {
             this.algorithm.iterate();
             this.draw(this.algorithm.getState(), 0);

@@ -1,10 +1,12 @@
 import {Pillar} from "./model/Pillar";
 import {App} from "./App";
 import {HSL} from "../canvas/model/HSL";
+import {ProgressTransformerImpl} from "./impl/ProgressTransformerImpl";
 
 export class DrawHelper {
 
     private readonly app : App;
+    private readonly progressTransformer = new ProgressTransformerImpl();
 
     private readonly colorInactive = new HSL(200, 100, 60);
     private readonly colorActive = new HSL(0, 100, 60);
@@ -35,8 +37,8 @@ export class DrawHelper {
                 i >= Math.min(movingFrom, movingTo) &&
                 i <= Math.max(movingFrom, movingTo);
             const offset = - Math.PI/2
-                + (isMoving ? Math.sign(movingFrom-movingTo)*rayWidth*progress : 0)
-                + (isInnerRay ? (movingTo-movingFrom)*rayWidth*progress : 0);
+                + (isMoving ? Math.sign(movingFrom-movingTo)*rayWidth*this.progressTransformer.transform(progress) : 0)
+                + (isInnerRay ? (movingTo-movingFrom)*rayWidth*this.progressTransformer.transform(progress) : 0);
             const index = isInnerRay ? movingFrom : (isMoving ? i+Math.sign(movingTo-movingFrom) : i);
             this.app.context.beginPath();
             this.app.context.arc(
