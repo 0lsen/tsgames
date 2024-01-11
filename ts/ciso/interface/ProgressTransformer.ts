@@ -1,3 +1,3 @@
 export interface ProgressTransformer {
-    transform(x : number) : number;
+    transform(x : number, transitionPhase : number) : number;
 }
