@@ -8,9 +8,11 @@ export class InsertionSort extends AbstractSort implements Sort {
 
     iterate(): void {
         const element = this.pillars[this.index];
-        this._movingFrom = this.index;
+        this._movingFrom = undefined;
+        this._movingTo = undefined;
         for (let i = 0; i < this.index; i++) {
             if (element.height < this.pillars[i].height) {
+                this._movingFrom = this.index;
                 this._movingTo = i;
                 this.pillars = this.pillars.slice(0, i)
                     .concat(element)
