@@ -1,4 +1,3 @@
-import {Pillar} from "./model/Pillar";
 import {App} from "./App";
 import {ArcCalcImpl} from "./impl/ArcCalcImpl";
 import {ArcOptions} from "./model/ArcOptions";
@@ -15,23 +14,23 @@ export class DrawHelper {
         this.app = app;
     }
 
-    public draw(pillars : Pillar[], movingFrom : number, movingTo : number, progress : number) : void {
-        this.arcWidth = Math.PI*2/pillars.length;
+    public draw(values : number[], movingFrom : number, movingTo : number, progress : number) : void {
+        this.arcWidth = Math.PI*2/values.length;
         this.arcCalc.setArcWidth(this.arcWidth);
 
-        pillars.forEach((pillar, i) => {
-            if (pillar.height === undefined) return;
+        values.forEach((value, i) => {
+            if (value === undefined) return;
             if (i === movingTo) {
-                this.arcCalc.innerArcs(pillar, movingFrom, movingTo, progress).forEach(option => this.drawArc(option));
+                this.arcCalc.innerArcs(value, movingFrom, movingTo, progress).forEach(option => this.drawArc(option));
             } else if (
                 movingFrom !== undefined &&
                 movingTo !== undefined &&
                 i >= Math.min(movingFrom, movingTo) &&
                 i <= Math.max(movingFrom, movingTo)
             ) {
-                this.drawArc(this.arcCalc.outerArcMoving(pillar, i, movingFrom, movingTo, progress));
+                this.drawArc(this.arcCalc.outerArcMoving(value, i, movingFrom, movingTo, progress));
             } else {
-                this.drawArc(this.arcCalc.outerArcStatic(pillar, i));
+                this.drawArc(this.arcCalc.outerArcStatic(value, i));
             }
         });
     }

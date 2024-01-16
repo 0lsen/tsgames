@@ -1,14 +1,12 @@
-import {Pillar} from "../model/Pillar";
-
 export abstract class AbstractSort {
 
-    protected pillars : Pillar[];
+    protected values : number[];
 
     protected _movingFrom : number;
     protected _movingTo : number;
 
-    constructor(pillars: Pillar[]) {
-        this.pillars = pillars.slice();
+    constructor(values: number[]) {
+        this.values = values.slice();
     }
 
     movingFrom(): number {

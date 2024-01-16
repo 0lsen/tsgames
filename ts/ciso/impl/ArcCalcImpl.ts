@@ -1,6 +1,5 @@
 import {ArcCalc} from "../interface/ArcCalc";
 import {ArcOptions} from "../model/ArcOptions";
-import {Pillar} from "../model/Pillar";
 import {HSL} from "../../canvas/model/HSL";
 import {ProgressTransformerImpl} from "./ProgressTransformerImpl";
 
@@ -16,20 +15,20 @@ export class ArcCalcImpl implements ArcCalc {
     private readonly transitionPhase = 0.15;
     private arcWidth : number;
 
-    innerArcs(pillar: Pillar, movingFrom: number, movingTo: number, progress: number): ArcOptions[] {
+    innerArcs(value: number, movingFrom: number, movingTo: number, progress: number): ArcOptions[] {
         if (progress < this.transitionPhase) {
             progress /= this.transitionPhase;
             return [
                 new ArcOptions(
-                    pillar.height*this.valueScale * (1-progress),
+                    value*this.valueScale * (1-progress),
                     this.colorInactive,
-                    this.horizonRadius + this.horizonMargin+pillar.height*this.valueScale*(1-progress)/2,
+                    this.horizonRadius + this.horizonMargin+value*this.valueScale*(1-progress)/2,
                     movingFrom*this.arcWidth
                 ),
                 new ArcOptions(
-                    (pillar.height/this.valueScale)*progress,
+                    (value/this.valueScale)*progress,
                     this.colorActive,
-                    this.horizonRadius-this.horizonMargin-(pillar.height/this.valueScale)*progress/2,
+                    this.horizonRadius-this.horizonMargin-(value/this.valueScale)*progress/2,
                     movingFrom*this.arcWidth
                 ),
             ];
@@ -37,42 +36,42 @@ export class ArcCalcImpl implements ArcCalc {
             progress = (1-progress) / this.transitionPhase;
             return [
                 new ArcOptions(
-                    (pillar.height/this.valueScale)*progress,
+                    (value/this.valueScale)*progress,
                     this.colorActive,
-                    this.horizonRadius-this.horizonMargin-(pillar.height/this.valueScale)*progress/2,
+                    this.horizonRadius-this.horizonMargin-(value/this.valueScale)*progress/2,
                     movingTo*this.arcWidth
                 ),
                 new ArcOptions(
-                    pillar.height*this.valueScale * (1-progress),
+                    value*this.valueScale * (1-progress),
                     this.colorInactive,
-                    this.horizonRadius + this.horizonMargin+pillar.height*this.valueScale*(1-progress)/2,
+                    this.horizonRadius + this.horizonMargin+value*this.valueScale*(1-progress)/2,
                     movingTo*this.arcWidth
                 ),
             ];
         } else {
             return [new ArcOptions(
-                pillar.height/this.valueScale,
+                value/this.valueScale,
                 this.colorActive,
-                this.horizonRadius-this.horizonMargin-(pillar.height/this.valueScale)/2,
+                this.horizonRadius-this.horizonMargin-(value/this.valueScale)/2,
                 movingFrom*this.arcWidth + (movingTo-movingFrom)*this.arcWidth*this.progressTransformer.transform(progress, this.transitionPhase)
             )];
         }
     }
 
-    outerArcMoving(pillar: Pillar, index: number, movingFrom: number, movingTo: number, progress: number): ArcOptions {
+    outerArcMoving(value: number, index: number, movingFrom: number, movingTo: number, progress: number): ArcOptions {
         return new ArcOptions(
-            pillar.height*this.valueScale,
+            value*this.valueScale,
             this.colorInactive,
-            this.horizonRadius+this.horizonMargin+pillar.height*this.valueScale/2,
+            this.horizonRadius+this.horizonMargin+value*this.valueScale/2,
             (index+Math.sign(movingTo-movingFrom))*this.arcWidth + Math.sign(movingFrom-movingTo)*this.arcWidth*this.progressTransformer.transform(progress, this.transitionPhase)
         );
     }
 
-    outerArcStatic(pillar: Pillar, index: number): ArcOptions {
+    outerArcStatic(value: number, index: number): ArcOptions {
         return new ArcOptions(
-            pillar.height*this.valueScale,
+            value*this.valueScale,
             this.colorInactive,
-            this.horizonRadius+this.horizonMargin+pillar.height*this.valueScale/2,
+            this.horizonRadius+this.horizonMargin+value*this.valueScale/2,
             index*this.arcWidth)
     }
 

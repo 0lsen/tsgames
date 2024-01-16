@@ -1,22 +1,21 @@
 import {AbstractSort} from "./AbstractSort";
 import {Sort} from "../interface/Sort";
-import {Pillar} from "../model/Pillar";
 
 export class ScheduleSort extends AbstractSort implements Sort {
 
     private static _timeoutMultiplier;
 
     private index = 0;
+    private readonly length : number
 
-    constructor(pillars: Pillar[]) {
-        super(pillars);
-        this.pillars.forEach((pillar, i) => setTimeout( ()=> {
-            this.pillars.splice(this.pillars.indexOf(pillar), 1);
-            this.pillars = this.pillars
-                .slice(0, this.index)
-                .concat(pillar).concat(this.pillars.slice(this.index));
+    constructor(values: number[]) {
+        super(values);
+        this.values = [];
+        this.length = values.length;
+        values.forEach((value, i) => setTimeout( ()=> {
+            this.values = this.values.concat(value);
             this.index++;
-            }, pillar.height * ScheduleSort._timeoutMultiplier
+            }, value * ScheduleSort._timeoutMultiplier
         ));
     }
 
@@ -24,11 +23,11 @@ export class ScheduleSort extends AbstractSort implements Sort {
     }
 
     isSorted(): boolean {
-        return this.index == this.pillars.length;
+        return this.index == this.length;
     }
 
-    getState(): Pillar[] {
-        return this.pillars.slice(0, this.index).concat(Array(this.pillars.length-this.index).fill(new Pillar(undefined)));
+    getValues(): number[] {
+        return this.values.concat(Array(this.length-this.index).fill(undefined));
     }
 
     static set timeoutMultiplier(value) {

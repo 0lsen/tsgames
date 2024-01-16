@@ -1,4 +1,3 @@
-import {Pillar} from "./model/Pillar";
 import {InsertionSort} from "./impl/InsertionSort";
 import {Sort} from "./interface/Sort";
 import {SelectionSort} from "./impl/SelectionSort";
@@ -19,7 +18,7 @@ export class App extends CanvasApp {
 
     private drawHelper : DrawHelper;
 
-    private unsortedPillars : Pillar[];
+    private unsortedValues : number[];
 
     private isSorting = false;
 
@@ -42,22 +41,22 @@ export class App extends CanvasApp {
     public sort(index : number) : void {
         if (this.isSorting) return;
 
-        this.algorithm = new this.algorithms[index](this.unsortedPillars);
+        this.algorithm = new this.algorithms[index](this.unsortedValues);
         this.isSorting = true;
         this.iterate();
     }
 
     private reset() : void {
         this.isSorting = false;
-        this.unsortedPillars = this.createShuffledValues().map(v => new Pillar(v));
-        this.draw(this.unsortedPillars);
+        this.unsortedValues = this.createShuffledValues();
+        this.draw(this.unsortedValues);
     }
 
-    private draw(pillars : Pillar[], progress = undefined) : void {
+    private draw(values : number[], progress = undefined) : void {
         this.clear();
         const progressAnimation = progress !== undefined && this.algorithm.movingFrom() !== this.algorithm.movingTo();
         this.drawHelper.draw(
-            pillars,
+            values,
             progressAnimation ? this.algorithm.movingFrom() : undefined,
             progressAnimation ? this.algorithm.movingTo() : undefined,
             progress
@@ -67,15 +66,16 @@ export class App extends CanvasApp {
     private iterate(animationProgress : number = undefined) : void {
         if (!this.isSorting) return;
         if (animationProgress !== undefined && animationProgress < 1) {
-            this.draw(this.algorithm.getState(), animationProgress);
+            this.draw(this.algorithm.getValues(), animationProgress);
             window.requestAnimationFrame(() => this.iterate(animationProgress+1/this.animationFrames));
         } else if (this.algorithm.isSorted()) {
             this.isSorting = false;
-            this.draw(this.algorithm.getState());
+            this.draw(this.algorithm.getValues());
         } else {
             this.algorithm.iterate();
-            this.draw(this.algorithm.getState(), 0);
-            window.requestAnimationFrame(() => this.iterate(0));
+            this.draw(this.algorithm.getValues(), 0);
+            const hasMovement = this.algorithm.movingFrom() !== undefined && this.algorithm.movingTo() !== undefined;
+            window.requestAnimationFrame(() => this.iterate(hasMovement ? 0 : undefined));
         }
     }
 
