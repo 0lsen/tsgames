@@ -6,6 +6,7 @@ import {ScheduleSort} from "./impl/ScheduleSort";
 import {CanvasApp} from "../canvas/CanvasApp";
 import {Coord} from "../core/model/Coord";
 import {DrawHelper} from "./DrawHelper";
+import {MergeSort} from "./impl/MergeSort";
 
 export class App extends CanvasApp {
 
@@ -27,6 +28,7 @@ export class App extends CanvasApp {
     private algorithms : SortConstructor[] = [
         InsertionSort,
         SelectionSort,
+        MergeSort,
         ScheduleSort,
     ];
 
