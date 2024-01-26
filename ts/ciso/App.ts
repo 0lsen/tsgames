@@ -7,6 +7,7 @@ import {CanvasApp} from "../canvas/CanvasApp";
 import {Coord} from "../core/model/Coord";
 import {DrawHelper} from "./DrawHelper";
 import {MergeSort} from "./impl/MergeSort";
+import {HeapSort} from "./impl/HeapSort";
 
 export class App extends CanvasApp {
 
@@ -29,6 +30,7 @@ export class App extends CanvasApp {
         InsertionSort,
         SelectionSort,
         MergeSort,
+        HeapSort,
         ScheduleSort,
     ];
 
