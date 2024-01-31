@@ -1,6 +1,7 @@
 import {App} from "./App";
 import {ArcCalcImpl} from "./impl/ArcCalcImpl";
 import {ArcOptions} from "./model/ArcOptions";
+import {AnimationOptions} from "./model/AnimationOptions";
 
 export class DrawHelper {
 
@@ -14,21 +15,30 @@ export class DrawHelper {
         this.app = app;
     }
 
-    public draw(values : number[], movingFrom : number, movingTo : number, progress : number) : void {
-        this.arcWidth = Math.PI*2/values.length;
+    public draw(animationOptions : AnimationOptions) : void {
+        this.arcWidth = Math.PI*2/animationOptions.values.length;
         this.arcCalc.setArcWidth(this.arcWidth);
 
-        values.forEach((value, i) => {
+        animationOptions.values.forEach((value, i) => {
             if (value === undefined) return;
-            if (i === movingTo) {
-                this.arcCalc.innerArcs(value, movingFrom, movingTo, progress).forEach(option => this.drawArc(option));
+            if (i === animationOptions.movingTo) {
+                this.arcCalc.innerArcs(value, animationOptions).forEach(arcOptions => this.drawArc(arcOptions));
+            } else if (animationOptions.swap && i === animationOptions.movingFrom) {
+                const swapOptions = new AnimationOptions(
+                    animationOptions.values,
+                    animationOptions.movingTo,
+                    animationOptions.movingFrom,
+                    animationOptions.progress
+                );
+                this.arcCalc.innerArcs(value, swapOptions).forEach(arcOptions => this.drawArc(arcOptions));
             } else if (
-                movingFrom !== undefined &&
-                movingTo !== undefined &&
-                i >= Math.min(movingFrom, movingTo) &&
-                i <= Math.max(movingFrom, movingTo)
+                !animationOptions.swap &&
+                animationOptions.movingFrom !== undefined &&
+                animationOptions.movingTo !== undefined &&
+                i >= Math.min(animationOptions.movingFrom, animationOptions.movingTo) &&
+                i <= Math.max(animationOptions.movingFrom, animationOptions.movingTo)
             ) {
-                this.drawArc(this.arcCalc.outerArcMoving(value, i, movingFrom, movingTo, progress));
+                this.drawArc(this.arcCalc.outerArcMoving(value, i, animationOptions));
             } else {
                 this.drawArc(this.arcCalc.outerArcStatic(value, i));
             }

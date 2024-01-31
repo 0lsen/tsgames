@@ -8,6 +8,7 @@ import {Coord} from "../core/model/Coord";
 import {DrawHelper} from "./DrawHelper";
 import {MergeSort} from "./impl/MergeSort";
 import {HeapSort} from "./impl/HeapSort";
+import {AnimationOptions} from "./model/AnimationOptions";
 
 export class App extends CanvasApp {
 
@@ -59,12 +60,14 @@ export class App extends CanvasApp {
     private draw(values : number[], progress = undefined) : void {
         this.clear();
         const progressAnimation = progress !== undefined && this.algorithm.movingFrom() !== this.algorithm.movingTo();
-        this.drawHelper.draw(
+        const animationOptions = new AnimationOptions(
             values,
             progressAnimation ? this.algorithm.movingFrom() : undefined,
             progressAnimation ? this.algorithm.movingTo() : undefined,
-            progress
+            progress,
+            progressAnimation ? this.algorithm.makeSwap() : false
         );
+        this.drawHelper.draw(animationOptions);
     }
 
     private iterate(animationProgress : number = undefined) : void {

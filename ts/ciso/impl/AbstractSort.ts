@@ -4,6 +4,7 @@ export abstract class AbstractSort {
 
     protected _movingFrom : number;
     protected _movingTo : number;
+    protected _makeSwap : boolean = false;
 
     constructor(values: number[]) {
         this.values = values.slice();
@@ -15,5 +16,9 @@ export abstract class AbstractSort {
 
     movingTo(): number {
         return this._movingTo;
+    }
+
+    makeSwap(): boolean {
+        return this._makeSwap;
     }
 }

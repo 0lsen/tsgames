@@ -1,5 +1,6 @@
 import {ArcCalcImpl} from "../../ts/ciso/impl/ArcCalcImpl";
 import {ArcOptions} from "../../ts/ciso/model/ArcOptions";
+import {AnimationOptions} from "../../ts/ciso/model/AnimationOptions";
 
 const chai = require('chai');
 const mocha = require('mocha');
@@ -15,33 +16,33 @@ mocha.describe('CiSo ArcCalc', () => {
         let options : ArcOptions[];
         const value = 100;
 
-        options = calc.innerArcs(value, 1, 2, 0);
+        options = calc.innerArcs(value, new AnimationOptions([], 1, 2, 0));
         chai.expect(options.length).to.equal(2);
         chai.expect(options[0].color.hue).to.equal(hueInactive);
         chai.expect(Math.round(options[0].width)).to.equal(110);
         chai.expect(options[1].color.hue).to.equal(hueActive);
         chai.expect(options[1].width).to.equal(0);
 
-        options = calc.innerArcs(value, 1, 2, 0.075);
+        options = calc.innerArcs(value, new AnimationOptions([], 1, 2, 0.075));
         chai.expect(options.length).to.equal(2);
         chai.expect(options[0].color.hue).to.equal(hueInactive);
         chai.expect(Math.round(options[0].width)).to.equal(55);
         chai.expect(options[1].color.hue).to.equal(hueActive);
         chai.expect(Math.round(options[1].width)).to.equal(45);
 
-        options = calc.innerArcs(value, 1, 2, 0.5);
+        options = calc.innerArcs(value, new AnimationOptions([], 1, 2, 0.5));
         chai.expect(options.length).to.equal(1);
         chai.expect(options[0].color.hue).to.equal(hueActive);
         chai.expect(Math.round(options[0].width)).to.equal(91);
 
-        options = calc.innerArcs(value, 1, 2, 0.925);
+        options = calc.innerArcs(value, new AnimationOptions([], 1, 2, 0.925));
         chai.expect(options.length).to.equal(2);
         chai.expect(options[0].color.hue).to.equal(hueActive);
         chai.expect(Math.round(options[0].width)).to.equal(45);
         chai.expect(options[1].color.hue).to.equal(hueInactive);
         chai.expect(Math.round(options[1].width)).to.equal(55);
 
-        options = calc.innerArcs(value, 1, 2, 1);
+        options = calc.innerArcs(value, new AnimationOptions([], 1, 2, 1));
         chai.expect(options.length).to.equal(2);
         chai.expect(options[0].color.hue).to.equal(hueActive);
         chai.expect(options[0].width).to.equal(0);

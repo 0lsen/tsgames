@@ -4,4 +4,5 @@ export interface Sort {
     getValues() : number[];
     movingFrom() : number;
     movingTo() : number;
+    makeSwap() : boolean;
 }

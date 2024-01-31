@@ -2,6 +2,7 @@ import {ArcCalc} from "../interface/ArcCalc";
 import {ArcOptions} from "../model/ArcOptions";
 import {HSL} from "../../canvas/model/HSL";
 import {ProgressTransformerImpl} from "./ProgressTransformerImpl";
+import {AnimationOptions} from "../model/AnimationOptions";
 
 export class ArcCalcImpl implements ArcCalc {
 
@@ -15,37 +16,37 @@ export class ArcCalcImpl implements ArcCalc {
     private readonly transitionPhase = 0.15;
     private arcWidth : number;
 
-    innerArcs(value: number, movingFrom: number, movingTo: number, progress: number): ArcOptions[] {
-        if (progress < this.transitionPhase) {
-            progress /= this.transitionPhase;
+    innerArcs(value: number, options : AnimationOptions): ArcOptions[] {
+        if (options.progress < this.transitionPhase) {
+            const progress = options.progress/this.transitionPhase;
             return [
                 new ArcOptions(
                     value*this.valueScale * (1-progress),
                     this.colorInactive,
                     this.horizonRadius + this.horizonMargin+value*this.valueScale*(1-progress)/2,
-                    movingFrom*this.arcWidth
+                    options.movingFrom*this.arcWidth
                 ),
                 new ArcOptions(
                     (value/this.valueScale)*progress,
                     this.colorActive,
                     this.horizonRadius-this.horizonMargin-(value/this.valueScale)*progress/2,
-                    movingFrom*this.arcWidth
+                    options.movingFrom*this.arcWidth
                 ),
             ];
-        } else if (progress > 1-this.transitionPhase) {
-            progress = (1-progress) / this.transitionPhase;
+        } else if (options.progress > 1-this.transitionPhase) {
+            const progress = (1-options.progress) / this.transitionPhase;
             return [
                 new ArcOptions(
                     (value/this.valueScale)*progress,
                     this.colorActive,
                     this.horizonRadius-this.horizonMargin-(value/this.valueScale)*progress/2,
-                    movingTo*this.arcWidth
+                    options.movingTo*this.arcWidth
                 ),
                 new ArcOptions(
                     value*this.valueScale * (1-progress),
                     this.colorInactive,
                     this.horizonRadius + this.horizonMargin+value*this.valueScale*(1-progress)/2,
-                    movingTo*this.arcWidth
+                    options.movingTo*this.arcWidth
                 ),
             ];
         } else {
@@ -53,17 +54,17 @@ export class ArcCalcImpl implements ArcCalc {
                 value/this.valueScale,
                 this.colorActive,
                 this.horizonRadius-this.horizonMargin-(value/this.valueScale)/2,
-                movingFrom*this.arcWidth + (movingTo-movingFrom)*this.arcWidth*this.progressTransformer.transform(progress, this.transitionPhase)
+                options.movingFrom*this.arcWidth + (options.movingTo-options.movingFrom)*this.arcWidth*this.progressTransformer.transform(options.progress, this.transitionPhase)
             )];
         }
     }
 
-    outerArcMoving(value: number, index: number, movingFrom: number, movingTo: number, progress: number): ArcOptions {
+    outerArcMoving(value: number, index: number, options : AnimationOptions): ArcOptions {
         return new ArcOptions(
             value*this.valueScale,
             this.colorInactive,
             this.horizonRadius+this.horizonMargin+value*this.valueScale/2,
-            (index+Math.sign(movingTo-movingFrom))*this.arcWidth + Math.sign(movingFrom-movingTo)*this.arcWidth*this.progressTransformer.transform(progress, this.transitionPhase)
+            (index+Math.sign(options.movingTo-options.movingFrom))*this.arcWidth + Math.sign(options.movingFrom-options.movingTo)*this.arcWidth*this.progressTransformer.transform(options.progress, this.transitionPhase)
         );
     }
 

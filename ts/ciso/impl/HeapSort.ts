@@ -8,7 +8,6 @@ export class HeapSort extends AbstractSort implements Sort {
     private readonly maxHeap : number[] = []
     private readonly initialElement : HeapSortElement;
 
-    private makeSwap : boolean = false;
     private chooseNextInitialAtomic = false;
 
     constructor(values: number[]) {
@@ -40,6 +39,7 @@ export class HeapSort extends AbstractSort implements Sort {
     }
 
     iterate(): void {
+        this._makeSwap = false;
         if (this.chooseNextInitialAtomic) {
             const lastElement = this.lastElement();
             if (lastElement.child2 !== undefined) {
@@ -57,15 +57,10 @@ export class HeapSort extends AbstractSort implements Sort {
             }
             this._movingTo = 0;
             this.chooseNextInitialAtomic = false;
-        } else if (this.makeSwap) {
-            const movingFrom = this._movingFrom;
-            this._movingFrom = this._movingTo+1;
-            this._movingTo = movingFrom;
-            this.makeSwap = false;
         } else  {
             const heapifyActionHappened = this.attemptHeapify();
             if (heapifyActionHappened) {
-                this.makeSwap = this._movingFrom-this._movingTo > 1;
+                this._makeSwap = this._movingFrom-this._movingTo > 1;
             } else {
                 const max = this.initialElement.atomic;
                 this.maxHeap.push(max);
@@ -98,13 +93,6 @@ export class HeapSort extends AbstractSort implements Sort {
         } while (currentLevel.find(e => e !== undefined && e.atomic !== undefined) !== undefined);
         let values = unsortedValues.concat(this.maxHeap.reverse());
         this.maxHeap.reverse();
-        if (this.makeSwap) {
-            values = values
-                .slice(0, this._movingTo+1)
-                .concat(values[this._movingFrom])
-                .concat(values.slice(this._movingTo+1, this._movingFrom))
-                .concat(this._movingFrom == values.length-1 ? [] : values.slice(this._movingFrom+1));
-        }
         return values;
     }
 

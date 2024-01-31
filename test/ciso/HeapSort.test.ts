@@ -14,34 +14,40 @@ mocha.describe('CiSo HeapSort', () => {
         chai.expect(sort.getValues()).to.deep.equal([4, 5, 3, 6, 1, 2]);
 
         sort.iterate();
-        chai.expect(sort.getValues()).to.deep.equal([4, 6, 5, 3, 1, 2]);
+        chai.expect(sort.getValues()).to.deep.equal([4, 6, 3, 5, 1, 2]);
         chai.expect(sort.movingFrom()).to.equal(3);
         chai.expect(sort.movingTo()).to.equal(1);
-
-        sort.iterate();
-        chai.expect(sort.getValues()).to.deep.equal([4, 6, 3, 5, 1, 2]);
-        chai.expect(sort.movingFrom()).to.equal(2);
-        chai.expect(sort.movingTo()).to.equal(3);
+        chai.expect(sort.makeSwap()).to.be.true;
 
         sort.iterate();
         chai.expect(sort.getValues()).to.deep.equal([6, 4, 3, 5, 1, 2]);
         chai.expect(sort.movingFrom()).to.equal(1);
         chai.expect(sort.movingTo()).to.equal(0);
-
-        sort.iterate();
-        chai.expect(sort.getValues()).to.deep.equal([6, 5, 4, 3, 1, 2]);
-        chai.expect(sort.movingFrom()).to.equal(3);
-        chai.expect(sort.movingTo()).to.equal(1);
+        chai.expect(sort.makeSwap()).to.be.false;
 
         sort.iterate();
         chai.expect(sort.getValues()).to.deep.equal([6, 5, 3, 4, 1, 2]);
-        chai.expect(sort.movingFrom()).to.equal(2);
-        chai.expect(sort.movingTo()).to.equal(3);
+        chai.expect(sort.movingFrom()).to.equal(3);
+        chai.expect(sort.movingTo()).to.equal(1);
+        chai.expect(sort.makeSwap()).to.be.true;
 
         sort.iterate();
         chai.expect(sort.getValues()).to.deep.equal([5, 3, 4, 1, 2, 6]);
         chai.expect(sort.movingFrom()).to.equal(0);
         chai.expect(sort.movingTo()).to.equal(5);
+        chai.expect(sort.makeSwap()).to.be.false;
+
+        sort.iterate();
+        chai.expect(sort.getValues()).to.deep.equal([2, 5, 3, 4, 1, 6]);
+        chai.expect(sort.movingFrom()).to.equal(4);
+        chai.expect(sort.movingTo()).to.equal(0);
+        chai.expect(sort.makeSwap()).to.be.false;
+
+        sort.iterate();
+        chai.expect(sort.getValues()).to.deep.equal([5, 2, 3, 4, 1, 6]);
+        chai.expect(sort.movingFrom()).to.equal(1);
+        chai.expect(sort.movingTo()).to.equal(0);
+        chai.expect(sort.makeSwap()).to.be.false;
 
         // ...
     });
