@@ -8,6 +8,8 @@ export class DrawHelper {
     private readonly app : App;
     private readonly arcCalc = new ArcCalcImpl();
     private readonly arcMargin = 0.2;
+    private readonly comparisonFontSizeDescription = 12;
+    private readonly comparisonFontSizeNumber = 30;
 
     private arcWidth : number;
 
@@ -67,8 +69,10 @@ export class DrawHelper {
 
     private writeComparisons(n : number) : void {
         this.app.context.textAlign = 'center';
-        this.app.context.font = '12px Arial';
         this.app.context.fillStyle = '#aaa';
-        this.app.context.fillText(n+' comparisons', this.app.dimensions.x/2, this.app.dimensions.y/2);
+        this.app.context.font = this.comparisonFontSizeNumber+'px Arial';
+        this.app.context.fillText(n.toString(), this.app.dimensions.x/2, this.app.dimensions.y/2 - (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
+        this.app.context.font = this.comparisonFontSizeDescription+'px Arial';
+        this.app.context.fillText('comparisons', this.app.dimensions.x/2, this.app.dimensions.y/2 + (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
     }
 }
