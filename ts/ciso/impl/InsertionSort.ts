@@ -3,14 +3,19 @@ import {AbstractSort} from "./AbstractSort";
 
 export class InsertionSort extends AbstractSort implements Sort {
 
-    private index = 1;
+    private index : number;
+
+    constructor(values: number[], index: number = 1) {
+        super(values);
+        this.index = index;
+    }
 
     iterate(): void {
         const value = this.values[this.index];
         this._movingFrom = undefined;
         this._movingTo = undefined;
         for (let i = 0; i < this.index; i++) {
-            if (value < this.values[i]) {
+            if (this.compare(value, this.values[i])) {
                 this._movingFrom = this.index;
                 this._movingTo = i;
                 this.values = this.values.slice(0, i)

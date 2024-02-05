@@ -24,16 +24,19 @@ export class MergeSortElement {
         this._atomic = value;
     }
 
-    public iterate() : void {
+    public iterate() : number {
         if (!this._child1.isSorted()) {
-            this._child1.iterate();
+            return this._child1.iterate();
         } else if (!this._child2.isSorted()) {
-            this._child2.iterate();
+            return this._child2.iterate();
         } else if (this.sort === undefined) {
-            this.sort = new InsertionSort(this._child1.getValues().concat(this._child2.getValues()));
+            this.sort = new InsertionSort(this._child1.getValues().concat(this._child2.getValues()), this._child1.getValues().length);
             this.sort.iterate();
+            return this.sort.comparisons();
         } else {
+            const comparionsBefore = this.sort.comparisons();
             this.sort.iterate();
+            return this.sort.comparisons()-comparionsBefore;
         }
     }
 

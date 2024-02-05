@@ -127,14 +127,17 @@ export class HeapSort extends AbstractSort implements Sort {
         for (let i = levels.length-1; i >= 0; i--) {
             for (let j = levels[i].length-1; j >= 0; j--) {
                 const element = levels[i][j];
+                if (!element.touched) {
+                    continue;
+                }
                 let max = element.atomic;
                 let swapChild1 = false;
                 let swapChild2 = false;
-                if (element.child1 !== undefined && element.child1.atomic > max) {
+                if (element.child1 !== undefined && this.compare(max, element.child1.atomic)) {
                     max = element.child1.atomic;
                     swapChild1 = true;
                 }
-                if (element.child2 !== undefined && element.child2.atomic > max) {
+                if (element.child2 !== undefined && this.compare(max, element.child2.atomic)) {
                     swapChild2 = true;
                 }
 
@@ -152,6 +155,7 @@ export class HeapSort extends AbstractSort implements Sort {
                     this._movingFrom = this.getElementIndex(element.child1);
                     return true;
                 }
+                element.untouch();
             }
         }
         this._movingFrom = undefined;

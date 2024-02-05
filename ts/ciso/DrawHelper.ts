@@ -15,7 +15,7 @@ export class DrawHelper {
         this.app = app;
     }
 
-    public draw(animationOptions : AnimationOptions) : void {
+    public draw(animationOptions : AnimationOptions, comparisons : number) : void {
         this.arcWidth = Math.PI*2/animationOptions.values.length;
         this.arcCalc.setArcWidth(this.arcWidth);
 
@@ -43,6 +43,10 @@ export class DrawHelper {
                 this.drawArc(this.arcCalc.outerArcStatic(value, i));
             }
         });
+
+        if (comparisons) {
+            this.writeComparisons(comparisons);
+        }
     }
 
     private drawArc(options : ArcOptions) : void {
@@ -59,5 +63,12 @@ export class DrawHelper {
         );
         this.app.context.stroke();
         this.app.context.closePath();
+    }
+
+    private writeComparisons(n : number) : void {
+        this.app.context.textAlign = 'center';
+        this.app.context.font = '12px Arial';
+        this.app.context.fillStyle = '#aaa';
+        this.app.context.fillText(n+' comparisons', this.app.dimensions.x/2, this.app.dimensions.y/2);
     }
 }

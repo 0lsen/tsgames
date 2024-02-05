@@ -61,7 +61,7 @@ export class MergeSort extends AbstractSort implements Sort {
                 throw new ThisShouldNeverHappenException('merge sort iteration without checking if already sorted');
             }
         }
-        this.elements[this.pointer].iterate();
+        this._comparisons += this.elements[this.pointer].iterate();
         const movingFrom = this.elements[this.pointer].movingFrom();
         const movingTo = this.elements[this.pointer].movingTo();
         if (movingFrom !== undefined && movingTo !== undefined) {

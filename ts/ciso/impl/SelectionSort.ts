@@ -8,7 +8,7 @@ export class SelectionSort extends AbstractSort implements Sort {
     iterate(): void {
         let min = 0;
         for (let i = 1; i < this.values.length; i++) {
-            if (this.values[i] < this.values[min]) {
+            if (this.compare(this.values[i], this.values[min])) {
                 min = i;
             }
         }

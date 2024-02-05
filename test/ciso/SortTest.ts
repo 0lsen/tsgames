@@ -66,6 +66,7 @@ export class SortTest {
                     sort.iterate();
                 }
                 chai.expect(sort.getValues()).to.deep.equal(values.sort((v1, v2) => v1-v2));
+                console.log('      comparions made:', sort.comparisons());
             });
         });
     }

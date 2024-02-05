@@ -5,4 +5,5 @@ export interface Sort {
     movingFrom() : number;
     movingTo() : number;
     makeSwap() : boolean;
+    comparisons(): number;
 }

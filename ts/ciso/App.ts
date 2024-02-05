@@ -54,10 +54,10 @@ export class App extends CanvasApp {
     private reset() : void {
         this.isSorting = false;
         this.unsortedValues = this.createShuffledValues();
-        this.draw(this.unsortedValues);
+        this.draw(this.unsortedValues, 0);
     }
 
-    private draw(values : number[], progress = undefined) : void {
+    private draw(values : number[], comparisons : number, progress = undefined) : void {
         this.clear();
         const progressAnimation = progress !== undefined && this.algorithm.movingFrom() !== this.algorithm.movingTo();
         const animationOptions = new AnimationOptions(
@@ -67,20 +67,20 @@ export class App extends CanvasApp {
             progress,
             progressAnimation ? this.algorithm.makeSwap() : false
         );
-        this.drawHelper.draw(animationOptions);
+        this.drawHelper.draw(animationOptions, comparisons);
     }
 
     private iterate(animationProgress : number = undefined) : void {
         if (!this.isSorting) return;
         if (animationProgress !== undefined && animationProgress < 1) {
-            this.draw(this.algorithm.getValues(), animationProgress);
+            this.draw(this.algorithm.getValues(), this.algorithm.comparisons(), animationProgress);
             window.requestAnimationFrame(() => this.iterate(animationProgress+1/this.animationFrames));
         } else if (this.algorithm.isSorted()) {
             this.isSorting = false;
-            this.draw(this.algorithm.getValues());
+            this.draw(this.algorithm.getValues(), this.algorithm.comparisons());
         } else {
             this.algorithm.iterate();
-            this.draw(this.algorithm.getValues(), 0);
+            this.draw(this.algorithm.getValues(), this.algorithm.comparisons(), 0);
             const hasMovement = this.algorithm.movingFrom() !== undefined && this.algorithm.movingTo() !== undefined;
             window.requestAnimationFrame(() => this.iterate(hasMovement ? 0 : undefined));
         }

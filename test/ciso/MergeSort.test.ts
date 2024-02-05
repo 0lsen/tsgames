@@ -36,11 +36,6 @@ mocha.describe('CiSo MergeSort', () => {
        chai.expect(sort.movingTo()).to.equal(6);
 
        sort.iterate();
-       chai.expect(sort.getValues()).to.deep.equal([7, 8, 5, 6, 3, 4, 1, 2]);
-       chai.expect(sort.movingFrom()).to.be.undefined;
-       chai.expect(sort.movingTo()).to.be.undefined;
-
-       sort.iterate();
        chai.expect(sort.getValues()).to.deep.equal([5, 7, 8, 6, 3, 4, 1, 2]);
        chai.expect(sort.movingFrom()).to.equal(2);
        chai.expect(sort.movingTo()).to.equal(0);
@@ -49,11 +44,6 @@ mocha.describe('CiSo MergeSort', () => {
        chai.expect(sort.getValues()).to.deep.equal([5, 6, 7, 8, 3, 4, 1, 2]);
        chai.expect(sort.movingFrom()).to.equal(3);
        chai.expect(sort.movingTo()).to.equal(1);
-
-       sort.iterate();
-       chai.expect(sort.getValues()).to.deep.equal([5, 6, 7, 8, 3, 4, 1, 2]);
-       chai.expect(sort.movingFrom()).to.be.undefined;
-       chai.expect(sort.movingTo()).to.be.undefined;
 
        sort.iterate();
        chai.expect(sort.getValues()).to.deep.equal([5, 6, 7, 8, 1, 3, 4, 2]);
