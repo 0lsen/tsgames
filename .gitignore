@@ -2,6 +2,7 @@
 .nyc_output/
 coverage/
 node_modules/
+public/fontawesome-free/*
 *.js
 *.js.map
 *.css
