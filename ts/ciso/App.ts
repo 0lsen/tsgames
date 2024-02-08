@@ -16,7 +16,8 @@ export class App extends CanvasApp {
 
     protected _dimensions = new Coord(600, 600);
 
-    private readonly numberOfValues = 50;
+    private readonly $numberOfValues = $('#numberOfValues');
+
     private readonly minValue = 33;
     private readonly maxValue = 100;
     private readonly animationFrames = 50;
@@ -91,13 +92,14 @@ export class App extends CanvasApp {
     }
 
     private createShuffledValues() : number[] {
-        const values = Array(this.numberOfValues).fill(0).map((v, i) => this.minValue + (this.maxValue-this.minValue)*i/this.numberOfValues);
+        const numberOfValues = parseInt(this.$numberOfValues.val().toString());
+        const values = Array(numberOfValues).fill(0).map((v, i) => this.minValue + (this.maxValue-this.minValue)*i/numberOfValues);
         const shuffledValues = [];
         let failedAssignments = 0;
         values.forEach(value => {
             let index : number;
             do {
-                index = this.randomizer.randomInt(this.numberOfValues);
+                index = this.randomizer.randomInt(numberOfValues);
             } while (shuffledValues[index] !== undefined && ++failedAssignments);
             shuffledValues[index] = value;
         });

@@ -29,7 +29,11 @@
     </div>
 </div>
 <div class="container">
-    <button type="button" class="button" id="reset">Reset</button>
+    <input class="input" id="numberOfValues" type="number" min="1" max="999" step="1" value="50">
+    <button type="button" class="button" id="reset">Random Elements</button>
+    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
+</div>
+<div class="container">
     <button type="button" class="button" onclick="app.sort(0)">Insertion Sort</button>
     <button type="button" class="button" onclick="app.sort(1)">Selection Sort</button>
     <button type="button" class="button" onclick="app.sort(2)">Merge Sort</button>
@@ -37,7 +41,6 @@
     <button type="button" class="button" onclick="app.sort(4)">Quick Sort</button>
     <button type="button" class="button" onclick="app.sort(5)">Bubble Sort</button>
     <button type="button" class="button" onclick="app.sort(6)">Schedule Sort</button>
-    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
 </div>
 
 <div id="overlay">
