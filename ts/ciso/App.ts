@@ -9,6 +9,7 @@ import {DrawHelper} from "./DrawHelper";
 import {MergeSort} from "./impl/MergeSort";
 import {HeapSort} from "./impl/HeapSort";
 import {AnimationOptions} from "./model/AnimationOptions";
+import {QuickSort} from "./impl/QuickSort";
 
 export class App extends CanvasApp {
 
@@ -32,6 +33,7 @@ export class App extends CanvasApp {
         SelectionSort,
         MergeSort,
         HeapSort,
+        QuickSort,
         ScheduleSort,
     ];
 
