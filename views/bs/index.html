@@ -1,27 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>
-        Battleship
-    </title>
-    <meta name="viewport" content="initial-scale=0.7, width=device-width"/>
-    <link rel="stylesheet" href="../bulma.min.css">
-    <link rel="stylesheet" href="../fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="../require.js"></script>
-    <script src="../jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plain-draggable@2.5.12/plain-draggable.min.js" integrity="sha384-9wTUojzuBH6fD8U401121o6f4M98qWnjRCXYb3BteVuf462XIkdFvoXYie2bPauC" crossorigin="anonymous"></script>
-    <script src="app.js"></script>
-</head>
-<body>
-<header class="header">
-    <div class="container">
-        <div class="navbar-brand">
-            <a href="../index.html" class="fas fa-chevron-left"></a> BATTLESHIP
-        </div>
-    </div>
-</header>
+<% layout('../layout.eta.html', {
+    title: 'Battleship',
+    additionalJs: [
+        {
+            url: 'https://cdn.jsdelivr.net/npm/plain-draggable@2.5.12/plain-draggable.min.js',
+            hash: 'sha384-9wTUojzuBH6fD8U401121o6f4M98qWnjRCXYb3BteVuf462XIkdFvoXYie2bPauC',
+        }
+    ]
+}) %>
+
 <div class="container" id="field">
     <div class="card">
         <div id="playerBoard" class="board">
@@ -76,20 +62,3 @@
     <button type="button" class="button" id="reset">Reset</button>
     <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
 </div>
-
-<div id="overlay">
-    <div class="card"></div>
-</div>
-
-<script>
-    $(function () {
-        require(
-            ['bs/App'],
-            (main) => {
-                let app = new main.App();
-            }
-        );
-    })
-</script>
-</body>
-</html>

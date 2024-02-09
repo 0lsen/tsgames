@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/peso/app.js"
+    "outFile": "../static/peso/app.js"
   },
   "include": [
     "../ts/peso",

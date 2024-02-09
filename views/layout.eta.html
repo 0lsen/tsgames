@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        <%~ it.title %>
+    </title>
+    <meta name="viewport" content="initial-scale=0.7, width=device-width"/>
+    <link rel="stylesheet" href="/static/bulma.min.css">
+    <% if (it.bulmaSliders) { %>
+      <link rel="stylesheet" href="/static/bulma-slider.min.css">
+    <% } %>
+    <link rel="stylesheet" href="/static/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/<%= it.module %>/style.css">
+    <script src="/static/require.js"></script>
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/<%= it.module %>/app.js"></script>
+    <% if (it.additionalJs) { it.additionalJs.forEach(function(js) { %>
+        <script src="<%= js.url %>" integrity="<%= js.hash %>" crossorigin="anonymous"></script>
+    <% });} %>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="fas fa-chevron-left"></a> <%= it.title.toUpperCase() %>
+        </div>
+    </div>
+</header>
+
+<%~ it.body %>
+
+<div id="overlay">
+    <div class="card"></div>
+</div>
+
+<script>
+    let app;
+    $(function () {
+        require(
+            ['<%= it.module %>/App'],
+            (main) => {
+                app = new main.App();
+            }
+        );
+    })
+</script>
+</body>
+</html>

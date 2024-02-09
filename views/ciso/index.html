@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>
-        Circle Sort
-    </title>
-    <meta name="viewport" content="initial-scale=1, width=device-width"/>
-    <link rel="stylesheet" href="../bulma.min.css">
-    <link rel="stylesheet" href="../fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="../require.js"></script>
-    <script src="../jquery.min.js"></script>
-    <script src="app.js"></script>
-</head>
-<body>
-<header class="header">
-    <div class="container">
-        <div class="navbar-brand">
-            <a href="../index.html" class="fas fa-chevron-left"></a> CIRCLE SORT
-        </div>
-    </div>
-</header>
+<% layout('../layout.eta.html', {
+    title: 'Circle Sort',
+}) %>
+
 <div class="container" id="field">
     <div class="card">
         <div id="board">
@@ -42,21 +23,3 @@
     <button type="button" class="button" onclick="app.sort(5)">Bubble Sort</button>
     <button type="button" class="button" onclick="app.sort(6)">Schedule Sort</button>
 </div>
-
-<div id="overlay">
-    <div class="card"></div>
-</div>
-
-<script>
-    let app;
-    $(function () {
-        require(
-            ['ciso/App'],
-            (main) => {
-                app = new main.App();
-            }
-        );
-    })
-</script>
-</body>
-</html>

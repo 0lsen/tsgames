@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>
-        Lightroom
-    </title>
-    <meta name="viewport" content="initial-scale=1, width=device-width"/>
-    <link rel="stylesheet" href="../bulma.min.css">
-    <link rel="stylesheet" href="../fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../bulma-slider.min.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="../require.js"></script>
-    <script src="../jquery.min.js"></script>
-    <script src="app.js"></script>
-</head>
-<body>
-<header class="header">
-    <div class="container">
-        <div class="navbar-brand">
-            <a href="../index.html" class="fas fa-chevron-left"></a> LIGHTROOM
-        </div>
-    </div>
-</header>
+<% layout('../layout.eta.html', {
+    title: 'Lightroom',
+    bulmaSliders: true,
+}) %>
+
 <div class="container" id="field">
     <div class="card">
         <div id="board">
@@ -123,21 +104,3 @@
     <button type="button" class="button" id="reset">Reset</button>
     <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
 </div>
-
-<div id="overlay">
-    <div class="card"></div>
-</div>
-
-<script>
-    let app;
-    $(function () {
-        require(
-            ['liro/App'],
-            (main) => {
-                app = new main.App();
-            }
-        );
-    })
-</script>
-</body>
-</html>

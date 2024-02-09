@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>
-        Canvas Dickery
-    </title>
-    <meta name="viewport" content="initial-scale=1, width=device-width"/>
-    <link rel="stylesheet" href="../bulma.min.css">
-    <link rel="stylesheet" href="../fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="../require.js"></script>
-    <script src="../jquery.min.js"></script>
-    <script src="app.js"></script>
-</head>
-<body>
-<header class="header">
-    <div class="container">
-        <div class="navbar-brand">
-            <a href="../index.html" class="fas fa-chevron-left"></a> CANVAS DICKERY
-        </div>
-    </div>
-</header>
+<% layout('../layout.eta.html', {
+    title: 'Canvas Dickery',
+}) %>
+
 <div class="container" id="field">
     <div class="card">
         <div id="board">
@@ -78,20 +59,3 @@
         </div>
     </div>
 </div>
-<div id="overlay">
-    <div class="card"></div>
-</div>
-
-<script>
-    let app;
-    $(function () {
-        require(
-            ['cadi/App'],
-            (main) => {
-                app = new main.App();
-            }
-        );
-    })
-</script>
-</body>
-</html>

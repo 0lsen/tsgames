@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/cadi/app.js"
+    "outFile": "../static/cadi/app.js"
   },
   "include": [
     "../ts/cadi",

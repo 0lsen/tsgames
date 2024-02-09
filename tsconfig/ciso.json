@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/ciso/app.js"
+    "outFile": "../static/ciso/app.js"
   },
   "include": [
     "../ts/ciso",

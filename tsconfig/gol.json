@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/gol/app.js"
+    "outFile": "../static/gol/app.js"
   },
   "include": [
     "../ts/gol",

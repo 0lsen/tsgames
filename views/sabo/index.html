@@ -1,0 +1,18 @@
+<% layout('../layout.eta.html', {
+    title: 'Sandbox',
+}) %>
+
+<div class="container" id="field">
+    <div class="card">
+        <div id="board">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <button type="button" class="button" id="reset">Reset</button>
+    <label class="label" for="angleOfRepose">ANGLE OF REPOSE</label>
+    <input type="range" id="angleOfRepose" value="45" min="0" max="90" step="1" class="input" style="width: 20rem;">
+    <input id="showAngleOfRepose" type="text" value="45°" class="input" disabled style="width: 4rem;">
+    <a class="button" href="https://github.com/0lsen/tsgames" target="_blank" id="github"></a>
+</div>

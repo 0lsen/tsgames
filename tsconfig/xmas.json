@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/xmas/app.js"
+    "outFile": "../static/xmas/app.js"
   },
   "include": [
     "../ts/xmas",

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "sourceMap": true,
+    "target": "es2022"
+  },
+  "files": [
+    "../ts/server.ts"
+  ]
+}

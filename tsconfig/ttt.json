@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/ttt/app.js"
+    "outFile": "../static/ttt/app.js"
   },
   "include": [
     "../ts/ttt",

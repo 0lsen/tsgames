@@ -3,7 +3,7 @@
     "lib": ["es6", "dom"],
     "module": "amd",
     "target": "es6",
-    "outFile": "../public/sabo/app.js"
+    "outFile": "../static/sabo/app.js"
   },
   "include": [
     "../ts/sabo",
