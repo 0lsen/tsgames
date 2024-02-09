@@ -20,24 +20,17 @@
     <h1 class="title">REAL GAMES</h1>
     <div class="card">
         <div class="list">
-            <a class="list-item" href="bs/">Battleship</a>
-            <a class="list-item" href="mw/">Minesweeper</a>
-            <a class="list-item" href="peso/">Peg Solitaire</a>
-            <a class="list-item" href="snake/">Snake</a>
-            <a class="list-item" href="ttt/">Tic Tac Toe</a>
-            <a class="list-item" href="ttt3d/">Tic Tac Toe 3D</a>
-            <a class="list-item" href="xmas/">X-Mas Special</a>
+            <% it.games.forEach(function(module) { %>
+                <a class="list-item" href="<%= module.id %>/"><%= module.name %></a>
+            <% }); %>
         </div>
     </div>
     <h1 class="title">OTHER STUFF</h1>
     <div class="card">
         <div class="list">
-            <a class="list-item" href="cadi/">Canvas Dickery</a>
-            <a class="list-item" href="ciso/">Circle Sort</a>
-            <a class="list-item" href="cotra/">Complex Number 2D Transformation</a>
-            <a class="list-item" href="gol/">Conway's Game of Life</a>
-            <a class="list-item" href="liro/">Lightroom</a>
-            <a class="list-item" href="sabo/">Sandbox</a>
+            <% it.nongames.forEach(function(module) { %>
+                <a class="list-item" href="<%= module.id %>/"><%= module.name %></a>
+            <% }); %>
         </div>
     </div>
 </div>
