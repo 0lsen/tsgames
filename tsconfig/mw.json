@@ -6,7 +6,6 @@
     "outFile": "../static/mw/app.js"
   },
   "include": [
-    "../ts/mw",
-    "../ts/core"
+    "../ts/mw/App.ts"
   ]
 }

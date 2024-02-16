@@ -6,7 +6,6 @@
     "outFile": "../static/snake/app.js"
   },
   "include": [
-    "../ts/snake",
-    "../ts/core"
+    "../ts/snake/App.ts"
   ]
 }

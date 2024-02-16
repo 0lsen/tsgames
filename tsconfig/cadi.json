@@ -6,7 +6,6 @@
     "outFile": "../static/cadi/app.js"
   },
   "include": [
-    "../ts/cadi",
-    "../ts/core"
+    "../ts/cadi/App.ts"
   ]
 }

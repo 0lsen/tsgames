@@ -6,7 +6,6 @@
     "outFile": "../static/gol/app.js"
   },
   "include": [
-    "../ts/gol",
-    "../ts/core"
+    "../ts/gol/App.ts"
   ]
 }

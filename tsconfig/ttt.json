@@ -6,7 +6,6 @@
     "outFile": "../static/ttt/app.js"
   },
   "include": [
-    "../ts/ttt",
-    "../ts/core"
+    "../ts/ttt/App.ts"
   ]
 }

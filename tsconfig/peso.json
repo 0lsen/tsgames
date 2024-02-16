@@ -6,7 +6,6 @@
     "outFile": "../static/peso/app.js"
   },
   "include": [
-    "../ts/peso",
-    "../ts/core"
+    "../ts/peso/App.ts"
   ]
 }

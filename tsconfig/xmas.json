@@ -6,7 +6,6 @@
     "outFile": "../static/xmas/app.js"
   },
   "include": [
-    "../ts/xmas",
-    "../ts/core"
+    "../ts/xmas/App.ts"
   ]
 }

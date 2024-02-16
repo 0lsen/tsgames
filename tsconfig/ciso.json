@@ -6,7 +6,6 @@
     "outFile": "../static/ciso/app.js"
   },
   "include": [
-    "../ts/ciso",
-    "../ts/core"
+    "../ts/ciso/App.ts"
   ]
 }

@@ -6,7 +6,6 @@
     "outFile": "../static/liro/app.js"
   },
   "include": [
-    "../ts/liro",
-    "../ts/core"
+    "../ts/liro/App.ts"
   ]
 }

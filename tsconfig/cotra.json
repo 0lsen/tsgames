@@ -6,7 +6,6 @@
     "outFile": "../static/cotra/app.js"
   },
   "include": [
-    "../ts/cotra",
-    "../ts/core"
+    "../ts/cotra/App.ts"
   ]
 }

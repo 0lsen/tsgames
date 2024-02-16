@@ -6,7 +6,6 @@
     "outFile": "../static/sabo/app.js"
   },
   "include": [
-    "../ts/sabo",
-    "../ts/core"
+    "../ts/sabo/App.ts"
   ]
 }
