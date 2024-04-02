@@ -2,6 +2,7 @@ import {App} from "./App";
 import {ArcCalcImpl} from "./impl/ArcCalcImpl";
 import {ArcOptions} from "./model/ArcOptions";
 import {AnimationOptions} from "./model/AnimationOptions";
+import {MoveMode} from "./enum/MoveMode";
 
 export class DrawHelper {
 
@@ -25,7 +26,7 @@ export class DrawHelper {
             if (value === undefined) return;
             if (i === animationOptions.movingTo) {
                 this.arcCalc.innerArcs(value, animationOptions).forEach(arcOptions => this.drawArc(arcOptions));
-            } else if (animationOptions.swap && i === animationOptions.movingFrom) {
+            } else if (animationOptions.moveMode === MoveMode.SWAP && i === animationOptions.movingFrom) {
                 const swapOptions = new AnimationOptions(
                     animationOptions.values,
                     animationOptions.movingTo,
@@ -34,7 +35,7 @@ export class DrawHelper {
                 );
                 this.arcCalc.innerArcs(value, swapOptions).forEach(arcOptions => this.drawArc(arcOptions));
             } else if (
-                !animationOptions.swap &&
+                animationOptions.moveMode === MoveMode.MOVE &&
                 animationOptions.movingFrom !== undefined &&
                 animationOptions.movingTo !== undefined &&
                 i >= Math.min(animationOptions.movingFrom, animationOptions.movingTo) &&

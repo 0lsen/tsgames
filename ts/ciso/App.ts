@@ -70,7 +70,7 @@ export class App extends CanvasApp {
             progressAnimation ? this.algorithm.movingFrom() : undefined,
             progressAnimation ? this.algorithm.movingTo() : undefined,
             progress,
-            progressAnimation ? this.algorithm.makeSwap() : false
+            progressAnimation ? this.algorithm.moveMode() : undefined
         );
         this.drawHelper.draw(animationOptions, comparisons);
     }

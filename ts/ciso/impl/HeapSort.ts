@@ -2,6 +2,7 @@ import {AbstractSort} from "./AbstractSort";
 import {Sort} from "../interface/Sort";
 import {HeapSortElement} from "../model/HeapSortElement";
 import {ThisShouldNeverHappenException} from "../../core/exception/ThisShouldNeverHappenException";
+import {MoveMode} from "../enum/MoveMode";
 
 export class HeapSort extends AbstractSort implements Sort {
 
@@ -39,7 +40,7 @@ export class HeapSort extends AbstractSort implements Sort {
     }
 
     iterate(): void {
-        this._makeSwap = false;
+        this._moveMode = MoveMode.MOVE;
         if (this.chooseNextInitialAtomic) {
             const lastElement = this.lastElement();
             if (lastElement.child2 !== undefined) {
@@ -60,7 +61,7 @@ export class HeapSort extends AbstractSort implements Sort {
         } else  {
             const heapifyActionHappened = this.attemptHeapify();
             if (heapifyActionHappened) {
-                this._makeSwap = this._movingFrom-this._movingTo > 1;
+                this._moveMode = this._movingFrom-this._movingTo > 1 ? MoveMode.SWAP : MoveMode.MOVE;
             } else {
                 const max = this.initialElement.atomic;
                 this.maxHeap.push(max);

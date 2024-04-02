@@ -1,10 +1,12 @@
+import {MoveMode} from "../enum/MoveMode";
+
 export abstract class AbstractSort {
 
     protected values : number[];
 
     protected _movingFrom : number;
     protected _movingTo : number;
-    protected _makeSwap : boolean = false;
+    protected _moveMode : MoveMode = MoveMode.MOVE;
     protected _comparisons = 0;
 
     constructor(values: number[]) {
@@ -24,8 +26,8 @@ export abstract class AbstractSort {
         return this._movingTo;
     }
 
-    makeSwap(): boolean {
-        return this._makeSwap;
+    moveMode(): MoveMode {
+        return this._moveMode;
     }
 
     comparisons(): number {
