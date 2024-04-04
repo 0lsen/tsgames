@@ -13,7 +13,7 @@ export class ArcCalcImpl implements ArcCalc {
     private readonly horizonMargin = 10;
     private readonly horizonRadius = 150;
     private readonly valueScale = 1.1;
-    private readonly transitionPhase = 0.15;
+    public readonly transitionPhase = 0.15;
     private arcWidth : number;
 
     innerArcs(value: number, options : AnimationOptions): ArcOptions[] {
@@ -74,6 +74,16 @@ export class ArcCalcImpl implements ArcCalc {
             this.colorInactive,
             this.horizonRadius+this.horizonMargin+value*this.valueScale/2,
             index*this.arcWidth)
+    }
+
+    outerArcElimination(value: number, options: AnimationOptions): ArcOptions {
+        const progress = options.progress / this.transitionPhase;
+        return new ArcOptions(
+            options.progress < this.transitionPhase ? value * this.valueScale * (1 - progress) : 0,
+            this.colorActive,
+            this.horizonRadius + this.horizonMargin + value * this.valueScale * (1 - progress) / 2,
+            options.movingFrom * this.arcWidth
+        );
     }
 
     setArcWidth(width: number): void {

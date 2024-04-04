@@ -6,4 +6,5 @@ export interface ArcCalc {
     innerArcs(value : number, options : AnimationOptions) : ArcOptions[];
     outerArcMoving(value : number, index : number, options : AnimationOptions) : ArcOptions;
     outerArcStatic(value : number, index : number) : ArcOptions;
+    outerArcElimination(value : number, options : AnimationOptions) : ArcOptions;
 }

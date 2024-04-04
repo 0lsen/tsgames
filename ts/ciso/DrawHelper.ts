@@ -24,32 +24,57 @@ export class DrawHelper {
 
         animationOptions.values.forEach((value, i) => {
             if (value === undefined) return;
-            if (i === animationOptions.movingTo) {
-                this.arcCalc.innerArcs(value, animationOptions).forEach(arcOptions => this.drawArc(arcOptions));
-            } else if (animationOptions.moveMode === MoveMode.SWAP && i === animationOptions.movingFrom) {
-                const swapOptions = new AnimationOptions(
-                    animationOptions.values,
-                    animationOptions.movingTo,
-                    animationOptions.movingFrom,
-                    animationOptions.progress
-                );
-                this.arcCalc.innerArcs(value, swapOptions).forEach(arcOptions => this.drawArc(arcOptions));
-            } else if (
-                animationOptions.moveMode === MoveMode.MOVE &&
-                animationOptions.movingFrom !== undefined &&
-                animationOptions.movingTo !== undefined &&
-                i >= Math.min(animationOptions.movingFrom, animationOptions.movingTo) &&
-                i <= Math.max(animationOptions.movingFrom, animationOptions.movingTo)
-            ) {
-                this.drawArc(this.arcCalc.outerArcMoving(value, i, animationOptions));
-            } else {
-                this.drawArc(this.arcCalc.outerArcStatic(value, i));
+
+            switch (animationOptions.moveMode) {
+                case MoveMode.MOVE:
+                    if (i === animationOptions.movingTo) {
+                        this.arcCalc.innerArcs(value, animationOptions).forEach(arcOptions => this.drawArc(arcOptions));
+                    } else if (this.isOuterArcMoving(animationOptions, i)) {
+                        this.drawArc(this.arcCalc.outerArcMoving(value, i, animationOptions));
+                    } else {
+                        this.drawArc(this.arcCalc.outerArcStatic(value, i));
+                    }
+                    break;
+                case MoveMode.SWAP:
+                    if (i === animationOptions.movingTo) {
+                        this.arcCalc.innerArcs(value, animationOptions).forEach(arcOptions => this.drawArc(arcOptions));
+                    } else if (i === animationOptions.movingFrom) {
+                        const swapOptions = new AnimationOptions(
+                            animationOptions.values,
+                            animationOptions.movingTo,
+                            animationOptions.movingFrom,
+                            animationOptions.progress
+                        );
+                        this.arcCalc.innerArcs(value, swapOptions).forEach(arcOptions => this.drawArc(arcOptions));
+                    } else {
+                        this.drawArc(this.arcCalc.outerArcStatic(value, i));
+                    }
+                    break;
+                case MoveMode.ELIMINATE:
+                    if (!i) {
+                        animationOptions.progress = animationOptions.progress * (1 - this.arcCalc.transitionPhase);
+                    }
+                    if (i === animationOptions.movingTo) {
+                        this.drawArc(this.arcCalc.outerArcElimination(value, animationOptions));
+                    } else if (this.isOuterArcMoving(animationOptions, i)) {
+                        this.drawArc(this.arcCalc.outerArcMoving(value, i, animationOptions));
+                    } else {
+                        this.drawArc(this.arcCalc.outerArcStatic(value, i));
+                    }
+                    break;
             }
         });
 
         if (comparisons) {
             this.writeComparisons(comparisons);
         }
+    }
+
+    private isOuterArcMoving(animationOptions : AnimationOptions, index : number) : boolean {
+        return animationOptions.movingFrom !== undefined &&
+            animationOptions.movingTo !== undefined &&
+            index >= Math.min(animationOptions.movingFrom, animationOptions.movingTo) &&
+            index <= Math.max(animationOptions.movingFrom, animationOptions.movingTo);
     }
 
     private drawArc(options : ArcOptions) : void {
