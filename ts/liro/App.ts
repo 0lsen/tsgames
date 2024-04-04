@@ -133,7 +133,7 @@ export class App extends CanvasApp {
     private draw() : void {
         this.setParameters();
         this.drawHelper.draw();
-        window.requestAnimationFrame(() => this.draw());
+        this.requestRecursiveAnimationFrame(() => this.draw());
     }
 
     private setParameters() : void {

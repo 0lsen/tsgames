@@ -139,7 +139,7 @@ export class App extends CanvasApp {
             this.checkChanges();
             this.calc();
             this.draw();
-            window.requestAnimationFrame(() => this.animate());
+            this.requestRecursiveAnimationFrame(() => this.animate());
         } else if (this.dragging === null && this.isPaused) {
             this.draw();
         }

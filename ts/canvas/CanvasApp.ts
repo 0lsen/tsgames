@@ -7,6 +7,10 @@ export abstract class CanvasApp extends BaseApp {
     private readonly _context = this._canvas.getContext("2d");
 
     protected readonly _dimensions : Coord;
+    protected readonly fps : number = 60;
+
+    private lastRecursiveAnimationFrameTime : number = 0;
+    private recursiveAnimationFrameRequested = false;
 
     constructor() {
         super();
@@ -28,6 +32,28 @@ export abstract class CanvasApp extends BaseApp {
             (e.clientX - boundingRect.left)*(this._dimensions.x/boundingRect.width),
             (e.clientY - boundingRect.top)*(this._dimensions.y/boundingRect.height)
         );
+    }
+
+    protected getTime() : number {
+        return new Date().getTime();
+    }
+
+    protected requestRecursiveAnimationFrame(animationCallback : () => void, recursive = false) : void {
+        if (this.recursiveAnimationFrameRequested && !recursive) {
+            debugger;
+            console.log('multiple recursive animations requested. please dont!');
+            return;
+        }
+        this.recursiveAnimationFrameRequested = true;
+        const time = this.getTime();
+        const diff = time - this.lastRecursiveAnimationFrameTime;
+        if (diff >= 1000/this.fps) {
+            this.recursiveAnimationFrameRequested = false;
+            this.lastRecursiveAnimationFrameTime = time;
+            window.requestAnimationFrame(animationCallback);
+        } else {
+            setTimeout(() => this.requestRecursiveAnimationFrame(animationCallback, true), 1000/this.fps-Math.ceil(diff));
+        }
     }
 
     get canvas(): HTMLCanvasElement {

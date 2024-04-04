@@ -96,7 +96,7 @@ export class App extends CanvasApp {
         } else {
             this.phase = undefined;
         }
-        this.timer = new Date().getTime();
+        this.setTimer();
         this.draw();
     }
 
@@ -107,12 +107,12 @@ export class App extends CanvasApp {
         this.drawSquare();
         this.fillEquations();
         if (this.phase !== undefined) {
-            const timeDiff = new Date().getTime() - this.timer;
+            const timeDiff = this.getTime() - this.timer;
             switch (this.phase) {
                 case Phase.SCALE:
                     if (timeDiff > this.timePerStep) {
                         this.currentScale = 1;
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.phase = Phase.PAUSE1;
                     } else {
                         this.currentScale = timeDiff / this.timePerStep;
@@ -120,14 +120,14 @@ export class App extends CanvasApp {
                     break;
                 case Phase.PAUSE1:
                     if (timeDiff > this.timePerPause) {
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.phase = this.rotation !== 0 ? Phase.ROTATION : (this.translation.x !== 0 || this.translation.y !== 0 ? Phase.TRANSLATION : undefined);
                     }
                     break;
                 case Phase.ROTATION:
                     if (timeDiff > this.timePerStep) {
                         this.currentRotation = 1;
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.phase = Phase.PAUSE2;
                     } else {
                         this.currentRotation = timeDiff / this.timePerStep;
@@ -135,14 +135,14 @@ export class App extends CanvasApp {
                     break;
                 case Phase.PAUSE2:
                     if (timeDiff > this.timePerPause) {
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.phase = this.translation.x !== 0 || this.translation.y !== 0 ? Phase.TRANSLATION : undefined;
                     }
                     break;
                 case Phase.TRANSLATION:
                     if (timeDiff > this.timePerStep) {
                         this.currentTranslation = 1;
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.phase = Phase.PAUSE3;
                     } else {
                         this.currentTranslation = timeDiff / this.timePerStep;
@@ -155,7 +155,7 @@ export class App extends CanvasApp {
                     break;
                 case Phase.ALL:
                     if (timeDiff > this.timePerStep) {
-                        this.timer = new Date().getTime();
+                        this.setTimer();
                         this.currentScale = 1;
                         this.currentRotation = 1;
                         this.currentTranslation = 1;
@@ -173,7 +173,7 @@ export class App extends CanvasApp {
                     break;
             }
             this.drawIllustration();
-            window.requestAnimationFrame(() => this.draw());
+            this.requestRecursiveAnimationFrame(() => this.draw());
         }
     }
 
@@ -373,5 +373,9 @@ export class App extends CanvasApp {
 
     private calcCurrentCenter() : Coord {
         return new Coord(50 * this.translation.x * this.currentTranslation + this.dimensions.x/2, -50 * (this.translation.y * this.currentTranslation) + this.dimensions.y/2);
+    }
+
+    private setTimer() : void {
+        this.timer = this.getTime();
     }
 }

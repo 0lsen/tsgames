@@ -85,7 +85,7 @@ export class App extends CanvasApp {
         this.presents.forEach(p => this.drawHelper.drawPresent(p));
         this.drawSleigh();
         this.drawStats();
-        window.requestAnimationFrame(() => {
+        this.requestRecursiveAnimationFrame(() => {
             this.scroll();
             this.draw();
         });

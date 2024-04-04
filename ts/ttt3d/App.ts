@@ -114,7 +114,7 @@ export class App extends CanvasApp {
     private requestAnimation() : void {
         if (this.requestingAnimation) return;
         this.requestingAnimation = true;
-        window.requestAnimationFrame(() => {
+        this.requestRecursiveAnimationFrame(() => {
             this.draw();
             this.requestingAnimation = false;
             if (this.rotation) {

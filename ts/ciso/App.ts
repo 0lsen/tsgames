@@ -21,7 +21,6 @@ export class App extends CanvasApp {
 
     private readonly minValue = 33;
     private readonly maxValue = 100;
-    private readonly animationFrames = 50;
 
     private drawHelper : DrawHelper;
 
@@ -81,7 +80,7 @@ export class App extends CanvasApp {
         if (!this.isSorting) return;
         if (animationProgress !== undefined && animationProgress < 1) {
             this.draw(this.algorithm.getValues(), this.algorithm.comparisons(), animationProgress);
-            window.requestAnimationFrame(() => this.iterate(animationProgress+1/this.animationFrames));
+            this.requestRecursiveAnimationFrame(() => this.iterate(animationProgress+1/this.fps));
         } else if (this.algorithm.isSorted()) {
             this.isSorting = false;
             this.draw(this.algorithm.getValues(), this.algorithm.comparisons());
@@ -89,7 +88,7 @@ export class App extends CanvasApp {
             this.algorithm.iterate();
             this.draw(this.algorithm.getValues(), this.algorithm.comparisons(), 0);
             const hasMovement = this.algorithm.movingFrom() !== undefined && this.algorithm.movingTo() !== undefined;
-            window.requestAnimationFrame(() => this.iterate(hasMovement ? 0 : undefined));
+            this.requestRecursiveAnimationFrame(() => this.iterate(hasMovement ? 0 : undefined));
         }
     }
 
