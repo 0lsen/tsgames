@@ -3,6 +3,7 @@ import {RandomizerImpl} from "./impl/RandomizerImpl";
 
 export abstract class BaseApp {
     protected $overlay = $('#overlay');
+    protected $overlayReset = $('#overlayReset');
     protected $resetButton = $('#reset');
     protected randomizer: Randomizer;
 
@@ -11,10 +12,11 @@ export abstract class BaseApp {
         this.$overlay.hide();
         this.$overlay.on('click', () => this.$overlay.hide());
         this.$overlay.find('>div').on('click', (e) => e.stopPropagation());
+        this.$overlayReset.on('click', () => this.$overlay.hide());
     }
 
-    protected overlay(text): void {
-        this.$overlay.find('>div').html(text);
+    protected overlay(html : string): void {
+        this.$overlay.find('.card > div').html(html);
         this.$overlay.show();
     }
 }

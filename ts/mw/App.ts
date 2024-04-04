@@ -35,6 +35,7 @@ export class App extends BaseApp {
         super();
         this.reset();
         this.$resetButton.on('click', () => this.reset());
+        this.$overlayReset.on('click', () => this.reset());
         this.runTimer();
         this.fetchRecords();
     }

@@ -51,6 +51,7 @@ export class App extends BaseApp {
         this.$opponentOverlay.hide();
         this.drawBoards(this.game.getState());
         this.$resetButton.on('click', () => this.reset());
+        this.$overlayReset.on('click', () => this.reset());
         this.$opponentBoard.on('click', (e) => {
             switch (this.state.phase) {
                 case Phase.SETUP:
