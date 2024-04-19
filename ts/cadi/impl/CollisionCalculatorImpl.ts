@@ -1,6 +1,5 @@
 import {CollisionCalculator} from "../interface/CollisionCalculator";
 import {Ball} from "../model/Ball";
-import {Direction} from "../../core/enum/Direction";
 import {QuadraticFormulaSolver} from "../../core/interface/QuadraticFormulaSolver";
 import {CollisionResult} from "../model/CollisionResult";
 import {App} from "../App";
@@ -14,7 +13,7 @@ export class CollisionCalculatorImpl implements CollisionCalculator {
         this.quadraticFormulaSolver = quadraticFormulaSolver;
     }
 
-    checkCollision(balls: Ball[], movingBall: Ball, gravityDirection : Direction) : CollisionResult | null {
+    checkCollision(balls: Ball[], movingBall: Ball) : CollisionResult | null {
         for (let i = 0; i < balls.length; i++) {
             let ball = balls[i];
             if (ball == movingBall) {
@@ -24,7 +23,7 @@ export class CollisionCalculatorImpl implements CollisionCalculator {
             if (distance > CanvasTools.distance(movingBall, ball)) {
                 continue;
             }
-            let time = this.timeOfCollision(distance, ball, movingBall, gravityDirection);
+            let time = this.timeOfCollision(distance, ball, movingBall);
             if (time != null && time > 0 && time < App.TIMESTEP) {
                 return new CollisionResult(
                     ball,
@@ -35,7 +34,7 @@ export class CollisionCalculatorImpl implements CollisionCalculator {
         return null;
     }
 
-    calculatePostCollisionVelocities(ball1: Ball, ball2: Ball, gravityDirection : Direction) : void {
+    calculatePostCollisionVelocities(ball1: Ball, ball2: Ball) : void {
         let v1x = ball1.velocity.x
         let v2x = ball2.velocity.x
         let x1 = ball1.x;
@@ -65,7 +64,7 @@ export class CollisionCalculatorImpl implements CollisionCalculator {
      * y_1(t) = g*t^2/2 + v_y1*t + y_1 (g term cancels out)
      * y_2(t) = g*t^2/2 + v_y2*t + y_2 (g term cancels out)
      */
-    private timeOfCollision(distance : number, ball1 : Ball, ball2 : Ball, gravityDirection : Direction) : number | null {
+    private timeOfCollision(distance : number, ball1 : Ball, ball2 : Ball) : number | null {
         let v1x = ball1.velocity.x
         let v2x = ball2.velocity.x
         let x1 = ball1.x;

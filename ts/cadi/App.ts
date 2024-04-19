@@ -172,13 +172,13 @@ export class App extends CanvasApp {
 
     private calcBall(ball : Ball) : void {
         if (!this.calculatedBalls.includes(ball)) {
-            const collisionResult = this.collisionCalculator.checkCollision(this.balls.filter(b => !this.calculatedBalls.includes(b)), ball, this.gravityDirection);
+            const collisionResult = this.collisionCalculator.checkCollision(this.balls.filter(b => !this.calculatedBalls.includes(b)), ball);
             if (collisionResult !== null) {
                 ball.changeColor();
                 collisionResult.collidingBall.changeColor();
                 this.calcMovement(ball, collisionResult.time);
                 this.calcMovement(collisionResult.collidingBall, collisionResult.time);
-                this.collisionCalculator.calculatePostCollisionVelocities(ball, collisionResult.collidingBall, this.gravityDirection);
+                this.collisionCalculator.calculatePostCollisionVelocities(ball, collisionResult.collidingBall);
                 this.calcMovement(ball, App.TIMESTEP-collisionResult.time);
                 this.calcMovement(collisionResult.collidingBall, App.TIMESTEP-collisionResult.time);
                 this.calculatedBalls.push(collisionResult.collidingBall);
@@ -201,7 +201,7 @@ export class App extends CanvasApp {
         if (CanvasTools.isBallCollision(ball, otherball)) {
             console.log('missed collision!');
             debugger;
-            this.collisionCalculator.checkCollision([otherball], ball, this.gravityDirection);
+            this.collisionCalculator.checkCollision([otherball], ball);
         }
 
         ball.x = movementResult.position.x;

@@ -1,7 +1,6 @@
 import {CollisionCalculatorImpl} from "../../ts/cadi/impl/CollisionCalculatorImpl";
 import {QuadraticFormulaSolverImpl} from "../../ts/core/impl/QuadraticFormulaSolverImpl";
 import {Ball} from "../../ts/cadi/model/Ball";
-import {Direction} from "../../ts/core/enum/Direction";
 import {HSL} from "../../ts/canvas/model/HSL";
 
 const chai = require('chai');
@@ -50,7 +49,7 @@ mocha.describe('Canvas Collision Calculator collision detection', () => {
 
     mocha.it('balls do not collide within time frame', () => {
         let balls = createBalls();
-        let result = calculator.checkCollision(balls, balls[0], Direction.DOWN);
+        let result = calculator.checkCollision(balls, balls[0]);
         chai.expect(result).to.be.null;
     });
 
@@ -58,7 +57,7 @@ mocha.describe('Canvas Collision Calculator collision detection', () => {
         v1x = 600;
         v2x = -600;
         let balls = createBalls();
-        let result = calculator.checkCollision(balls, balls[0], Direction.DOWN);
+        let result = calculator.checkCollision(balls, balls[0]);
         chai.expect(result).to.not.be.null;
         if (result !== null)
             chai.expect(Math.round(result.time*100_000)).to.equal(8411);
@@ -68,7 +67,7 @@ mocha.describe('Canvas Collision Calculator collision detection', () => {
         v1x = 0;
         v2x = 0;
         let balls = createBalls();
-        let result = calculator.checkCollision(balls, balls[0], Direction.DOWN);
+        let result = calculator.checkCollision(balls, balls[0]);
         chai.expect(result).to.be.null;
     });
 
@@ -77,7 +76,7 @@ mocha.describe('Canvas Collision Calculator collision detection', () => {
         y1 = 120;
         v1y = -400;
         let balls = createBalls();
-        let result = calculator.checkCollision(balls, balls[0], Direction.DOWN);
+        let result = calculator.checkCollision(balls, balls[0]);
         chai.expect(result).to.not.be.null;
         if (result !== null)
             chai.expect(Math.round(result.time*100_000)).to.equal(3375);
@@ -98,7 +97,7 @@ mocha.describe('Canvas Collision Calculator velocity calculation', () => {
         y1 = 50;
         y2 = 100;
         let balls = createBalls();
-        calculator.calculatePostCollisionVelocities(balls[0], balls[1], Direction.DOWN);
+        calculator.calculatePostCollisionVelocities(balls[0], balls[1]);
         chai.expect(balls[0].velocity.x).to.equal(0);
         chai.expect(balls[0].velocity.y).to.equal(-10);
         chai.expect(balls[1].velocity.x).to.equal(0);
@@ -117,7 +116,7 @@ mocha.describe('Canvas Collision Calculator velocity calculation', () => {
         y1 = 0;
         y2 = 0;
         let balls = createBalls();
-        calculator.calculatePostCollisionVelocities(balls[0], balls[1], Direction.DOWN);
+        calculator.calculatePostCollisionVelocities(balls[0], balls[1]);
         chai.expect(balls[0].velocity.x).to.equal(-10);
         chai.expect(balls[0].velocity.y).to.equal(0);
         chai.expect(balls[1].velocity.x).to.equal(10);
@@ -136,7 +135,7 @@ mocha.describe('Canvas Collision Calculator velocity calculation', () => {
         y1 = 50;
         y2 = 100;
         let balls = createBalls();
-        calculator.calculatePostCollisionVelocities(balls[0], balls[1], Direction.DOWN);
+        calculator.calculatePostCollisionVelocities(balls[0], balls[1]);
         chai.expect(Math.round(balls[0].velocity.x*1000)).to.equal(0);
         chai.expect(Math.round(balls[0].velocity.y*1000)).to.equal(-3333);
         chai.expect(Math.round(balls[1].velocity.x*1000)).to.equal(0);
@@ -155,7 +154,7 @@ mocha.describe('Canvas Collision Calculator velocity calculation', () => {
         y1 = 0;
         y2 = 50/Math.sqrt(2);
         let balls = createBalls();
-        calculator.calculatePostCollisionVelocities(balls[0], balls[1], Direction.DOWN);
+        calculator.calculatePostCollisionVelocities(balls[0], balls[1]);
         chai.expect(balls[0].velocity.x).to.equal(0);
         chai.expect(balls[0].velocity.y).to.equal(-10);
         chai.expect(balls[1].velocity.x).to.equal(10);
