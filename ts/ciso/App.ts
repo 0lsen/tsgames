@@ -12,6 +12,7 @@ import {AnimationOptions} from "./model/AnimationOptions";
 import {QuickSort} from "./impl/QuickSort";
 import {BubbleSort} from "./impl/BubbleSort";
 import {StalinSort} from "./impl/StalinSort";
+import {RadixSort} from "./impl/RadixSort";
 
 export class App extends CanvasApp {
 
@@ -37,6 +38,7 @@ export class App extends CanvasApp {
         HeapSort,
         QuickSort,
         BubbleSort,
+        RadixSort,
         ScheduleSort,
         StalinSort,
     ];
