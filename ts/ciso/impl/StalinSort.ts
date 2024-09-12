@@ -11,15 +11,16 @@ export class StalinSort extends AbstractSort implements Sort {
     iterate(): void {
         this._movingFrom = undefined;
         this._movingTo = undefined;
-        if (this.index + this.purged == this.values.length) {
-            this.sorted = true;
-            return;
-        }
+
         for (this.index; this.index < this.values.length; this.index++) {
             if (!this.index) {
                 continue;
             }
-            if (this.compare(this.values[this.index-1], this.values[this.index])) {
+            if (this.index + this.purged == this.values.length) {
+                this.sorted = true;
+                break;
+            }
+            if (this.compare(this.values[this.index], this.values[this.index-1])) {
                 this._movingFrom = this.index;
                 this._movingTo = this.values.length-1;
                 this._moveMode = MoveMode.ELIMINATE;

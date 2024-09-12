@@ -13,6 +13,7 @@ import {QuickSort} from "./impl/QuickSort";
 import {BubbleSort} from "./impl/BubbleSort";
 import {StalinSort} from "./impl/StalinSort";
 import {RadixSort} from "./impl/RadixSort";
+import {MoveMode} from "./enum/MoveMode";
 
 export class App extends CanvasApp {
 
@@ -65,9 +66,9 @@ export class App extends CanvasApp {
         this.draw(this.unsortedValues, 0);
     }
 
-    private draw(values : number[], comparisons : number, progress = undefined) : void {
+    private draw(values : number[], comparisons : number, progress : number = undefined) : void {
         this.clear();
-        const progressAnimation = progress !== undefined && this.algorithm.movingFrom() !== this.algorithm.movingTo();
+        const progressAnimation = this.isAnimationInProgress(progress);
         const animationOptions = new AnimationOptions(
             values,
             progressAnimation ? this.algorithm.movingFrom() : undefined,
@@ -108,5 +109,13 @@ export class App extends CanvasApp {
         });
         // console.log(failedAssignments);
         return shuffledValues;
+    }
+
+    private isAnimationInProgress(progress : number) : boolean {
+        return progress !== undefined &&
+        (
+            this.algorithm.movingFrom() !== this.algorithm.movingTo() ||
+            this.algorithm.moveMode() === MoveMode.ELIMINATE
+        );
     }
 }
