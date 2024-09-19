@@ -8,29 +8,28 @@
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.1",
-    "@types/jquery": "^3.5.14",
+    "@types/jquery": "^3.5.30 ",
     "bulma": "0.7.5",
     "bulma-slider": "2.0.5",
-    "eta": "^3.2.0",
-    "express": "^4.18.2",
+    "eta": "^3.5.0",
+    "express": "^4.21.0",
     "jquery": "^3.7.1",
-    "requirejs": "^2.3.6",
-    "sass": "^1.69.4",
-    "typescript": "^4.6.4",
-    "uglify-js": "^3.15.5"
+    "requirejs": "^2.3.7",
+    "sass": "^1.79.1",
+    "typescript": "^4.6.4"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.1",
+    "@types/chai": "^4.3.19",
     "@types/express": "^4.17.21",
-    "@types/mocha": "^9.1.1",
+    "@types/mocha": "^10.0.8",
     "@types/node": "^17.0.33",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-    "chai": "^4.3.6",
-    "eslint": "^8.55.0",
-    "mocha": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "chai": "^4.5.0",
+    "eslint": "^8.57.1",
+    "mocha": "^10.7.3",
     "nyc": "^15.1.0",
-    "ts-node": "^10.7.0"
+    "ts-node": "^10.9.2"
   },
   "scripts": {
     "copyAssets": "cp node_modules/bulma/css/bulma.min.css static/ && cp node_modules/bulma-slider/dist/css/bulma-slider.min.css static/ && cp -a node_modules/@fortawesome/fontawesome-free static/ && cp node_modules/requirejs/require.js static && cp node_modules/jquery/dist/jquery.min.js static",
