@@ -25,7 +25,6 @@ app.get('/', (req, res) => {
             new Module('gol', 'Conway\'s Game of Life'),
             new Module('liro', 'Lightroom'),
             new Module('sabo', 'Sandbox'),
-
         ]
     }));
 });
@@ -33,4 +32,4 @@ app.get('/:module', (req, res) => {
     res.status(200).send(eta.render(req.params.module+'/index.html', {module: req.params.module}));
 });
 
-app.listen(8080, '127.0.0.1', () => console.log('started'));
+app.listen(8080, process.env.HOST || '127.0.0.1', () => console.log('started'));
