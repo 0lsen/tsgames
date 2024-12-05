@@ -14,6 +14,7 @@ import {BubbleSort} from "./impl/BubbleSort";
 import {StalinSort} from "./impl/StalinSort";
 import {RadixSort} from "./impl/RadixSort";
 import {MoveMode} from "./enum/MoveMode";
+import {BogoSort} from "./impl/BogoSort";
 
 export class App extends CanvasApp {
 
@@ -42,6 +43,7 @@ export class App extends CanvasApp {
         RadixSort,
         ScheduleSort,
         StalinSort,
+        BogoSort,
     ];
 
     protected init() {
@@ -49,6 +51,7 @@ export class App extends CanvasApp {
         this.drawHelper = new DrawHelper(this);
         this.$resetButton.on('click', () => this.reset());
         ScheduleSort.timeoutMultiplier = 50;
+        BogoSort.randomizer = this.randomizer;
         this.reset();
     }
 
