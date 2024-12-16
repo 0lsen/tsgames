@@ -22,8 +22,8 @@ export class VelocityCalculatorImpl implements VelocityCalculator {
         let xVelocity = this.averageVelocity(xVelocities)*this.velocityFactor;
         let yVelocity = this.averageVelocity(yVelocities)*this.velocityFactor;
         return new CoreCoord(
-            Math.abs(xVelocity) > this.maxVelocity ? this.maxVelocity : xVelocity,
-            Math.abs(yVelocity) > this.maxVelocity ? this.maxVelocity : yVelocity
+            Math.abs(xVelocity) > this.maxVelocity ? Math.sign(xVelocity)*this.maxVelocity : xVelocity,
+            Math.abs(yVelocity) > this.maxVelocity ? Math.sign(yVelocity)*this.maxVelocity : yVelocity
         );
     }
 

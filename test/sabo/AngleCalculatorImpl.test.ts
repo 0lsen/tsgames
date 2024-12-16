@@ -10,8 +10,15 @@ const calculator = new AngleCalculatorImpl(width, profile);
 
 mocha.describe('AngleCalculator', () => {
     calculator.setAngleOfRepose(45);
-    mocha.it('TODO', () => {
+    mocha.it('calculates stuff', () => {
 
+        chai.expect(calculator.calcAngle(5, true)).to.be.undefined;
+        chai.expect(calculator.calcAngle(5, false)).to.be.undefined;
+
+        profile[5]++;
+
+        chai.expect(calculator.calcAngle(5, true)).to.equal(0);
+        chai.expect(calculator.calcAngle(5, false)).to.equal(0);
     });
 });
 

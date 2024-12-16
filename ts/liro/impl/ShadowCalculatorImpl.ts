@@ -7,6 +7,7 @@ import {Line} from "../model/Line";
 import {CanvasTools} from "../../canvas/CanvasTools";
 import {QuadraticFormulaSolverImpl} from "../../core/impl/QuadraticFormulaSolverImpl";
 import {HSL} from "../../canvas/model/HSL";
+import {CanvasContext} from "../../canvas/CanvasContext";
 
 declare const DEBUG;
 
@@ -15,12 +16,12 @@ export class ShadowCalculatorImpl implements ShadowCalculator {
     private readonly quadraticFormulaSolver = new QuadraticFormulaSolverImpl();
 
     private readonly dimensions : Coord;
-    private readonly context : CanvasRenderingContext2D;
+    private readonly context : CanvasContext;
     private readonly lightSource : CanvasBall;
     private readonly lightBrightestHsl : HSL;
     private readonly lightDarkestHsl : HSL;
 
-    constructor(dimensions: Coord, context: CanvasRenderingContext2D, lightSource: CanvasBall, lightBrightestHsl: HSL, lightDarkestHsl: HSL) {
+    constructor(dimensions: Coord, context: CanvasContext, lightSource: CanvasBall, lightBrightestHsl: HSL, lightDarkestHsl: HSL) {
         this.dimensions = dimensions;
         this.context = context;
         this.lightSource = lightSource;

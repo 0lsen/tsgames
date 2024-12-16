@@ -1,11 +1,12 @@
 import {CanvasHelper} from "../interface/CanvasHelper";
 import {Coord} from "../../core/model/Coord";
 import {IsometricCalc} from "../interface/IsometricCalc";
+import {CanvasContext} from "../../canvas/CanvasContext";
 
 export class CanvasHelperImpl implements CanvasHelper {
 
     private isometricCalc : IsometricCalc;
-    private readonly context : CanvasRenderingContext2D;
+    private readonly context : CanvasContext;
     private readonly tileSize : number;
 
     private readonly yOffset = 20;
@@ -30,7 +31,7 @@ export class CanvasHelperImpl implements CanvasHelper {
 
     public pegShadowRad = 5;
 
-    constructor(isometricCalc: IsometricCalc, context: CanvasRenderingContext2D, tileSize: number) {
+    constructor(isometricCalc: IsometricCalc, context: CanvasContext, tileSize: number) {
         this.isometricCalc = isometricCalc;
         this.context = context;
         this.tileSize = tileSize;

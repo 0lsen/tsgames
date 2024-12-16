@@ -6,7 +6,7 @@ export class CanvasTools {
     public static isBallGrab(mouseCoord : Coord, ball : CanvasBall, margin : number = 0) : boolean {
         const dx = mouseCoord.x-ball.x;
         const dy = mouseCoord.y-ball.y;
-        return dx*dx+dy*dy < (ball.radius+margin)*(ball.radius+margin);
+        return dx*dx+dy*dy <= (ball.radius+margin)*(ball.radius+margin);
     }
 
     public static isBallCollision(ball1 : CanvasBall, ball2 : CanvasBall) : boolean {

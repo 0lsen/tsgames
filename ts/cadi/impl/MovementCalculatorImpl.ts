@@ -45,17 +45,17 @@ export class MovementCalculatorImpl implements MovementCalculator {
         let newVelocity : number;
         let bounce = false;
         let directionalGravity = this.gravityConstant * (direction < 0 ? -1 : 1);
-        let newCoordsWithoutBounds = this.calcAcceleratedCoordByTime(directionalGravity, time, velocity, currentCoord);
+        let newCoordsWithoutBounce = this.calcAcceleratedCoordByTime(directionalGravity, time, velocity, currentCoord);
         let isAlreadyFalling = !velocity || Math.sign(velocity) == Math.sign(direction);
         if (isAlreadyFalling) {
-            if (newCoordsWithoutBounds > max-radius) {
+            if (newCoordsWithoutBounce > max-radius) {
                 let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, max-radius, velocity, currentCoord);
                 let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
                 let timeAfterBounce = time-timeOfBounce;
                 newCoord = this.calcAcceleratedCoordByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce, max-radius);
                 newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
                 bounce = true;
-            } else if (newCoordsWithoutBounds < radius) {
+            } else if (newCoordsWithoutBounce < radius) {
                 let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, radius, velocity, currentCoord);
                 let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
                 let timeAfterBounce = time-timeOfBounce;
@@ -63,26 +63,26 @@ export class MovementCalculatorImpl implements MovementCalculator {
                 newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
                 bounce = true;
             } else {
-                newCoord = newCoordsWithoutBounds;
+                newCoord = newCoordsWithoutBounce;
                 newVelocity = velocity + directionalGravity*time;
             }
         } else {
             let timeTilPeak = Math.abs(velocity)/this.gravityConstant;
             let peakReached = timeTilPeak < time;
             if (peakReached) {
-                let peak = velocity*velocity/(2*directionalGravity) + currentCoord;
+                let peak = this.calcAcceleratedCoordByTime(directionalGravity, timeTilPeak, velocity, currentCoord);
                 if (peak < radius || peak > max - radius) {
                     if (direction > 0) {
-                        let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, max - radius, velocity, currentCoord);
-                        let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
-                        let timeAfterBounce = time - timeOfBounce;
-                        newCoord = this.calcAcceleratedCoordByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce, max - radius);
-                        newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
-                    } else {
                         let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, radius, velocity, currentCoord);
                         let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
                         let timeAfterBounce = time - timeOfBounce;
                         newCoord = this.calcAcceleratedCoordByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce, radius);
+                        newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
+                    } else {
+                        let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, max - radius, velocity, currentCoord);
+                        let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
+                        let timeAfterBounce = time - timeOfBounce;
+                        newCoord = this.calcAcceleratedCoordByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce, max - radius);
                         newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
                     }
                     bounce = true;
@@ -91,14 +91,14 @@ export class MovementCalculatorImpl implements MovementCalculator {
                     newVelocity = velocity + directionalGravity*time;
                 }
             } else {
-                if (newCoordsWithoutBounds > max-radius) {
+                if (newCoordsWithoutBounce > max-radius) {
                     let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, max - radius, velocity, currentCoord);
                     let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
                     let timeAfterBounce = time - timeOfBounce;
                     newCoord = this.calcAcceleratedCoordByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce, max - radius);
                     newVelocity = this.calcAcceleratedVelocityByTime(directionalGravity, timeAfterBounce, velocityAtTimeOfBounce);
                     bounce = true;
-                } else if (newCoordsWithoutBounds < radius) {
+                } else if (newCoordsWithoutBounce < radius) {
                     let timeOfBounce = this.calcAcceleratedTimeByCoord(directionalGravity, radius, velocity, currentCoord);
                     let velocityAtTimeOfBounce = -this.calcAcceleratedVelocityByTime(directionalGravity, timeOfBounce, velocity);
                     let timeAfterBounce = time - timeOfBounce;
@@ -115,7 +115,7 @@ export class MovementCalculatorImpl implements MovementCalculator {
         return new CalcResult(newCoord, newVelocity, bounce);
     }
 
-    private calcAcceleratedTimeByCoord(gravity : number, coord : number, initialVelocity : number, coord0) : number {
+    private calcAcceleratedTimeByCoord(gravity : number, coord : number, initialVelocity : number, coord0 : number) : number {
         return this.quadraticFormulaSolver.solveOne(gravity/2, initialVelocity, coord0-coord);
     }
 

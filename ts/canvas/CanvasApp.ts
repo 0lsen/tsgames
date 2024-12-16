@@ -1,10 +1,12 @@
 import {BaseApp} from "../core/BaseApp";
 import {Coord} from "../core/model/Coord";
+import {CanvasContext} from "./CanvasContext";
+import {CanvasContextImpl} from "./CanvasContextImpl";
 
 export abstract class CanvasApp extends BaseApp {
 
     private readonly _canvas = $('#canvas')[0] as HTMLCanvasElement;
-    private readonly _context = this._canvas.getContext("2d");
+    private readonly _context = new CanvasContextImpl(this._canvas.getContext("2d"));
 
     protected readonly _dimensions : Coord;
     protected readonly fps : number = 60;
@@ -60,7 +62,7 @@ export abstract class CanvasApp extends BaseApp {
         return this._canvas;
     }
 
-    get context(): CanvasRenderingContext2D {
+    get context(): CanvasContext {
         return this._context;
     }
 

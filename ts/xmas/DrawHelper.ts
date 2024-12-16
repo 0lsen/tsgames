@@ -5,14 +5,15 @@ import {Roof} from "./model/Roof";
 import {Present} from "./model/Present";
 import {Coord} from "../core/model/Coord";
 import {Settings} from "./model/Settings";
+import {CanvasContext} from "../canvas/CanvasContext";
 
 export class DrawHelper {
 
     private readonly dimensions : Coord;
-    private readonly context : CanvasRenderingContext2D;
+    private readonly context : CanvasContext;
     private readonly settings : Settings;
 
-    constructor(dimensions: Coord, context: CanvasRenderingContext2D, settings: Settings) {
+    constructor(dimensions: Coord, context: CanvasContext, settings: Settings) {
         this.dimensions = dimensions;
         this.context = context;
         this.settings = settings;
