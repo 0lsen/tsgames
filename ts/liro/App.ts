@@ -37,7 +37,7 @@ export class App extends CanvasApp {
             : new Settings();
         this._lightSource = loadFromStorage
             ? this.saveHelper.loadLightsource()
-            : new CanvasBall(this.dimensions.x/2, this.dimensions.y/2, this.settings.lightSourceRadius);
+            : new CanvasBall(this.center.x, this.center.y, this.settings.lightSourceRadius);
         this._pillars = loadFromStorage
             ? this.saveHelper.loadPillars()
             : [];

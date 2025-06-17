@@ -9,6 +9,7 @@ export abstract class CanvasApp extends BaseApp {
     private readonly _context = new CanvasContextImpl(this._canvas.getContext("2d"));
 
     protected readonly _dimensions : Coord;
+    private _center : Coord;
     protected readonly fps : number = 60;
 
     private lastRecursiveAnimationFrameTime : number = 0;
@@ -22,6 +23,7 @@ export abstract class CanvasApp extends BaseApp {
     protected init() : void {
         this._canvas.width = this._dimensions.x;
         this._canvas.height = this._dimensions.y;
+        this._center = new Coord(this._dimensions.x/2, this._dimensions.y/2);
     }
 
     public clear() : void {
@@ -68,5 +70,9 @@ export abstract class CanvasApp extends BaseApp {
 
     get dimensions(): Coord {
         return this._dimensions;
+    }
+
+    get center(): Coord {
+        return this._center;
     }
 }

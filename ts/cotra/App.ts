@@ -182,34 +182,34 @@ export class App extends CanvasApp {
         this.context.lineWidth = .5;
 
         this.context.beginPath();
-        this.context.moveTo(0, this.dimensions.y/2);
-        this.context.lineTo(this.dimensions.x, this.dimensions.y/2);
+        this.context.moveTo(0, this.center.y);
+        this.context.lineTo(this.dimensions.x, this.center.y);
         this.context.stroke();
 
         this.context.beginPath();
-        this.context.moveTo(this.dimensions.x/2, 0);
-        this.context.lineTo(this.dimensions.x/2, this.dimensions.y);
+        this.context.moveTo(this.center.x, 0);
+        this.context.lineTo(this.center.x, this.dimensions.y);
         this.context.stroke();
 
         this.context.strokeStyle = this.gridMarkerStrokeStyle;
 
         for (let i = 1; i < this.dimensions.x/50; i++) {
-            if (i*50 === this.dimensions.x/2) {
+            if (i*50 === this.center.x) {
                 continue;
             }
             this.context.beginPath();
-            this.context.moveTo(i*50, this.dimensions.y/2);
-            this.context.lineTo(i*50, this.dimensions.y/2+10);
+            this.context.moveTo(i*50, this.center.y);
+            this.context.lineTo(i*50, this.center.y+10);
             this.context.stroke();
         }
 
         for (let i = 1; i < this.dimensions.y/50; i++) {
-            if (i*50 === this.dimensions.y/2) {
+            if (i*50 === this.center.y) {
                 continue;
             }
             this.context.beginPath();
-            this.context.moveTo(this.dimensions.x/2, i*50);
-            this.context.lineTo(this.dimensions.x/2-10, i*50);
+            this.context.moveTo(this.center.x, i*50);
+            this.context.lineTo(this.center.x-10, i*50);
             this.context.stroke();
         }
     }
@@ -263,16 +263,16 @@ export class App extends CanvasApp {
         this.$r.text((this.rotation*this.currentRotation).toFixed(1));
         this.$re.text((this.calcScale() * Math.SQRT2 * Math.cos(this.rotation * this.currentRotation * Math.PI + Math.PI/4)).toFixed(2));
         this.$im.text((this.calcScale() * Math.SQRT2 * Math.sin(this.rotation * this.currentRotation * Math.PI + Math.PI/4)).toFixed(2));
-        this.$tx.text(((this.calcCurrentCenter().x-this.dimensions.x/2)/50).toFixed(1));
-        this.$ty.text((-(this.calcCurrentCenter().y-this.dimensions.y/2)/50).toFixed(1));
-        this.$px.text(((p1.x-this.dimensions.x/2)/50).toFixed(2));
-        this.$py.text((-(p1.y-this.dimensions.y/2)/50).toFixed(2));
+        this.$tx.text(((this.calcCurrentCenter().x-this.center.x)/50).toFixed(1));
+        this.$ty.text((-(this.calcCurrentCenter().y-this.center.y)/50).toFixed(1));
+        this.$px.text(((p1.x-this.center.x)/50).toFixed(2));
+        this.$py.text((-(p1.y-this.center.y)/50).toFixed(2));
     }
 
     private drawText(index : number, p : Coord) : void {
         const center = this.calcCurrentCenter();
-        const x = (p.x - this.dimensions.x/2)/50;
-        const y = -(p.y - this.dimensions.y/2)/50;
+        const x = (p.x - this.center.x)/50;
+        const y = -(p.y - this.center.y)/50;
         const xDiff = p.x - center.x;
         const xOffset = xDiff === 0 ? 0 : (xDiff > 0 ? 10 : -10);
         this.context.textAlign = xOffset >= 0 ? 'left' : 'right';
@@ -354,7 +354,7 @@ export class App extends CanvasApp {
     private drawTranslationIllustration() : void {
         this.context.strokeStyle = this.illustrationStrokeStyle;
         this.context.beginPath();
-        this.context.moveTo(this.dimensions.x/2, this.dimensions.y/2);
+        this.context.moveTo(this.center.x, this.center.y);
         this.context.lineTo(this.calcCurrentCenter().x, this.calcCurrentCenter().y);
         this.context.stroke();
         this.context.closePath();
@@ -372,7 +372,7 @@ export class App extends CanvasApp {
     }
 
     private calcCurrentCenter() : Coord {
-        return new Coord(50 * this.translation.x * this.currentTranslation + this.dimensions.x/2, -50 * (this.translation.y * this.currentTranslation) + this.dimensions.y/2);
+        return new Coord(50 * this.translation.x * this.currentTranslation + this.center.x, -50 * (this.translation.y * this.currentTranslation) + this.center.y);
     }
 
     private setTimer() : void {

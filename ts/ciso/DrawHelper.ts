@@ -83,8 +83,8 @@ export class DrawHelper {
         this.app.context.strokeStyle  = options.color.toString();
         this.app.context.beginPath();
         this.app.context.arc(
-            this.app.dimensions.x/2,
-            this.app.dimensions.y/2,
+            this.app.center.x,
+            this.app.center.y,
             options.radius,
             options.startAngle - Math.PI/2 + this.arcWidth*this.arcMargin,
             options.startAngle - Math.PI/2 - this.arcWidth*this.arcMargin + this.arcWidth
@@ -97,8 +97,8 @@ export class DrawHelper {
         this.app.context.textAlign = 'center';
         this.app.context.fillStyle = '#aaa';
         this.app.context.font = this.comparisonFontSizeNumber+'px Arial';
-        this.app.context.fillText(n.toString(), this.app.dimensions.x/2, this.app.dimensions.y/2 - (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
+        this.app.context.fillText(n.toString(), this.app.center.x, this.app.center.y - (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
         this.app.context.font = this.comparisonFontSizeDescription+'px Arial';
-        this.app.context.fillText('comparisons', this.app.dimensions.x/2, this.app.dimensions.y/2 + (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
+        this.app.context.fillText('comparisons', this.app.center.x, this.app.center.y + (this.comparisonFontSizeNumber-this.comparisonFontSizeDescription)/2);
     }
 }

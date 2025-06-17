@@ -65,14 +65,14 @@ export class App extends CanvasApp {
         super();
         this.balls.push(new Ball(
             this.dimensions.x/3,
-            this.dimensions.y/2 - this.parseFloat(this.$radius1),
+            this.center.y - this.parseFloat(this.$radius1),
             this.parseFloat(this.$radius1),
             this.parseFloatLog(this.$mass1),
             new HSL(0, 80, 60)
         ));
         this.balls.push(new Ball(
             2*this.dimensions.x/3,
-            this.dimensions.y/2 - this.parseFloat(this.$radius2),
+            this.center.y - this.parseFloat(this.$radius2),
             this.parseFloat(this.$radius2),
             this.parseFloatLog(this.$mass2),
             new HSL(180, 80, 60)

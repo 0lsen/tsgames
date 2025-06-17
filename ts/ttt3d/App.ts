@@ -133,8 +133,8 @@ export class App extends CanvasApp {
 
     private checkRotation() : void {
         if (this.rotation) {
-            this.rotationX = (this.rotationX+this.rotationMaxSpeed*this.rotationSpeedX/(this.dimensions.x/2))%(Math.PI*2);
-            this.rotationY = (this.rotationY-this.rotationMaxSpeed*this.rotationSpeedY/(this.dimensions.y/2))%(Math.PI*2);
+            this.rotationX = (this.rotationX+this.rotationMaxSpeed*this.rotationSpeedX/this.center.x)%(Math.PI*2);
+            this.rotationY = (this.rotationY-this.rotationMaxSpeed*this.rotationSpeedY/this.center.y)%(Math.PI*2);
             this.setHiddenCorner();
         }
     }
@@ -252,8 +252,8 @@ export class App extends CanvasApp {
     }
 
     private calcRotation(mouse : Coord) : void {
-        this.rotationSpeedX = mouse.y - this.dimensions.y/2;
-        this.rotationSpeedY = this.dimensions.x/2 - mouse.x;
+        this.rotationSpeedX = mouse.y - this.center.y;
+        this.rotationSpeedY = this.center.x - mouse.x;
     }
 
     private isMouseOverCube(mouseCoord : Coord, cube : Cube) : boolean {
@@ -292,12 +292,12 @@ export class App extends CanvasApp {
 
     private projectX(coord : Coord3d) : number {
         return (coord.x * Math.cos(this.rotationY) + coord.y * Math.sin(this.rotationY))
-            * this.dimensions.x/4 + this.dimensions.x/2;
+            * this.dimensions.x/4 + this.center.x;
     }
 
     private projectY(coord : Coord3d) : number {
         return (coord.z * Math.sin(this.rotationX) + Math.cos(this.rotationX) * (coord.y * Math.cos(this.rotationY) - coord.x * Math.sin(this.rotationY)))
-            * this.dimensions.y/4 + this.dimensions.y/2;
+            * this.dimensions.y/4 + this.center.y;
     }
 
     private projectZ(coord : Coord3d) : number {
